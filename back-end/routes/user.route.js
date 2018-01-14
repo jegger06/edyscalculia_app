@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const keys = require('../config/keys');
 
 const db = require('../config/connection');
 
@@ -59,7 +63,63 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.get('/lists', (req, res) => {
+router.post('/login', (req, res) => {
+  const username = req.body.account_username;
+  const password = req.body.account_password;
+
+  // Check if username exist in DB
+  let sql = 'SELECT * FROM tbl_account AS a INNER JOIN tbl_type AS t ON a.type_id = t.type_id WHERE account_username = ? LIMIT 1';
+  db.query(sql, [username], (err, result) => {
+    if (err) {
+      return res.json({
+        success: false,
+        message: 'Error in checking user data. Please try again later.'
+      });
+    }
+    if (!result.length) {
+      return res.json({
+        success: false,
+        message: 'User not found. Please check the username field.'
+      });
+    }
+
+    // username is correct. check if password match
+    bcrypt.compare(password, result[0].account_password, (err, isMatch) => {
+
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Error in checking your password. Please try again later.'
+        });
+      }
+
+      if (isMatch) {
+        const user = {
+          "name": result[0].account_name,
+          "username": result[0].account_username,
+          "account_type": result[0].type_id
+        }
+
+        const token = jwt.sign(user, keys.secret, {
+          expiresIn: 604800 // 1 week in seconds
+        });
+
+        return res.json({
+          success: true,
+          token: `Bearer ${token}`,
+          user: result
+        });
+      } else {
+        return res.json({
+          success: false,
+          msg: 'Password incorrect, please check your username and password.'
+        });
+      }
+    });
+  });
+});
+
+router.get('/lists', passport.authenticate('jwt', { session: false }), (req, res) => {
     let sql = 'SELECT * FROM tbl_account';
     db.query(sql, (err, result) => {
         if (err) {
@@ -72,7 +132,7 @@ router.get('/lists', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     let sql = 'SELECT * FROM tbl_account WHERE account_id = ?';
     db.query(sql, req.params.id, (err, result) => {
         if (err) {
