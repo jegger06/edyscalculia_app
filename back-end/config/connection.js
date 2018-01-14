@@ -10,3 +10,13 @@ const db = mysql.createConnection({
     password : keys.password,
     database : keys.database
 });
+
+// Connect
+db.connect((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log('MySql Connected...');
+});
+
+module.exports = db;
