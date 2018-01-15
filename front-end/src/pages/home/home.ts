@@ -21,4 +21,8 @@ export class HomePage {
     console.log('ionViewDidLoad HomePage');
   }
 
+  routeTo (param) {
+    this.navCtrl.push(param)
+  }
+
 }

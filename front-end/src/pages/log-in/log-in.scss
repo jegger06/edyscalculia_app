@@ -1,0 +1,27 @@
+page-log-in {
+    .main {
+        margin-top: 30px;
+        img {
+            margin: 20px 0;
+        }
+        @at-root #{&}-button {
+            margin: 20px 0 10px;
+            & .button-inner {
+                font-size: 26px;
+                font-weight: 700;
+                font-family: 'Gloria Hallelujah', cursive;
+            }
+        }
+    }
+    ion-item.item-md {
+        background-color: transparent;
+        margin-bottom: 25px;
+    }
+    .align-items-flex-end {
+        align-items: flex-end;
+        -webkit-align-items: flex-end;
+    }
+    .card-md {
+        background: #ffffff7d;
+    }
+}
