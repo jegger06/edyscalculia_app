@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
             password = hash;
 
             let sql = 'INSERT INTO tbl_account SET account_name = ?, account_bday = ?, account_username = ?, account_password = ?, account_date = ?, type_id = ?';
-            // value for `type_id` is set to 2 because right now, 2 is assigned to 'user. change it if we will update this'
+            // value for `type_id` is set to 2 because right now, 2 is assigned to 'user'. change it if we will update this
             db.query(sql, [name, bday, username, password, date_created, 2], (err, result) => {
                 if (err) {
                   return res.json({
@@ -107,12 +107,12 @@ router.post('/login', (req, res) => {
         return res.json({
           success: true,
           token: `Bearer ${token}`,
-          user: result
+          user: result[0]
         });
       } else {
         return res.json({
           success: false,
-          msg: 'Password incorrect, please check your username and password.'
+          message: 'Password incorrect, please check your username and password.'
         });
       }
     });
