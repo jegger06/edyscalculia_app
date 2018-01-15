@@ -19,4 +19,9 @@ db.connect((err) => {
     console.log('MySql Connected...');
 });
 
+// Log queries on console
+db.on('enqueue', (sequence) => {
+    console.log(sequence.sql);
+})
+
 module.exports = db;

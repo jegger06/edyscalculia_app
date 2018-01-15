@@ -1,4 +1,4 @@
-# Details about the USER API
+# Details about the USER Endpoints
 
 ## Register
 Type: POST
