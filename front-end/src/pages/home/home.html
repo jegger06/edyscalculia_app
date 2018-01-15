@@ -5,25 +5,34 @@
   Ionic pages and navigation.
 -->
 <ion-content padding>
+
   <div class="main">
+
     <img src="../../assets/imgs/test-logo.png" alt="App Logo">
+
     <div class="main-button">
-      <button ion-button block round large icon-left>
+      <button (click)="routeTo('DiscoverPage')" ion-button block round large icon-left>
         <ion-icon name="md-search"></ion-icon>
         Discover
       </button>
     </div>
+
     <div class="main-button">
-      <button ion-button block round large icon-left>
+      <button (click)="routeTo('TopScorePage')" ion-button block round large icon-left>
         <ion-icon name="md-bulb"></ion-icon>
         Top Score
       </button>
     </div>
+
     <div class="main-button">
-      <button ion-button block round large icon-left>
+
+      <button (click)="routeTo('LogInPage')" ion-button block round large icon-left>
         <ion-icon name="ios-contacts"></ion-icon>
-        Log in
+        Login
       </button>
+
     </div>
+
   </div>
+
 </ion-content>
