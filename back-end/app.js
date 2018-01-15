@@ -20,10 +20,12 @@ require('./config/passport')(passport);
 // Load Routes
 const users = require('./routes/user.route');
 const accounts = require('./routes/account.route');
+const chapters = require('./routes/chapter.route');
 
 // Use Routes
 app.use('/api/user', users);
 app.use('/api/account', accounts);
+app.use('/api/chapter', chapters);
 
 const port = process.env.PORT || 8000;
 
