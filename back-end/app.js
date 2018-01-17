@@ -21,6 +21,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport')(passport);
 
+// Set global variable
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
+
 // Load Routes
 const users = require('./routes/user.route');
 const accounts = require('./routes/account.route');
@@ -40,7 +46,7 @@ if (!fs.existsSync(filesDir)) {
     fs.mkdirSync(filesDir);
 }
 
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}...`);

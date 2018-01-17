@@ -4,5 +4,5 @@ module.exports = {
     password: '',
     database: 'dyscalculia_db',
     secret: 'customsecret',
-    url: 'http://localhost:7000'
+    url: 'http://localhost:8000'
 }

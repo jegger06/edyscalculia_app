@@ -95,6 +95,7 @@ router.post('/login', (req, res) => {
 
       if (isMatch) {
         const user = {
+          "account_id": result[0].account_id,
           "name": result[0].account_name,
           "username": result[0].account_username,
           "account_type": result[0].type_id
