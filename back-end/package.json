@@ -4,7 +4,7 @@
   "description": "The API for the edyscalculia application. ",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "author": "Jegger Saren & John Rey Baylen",
   "license": "ISC",
@@ -17,5 +17,8 @@
     "mysql": "^2.15.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
   }
 }

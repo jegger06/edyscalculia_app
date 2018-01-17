@@ -1,7 +1,7 @@
 module.exports = {
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'webdeveloper',
     database: 'dyscalculia_db',
     secret: 'customsecret'
 }

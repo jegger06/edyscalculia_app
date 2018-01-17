@@ -18,3 +18,15 @@
     background: url('../assets/imgs/test-bg.jpg') no-repeat top center;
     background-size: cover;
 }
+
+*:not(ion-icon) {
+    font-family: 'Gloria Hallelujah', cursive;
+}
+
+.toast-error-message .toast-bottom {
+    background: #e13838;
+}
+
+.toast-success-message .toast-bottom {
+    background: #71c800;
+}
