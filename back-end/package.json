@@ -11,14 +11,23 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
+    "busboy": "^0.2.14",
     "cors": "^2.8.4",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.2",
+    "gm": "^1.23.1",
     "jsonwebtoken": "^8.1.0",
+    "merge": "^1.2.0",
     "mysql": "^2.15.0",
     "passport": "^0.4.0",
+<<<<<<< HEAD
     "passport-jwt": "^3.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.14.11"
+=======
+    "passport-jwt": "^3.0.1",
+    "sha1": "^1.1.1"
+>>>>>>> 9f537db10b491951b23dcfef5c600ffa83b54f6d
   }
 }
