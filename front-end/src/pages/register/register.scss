@@ -1,0 +1,28 @@
+page-register {
+  .main {
+      img {
+          margin: 20px 0;
+      }
+      @at-root #{&}-button {
+          margin: 20px 0 10px;
+          & button:first-child {
+              margin-bottom: 15px;
+          }
+          & .button-inner {
+              font-size: 26px;
+              font-weight: 700;
+          }
+      }
+  }
+  ion-item.item-md {
+      background-color: transparent;
+      margin-bottom: 25px;
+  }
+  .align-items-flex-end {
+      align-items: flex-end;
+      -webkit-align-items: flex-end;
+  }
+  .card-md {
+      background: #ffffff7d;
+  }
+}
