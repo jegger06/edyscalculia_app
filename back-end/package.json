@@ -4,6 +4,7 @@
   "description": "The API for the edyscalculia application. ",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
     "dev": "nodemon app.js"
   },
   "author": "Jegger Saren & John Rey Baylen",
@@ -20,14 +21,6 @@
     "merge": "^1.2.0",
     "mysql": "^2.15.0",
     "passport": "^0.4.0",
-<<<<<<< HEAD
-    "passport-jwt": "^3.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^1.14.11"
-=======
     "passport-jwt": "^3.0.1",
     "sha1": "^1.1.1"
->>>>>>> 9f537db10b491951b23dcfef5c600ffa83b54f6d
-  }
 }
