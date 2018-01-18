@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the HomePage page.
@@ -15,7 +16,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) { }
+  isLoggedIn: boolean = false;
+  buttonText: string = 'Login';
+  routeDirection: string = 'LogInPage';
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
+  
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.isLoggedIn = response['authenticated'];
+        this.routeDirection = 'ProfilePage';
+        this.buttonText = 'Profile';
+      }
+    });
+  }
 
   routeTo (param) {
     this.navCtrl.push(param);
