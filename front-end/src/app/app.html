@@ -1,1 +1,13 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content" swipeEnabled persistent>
+  <ion-content class="no-bg">
+    <h3 text-center class="menu-title">Menu</h3>
+    <ion-list class="no-padding-ul">
+      <ion-item no-padding *ngFor="let nav of navItem" (click)="goTo(nav.link)">
+        <ion-icon [name]="nav.icon"></ion-icon>
+        {{ nav.text }}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content></ion-nav>

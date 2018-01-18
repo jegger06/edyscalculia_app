@@ -6,12 +6,17 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Welcome AdminName</ion-title>
+  <ion-navbar hideBackButton>
+
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="md-menu"></ion-icon>
+    </button>
+
+    <ion-title>Welcome {{ account.account_name }}</ion-title>
+
   </ion-navbar>
 
 </ion-header>
-
 
 <ion-content padding>
 

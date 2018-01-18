@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Component, ViewChild } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 /**
@@ -8,7 +9,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from '../../api'
+import { api } from '../../config'
 
 @IonicPage()
 @Component({
@@ -17,18 +18,34 @@ import { api } from '../../api'
 })
 export class LogInPage {
 
-  subscription: any;
   @ViewChild('username') username;
   @ViewChild('password') password;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController, public storage: Storage) { }
 
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.goToPage(response['type_id'], response['type_slog']);
+      }
+    });
+  }
+  
   toastMessage (message) {
-    let toast = this.toastCtrl.create({
+    this.toastCtrl.create({
       message,
       cssClass: 'toast-error-message',
       duration: 3000
     }).present();
+  }
+
+  goToPage (id, slog) {
+    if (id === 1 && slog === 'admin') {
+      this.navCtrl.push('AdminHomePage');
+      return;
+    }
+    this.navCtrl.push('UserHomePage');
+    return;
   }
 
   requestAuth () {
@@ -38,21 +55,18 @@ export class LogInPage {
       this.toastMessage('Both fields are required! Check and try again.');
       return;
     }
-    this.subscription = this.http.post(`${ api.host }/user/login`, {
+    this.http.post(`${api.host}/user/login`, {
       "account_username": user,
       "account_password": pass
     }).subscribe(account => {
       if (account.hasOwnProperty('user')) {
-        if (account['user']['type_id'] === 1 && account['user']['type_slog'] === 'admin') {
-          this.navCtrl.push('AdminHomePage');
-          return;
-        }
-        this.navCtrl.push('UserHomePage');
-        return;
+        this.storage.set('account', account['user']).then(response => {
+          this.goToPage(response['type_id'], response['type_slog']);
+        });
       }
       this.toastMessage(account['message']);
       return;
-    });
+    }, error => this.toastMessage(`${ error['name'] }: ${ error['message'] }`));
   }
 
   toRegister () {
