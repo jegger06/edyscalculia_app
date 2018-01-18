@@ -21,12 +21,7 @@ export class AdminHomePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
 
   ionViewWillEnter () {
-    this.storage.get('account').then(response => {
-      if (!response) {
-        this.navCtrl.push('LogInPage');
-      }
-      this.account = response;
-    });
+    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.account = response);
   }
 
 }

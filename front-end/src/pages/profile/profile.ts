@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -15,11 +16,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  account: Object = {};
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
+
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => response ? this.account = response : this.navCtrl.push('LogInPage'));
   }
 
 }

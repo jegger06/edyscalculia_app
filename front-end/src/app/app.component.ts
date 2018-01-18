@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -11,12 +11,13 @@ export class MyApp {
 
   navItem: Array<{ icon: string, link: string, text: string}>;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public menuCtrl: MenuController) {
     this.navItem = [
-      { icon: 'logo-buffer', link: 'DashboardPage', text: 'Dashboard' },
-      { icon: 'md-paper', link: 'ChapterPage', text: 'Chapter' },
-      { icon: 'md-star', link: 'TopScorePage', text: 'Top Score' },
-      { icon: 'md-people', link: 'AccountsPage', text: 'Accounts' },
+      { icon: 'logo-buffer', link: 'AdminDashboardPage', text: 'Dashboard' },
+      { icon: 'md-paper', link: 'AdminChapterPage', text: 'Chapter' },
+      { icon: 'md-star', link: 'AdminTopscorePage', text: 'Top Score' },
+      { icon: 'md-people', link: 'AdminAccountsPage', text: 'Accounts' },
+      { icon: 'md-person', link: 'ProfilePage', text: 'Profile' },
       { icon: 'md-exit', link: 'LogoutPage', text: 'Logout' }
     ];
 
@@ -29,7 +30,8 @@ export class MyApp {
   }
 
   goTo (link) {
-    console.log(link)
+    this.menuCtrl.close();
+    this.rootPage = link;
   }
 
 }
