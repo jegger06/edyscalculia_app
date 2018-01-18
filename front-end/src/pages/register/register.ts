@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
+import { Storage} from '@ionic/storage';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 /**
@@ -8,7 +9,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from '../../api'
+import { api } from '../../config'
 
 @IonicPage()
 @Component({
@@ -22,7 +23,24 @@ export class RegisterPage {
   @ViewChild('username') username;
   @ViewChild('password') password;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
+  constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
+
+  ionViewWillEnter() {
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.goToPage(response['type_id'], response['type_slog']);
+      }
+    });
+  }
+
+  goToPage (id, slog) {
+    if (id === 1 && slog === 'admin') {
+      this.navCtrl.push('AdminHomePage');
+      return;
+    }
+    this.navCtrl.push('UserHomePage');
+    return;
+  }
 
   toastMessage (message, type = false) {
     this.toastCtrl.create({

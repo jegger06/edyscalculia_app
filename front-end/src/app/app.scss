@@ -19,8 +19,36 @@
     background-size: cover;
 }
 
+.no-bg {
+   .scroll-content {
+       background: none;
+    }
+    .side-menu-header {
+        background: #488aff;
+    }
+    .no-padding-ul {
+        ion-item {
+            ion-label {
+                padding-left: 16px;
+            }
+        }
+    }
+    .menu-title {
+        margin: 0;
+        padding: 14px 0 13px;
+        background: #488aff;
+        color: #fff;
+        font-size: 26px;
+        font-weight: bold;
+    }
+}
+
 *:not(ion-icon) {
     font-family: 'Gloria Hallelujah', cursive;
+}
+
+.focus-outline :focus {
+    outline: none;
 }
 
 .toast-error-message .toast-bottom {
