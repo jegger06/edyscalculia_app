@@ -33,7 +33,8 @@ router.post('/create', passport.authenticate('jwt', { session: false }), (req, r
     
                     return res.json({
                         success: true,
-                        message: 'Chapter has been saved.'
+                        message: 'Chapter has been saved.',
+                        chapter_id: result.insertId
                     });
                 });
             } else {
@@ -53,8 +54,22 @@ router.post('/create', passport.authenticate('jwt', { session: false }), (req, r
 
 // List of Chapters
 router.get('/lists', (req, res) => {
-    let sql = 'SELECT chapter_id, account_id, chapter_slog, chapter_text, chapter_status, chapter_date FROM tbl_chapter ORDER BY chapter_status DESC, chapter_date DESC';
-    db.query(sql, (err, result) => {
+    let params = req.query.sort;
+    let sql = 'SELECT c.chapter_id, c.account_id, c.chapter_slog, c.chapter_text, c.chapter_status, c.chapter_date, a.account_name, a.account_username FROM tbl_chapter AS c INNER JOIN tbl_account AS a ON c.account_id = a.account_id ';
+    switch(params) {
+        case '1':
+            sql += 'WHERE chapter_status = ? ';
+        break;
+        case '0':
+            sql += 'WHERE chapter_status = ? ';
+        break;
+        default:
+            sql += '';
+            params = '';
+    }
+    sql += 'ORDER BY chapter_status DESC, chapter_date DESC';
+    db.query(sql, [params], (err, result) => {
+        
         if (err) {
             return res.json({
                 success: false,
@@ -68,7 +83,9 @@ router.get('/lists', (req, res) => {
                 message: 'No chapters added yet. Try to add a chapter.'
             });
         } else {
+            
             return res.json({
+                query: req.query.sort,
                 success: true,
                 chapters: result
             });

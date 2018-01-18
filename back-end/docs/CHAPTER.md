@@ -14,10 +14,23 @@ Endpoint: /api/chapter/create
     }
 ```
 ### Response
+
+Failed to Insert
+
 ```json
 {
     "success": boolean,
     "message": string
+}
+```
+
+Chapter inserted
+
+```json
+{
+    "success": boolean,
+    "message": string,
+    "chapter_id": number
 }
 ```
 
@@ -26,7 +39,9 @@ Type: GET
 
 Protected: No
 
-Endpoint: /api/chapter/lists
+Endpoint: /api/chapter/lists?sort=
+
+Parameters: Either 1 for active, 0 for inactive, anything for all chapters
 ### Response
 
 No Chapters on DB found / Error in query.
@@ -49,7 +64,9 @@ There are chapters on DB
             "chapter_slog": string,
             "chapter_text": string,
             "chapter_status": number,
-            "chapter_date": string | date
+            "chapter_date": string | date,
+            "account_name": string,
+            "account_username": string
         }
     ]
 }
