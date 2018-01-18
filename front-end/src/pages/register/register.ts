@@ -26,11 +26,7 @@ export class RegisterPage {
   constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
 
   ionViewWillEnter() {
-    this.storage.get('account').then(response => {
-      if (response) {
-        this.goToPage(response['type_id'], response['type_slog']);
-      }
-    });
+    this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
   }
 
   goToPage (id, slog) {
