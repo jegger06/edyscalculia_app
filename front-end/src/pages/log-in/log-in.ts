@@ -18,8 +18,8 @@ import { api } from '../../config'
 })
 export class LogInPage {
 
-  @ViewChild('username') username;
-  @ViewChild('password') password;
+  @ViewChild('username') username: string;
+  @ViewChild('password') password: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController, public storage: Storage) { }
 
@@ -37,7 +37,7 @@ export class LogInPage {
 
   goToPage (id, slog) {
     if (id === 1 && slog === 'admin') {
-      this.navCtrl.push('AdminHomePage');
+      this.navCtrl.push('AdminDashboardPage');
       return;
     }
     this.navCtrl.push('UserHomePage');
