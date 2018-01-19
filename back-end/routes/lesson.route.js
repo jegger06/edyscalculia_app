@@ -204,4 +204,47 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
   }
 });
 
+// Delete a lesson
+router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (req.user.type_slog === 'admin') {
+    const id = req.params.id;
+    let sql = 'SELECT lesson_title FROM tbl_lesson WHERE lesson_id = ? LIMIT 1';
+    db.query(sql, [id], (err, result) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Something wen\'t wrong. Please try again later.'
+        });
+      }
+
+      if (!result.length) {
+        return res.json({
+          success: false,
+          message: 'The lesson does not exist. Please don\'t edit the URL.'
+        });
+      } else {
+        let sql = 'DELETE FROM tbl_lesson WHERE lesson_id = ?';
+        db.query(sql, [id], (err, result) => {
+          if (err) {
+            return res.json({
+              success: false,
+              message: 'Deleting lesson failed. Please try again later.'
+            });
+          }
+
+          return res.json({
+            success: true,
+            message: 'Lesson has been deleted.'
+          })
+        });
+      }
+    });
+  } else {
+    return res.json({
+      message: 'Not authorized...'
+    });
+  }
+  
+});
+
 module.exports = router;

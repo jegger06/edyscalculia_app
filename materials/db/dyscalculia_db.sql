@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2018 at 09:14 AM
+-- Generation Time: Jan 19, 2018 at 09:25 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -51,6 +51,21 @@ INSERT INTO `tbl_account` (`account_id`, `type_id`, `account_name`, `account_bda
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_answer`
+--
+
+CREATE TABLE `tbl_answer` (
+  `answer_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `answer_slog` varchar(255) NOT NULL,
+  `answer_choices` text NOT NULL,
+  `answer_key` text NOT NULL,
+  `answer_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_chapter`
 --
 
@@ -71,7 +86,21 @@ INSERT INTO `tbl_chapter` (`chapter_id`, `account_id`, `chapter_slog`, `chapter_
 (3, 1, 'the-awesome-chapter1', 'some title here', 1, '2018-01-17'),
 (6, 1, 'sample-chapter', 'sample chapter', 1, '2018-01-16'),
 (8, 4, 'just-a-notebook', 'Just a Notebook', 1, '2018-01-17'),
-(11, 4, 'readers-digest', 'Readers Digest', 0, '2018-01-17');
+(11, 4, 'readers-digest', 'Readers Digest', 0, '2018-01-17'),
+(12, 4, 'readers-digest1', 'Readers Digest', 0, '2018-01-18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_difficulty`
+--
+
+CREATE TABLE `tbl_difficulty` (
+  `difficulty_id` int(11) NOT NULL,
+  `difficulty_slog` varchar(255) NOT NULL,
+  `difficulty_text` varchar(255) NOT NULL,
+  `difficulty_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -83,20 +112,28 @@ CREATE TABLE `tbl_lesson` (
   `lesson_id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   `chapter_id` int(11) NOT NULL,
-  `lesson _title` varchar(255) NOT NULL,
+  `lesson_title` varchar(255) NOT NULL,
   `lesson_slog` varchar(255) NOT NULL,
   `lesson_content` text NOT NULL,
   `lesson_status` int(11) NOT NULL DEFAULT '0' COMMENT '0 = Inactive | 1 = active',
   `lesson_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `tbl_lesson`
+-- Table structure for table `tbl_question`
 --
 
-INSERT INTO `tbl_lesson` (`lesson_id`, `account_id`, `chapter_id`, `lesson _title`, `lesson_slog`, `lesson_content`, `lesson_status`, `lesson_date`) VALUES
-(1, 1, 3, 'The Basic Arithmetic', 'the-basic-arithmetic', '<p>Take a look at this image and see how its done.</p><p><img src=\"http://localhost:7000/uploads/e9baa18603ca7d93e65078dffa870ada6efd4711.gif\" style=\"width: 300px;\" class=\"fr-fic fr-dib fr-draggable\">Watch the Video Tutorial to learn more about basic arithmetic</p><p><br></p><p><span contenteditable=\"false\" draggable=\"true\" class=\"fr-video fr-dvb fr-draggable\"><video src=\"http://localhost:7000/uploads/7b4cee345c75b91a991b472feefa69c6d5b19c93.mp4\" style=\"width: 600px;\" controls=\"\" class=\"fr-draggable\">Your browser does not support HTML5 video.</video></span></p><p>Now, that is how its done.</p>', 0, '2018-01-17'),
-(2, 1, 3, 'Dofus', 'dofus', 'Dofusssssssssssssss', 0, '2018-01-17');
+CREATE TABLE `tbl_question` (
+  `question_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `difficulty_id` int(11) NOT NULL,
+  `question_content` text NOT NULL,
+  `question_status` int(11) NOT NULL DEFAULT '0' COMMENT '0 = Inactive | 1 = active	',
+  `question_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -131,16 +168,37 @@ ALTER TABLE `tbl_account`
   ADD PRIMARY KEY (`account_id`);
 
 --
+-- Indexes for table `tbl_answer`
+--
+ALTER TABLE `tbl_answer`
+  ADD PRIMARY KEY (`answer_id`),
+  ADD KEY `question_id` (`question_id`);
+
+--
 -- Indexes for table `tbl_chapter`
 --
 ALTER TABLE `tbl_chapter`
   ADD PRIMARY KEY (`chapter_id`);
 
 --
+-- Indexes for table `tbl_difficulty`
+--
+ALTER TABLE `tbl_difficulty`
+  ADD PRIMARY KEY (`difficulty_id`);
+
+--
 -- Indexes for table `tbl_lesson`
 --
 ALTER TABLE `tbl_lesson`
   ADD PRIMARY KEY (`lesson_id`);
+
+--
+-- Indexes for table `tbl_question`
+--
+ALTER TABLE `tbl_question`
+  ADD PRIMARY KEY (`question_id`),
+  ADD KEY `lesson_id` (`lesson_id`),
+  ADD KEY `difficulty_id` (`difficulty_id`);
 
 --
 -- Indexes for table `tbl_type`
@@ -159,22 +217,57 @@ ALTER TABLE `tbl_account`
   MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `tbl_answer`
+--
+ALTER TABLE `tbl_answer`
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_chapter`
 --
 ALTER TABLE `tbl_chapter`
-  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `tbl_difficulty`
+--
+ALTER TABLE `tbl_difficulty`
+  MODIFY `difficulty_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_lesson`
 --
 ALTER TABLE `tbl_lesson`
-  MODIFY `lesson_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `lesson_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tbl_question`
+--
+ALTER TABLE `tbl_question`
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_type`
 --
 ALTER TABLE `tbl_type`
   MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tbl_answer`
+--
+ALTER TABLE `tbl_answer`
+  ADD CONSTRAINT `tbl_answer_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `tbl_question` (`question_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `tbl_question`
+--
+ALTER TABLE `tbl_question`
+  ADD CONSTRAINT `tbl_question_ibfk_1` FOREIGN KEY (`lesson_id`) REFERENCES `tbl_lesson` (`lesson_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tbl_question_ibfk_2` FOREIGN KEY (`difficulty_id`) REFERENCES `tbl_difficulty` (`difficulty_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
