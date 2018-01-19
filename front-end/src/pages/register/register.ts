@@ -18,10 +18,10 @@ import { api } from '../../config'
 })
 export class RegisterPage {
 
-  birthDay = new Date().toISOString();
-  @ViewChild('name') name;
-  @ViewChild('username') username;
-  @ViewChild('password') password;
+  birthDay: string = new Date().toISOString();
+  @ViewChild('name') name: string;
+  @ViewChild('username') username: string;
+  @ViewChild('password') password: string;
 
   constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
 
@@ -31,7 +31,7 @@ export class RegisterPage {
 
   goToPage (id, slog) {
     if (id === 1 && slog === 'admin') {
-      this.navCtrl.push('AdminHomePage');
+      this.navCtrl.push('AdminDashboardPage');
       return;
     }
     this.navCtrl.push('UserHomePage');

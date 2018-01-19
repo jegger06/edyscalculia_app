@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the AdminTopscorePage page.
@@ -15,11 +16,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AdminTopscorePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AdminTopscorePage');
+  ionViewWillEnter() {
+    this.storage.get('account').then(response => !response && this.navCtrl.push('LogInPage'));
   }
 
 }
