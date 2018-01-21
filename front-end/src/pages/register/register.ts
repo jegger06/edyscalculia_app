@@ -47,10 +47,10 @@ export class RegisterPage {
   }
 
   requestNewAccount () {
-    const account_name = this.name.value
-    const account_bday = this.birthDay
-    const account_username = this.username.value
-    const account_password = this.password.value
+    const account_name = this.name['value'];
+    const account_bday = this.birthDay;
+    const account_username = this.username['value'];
+    const account_password = this.password['value'];
     if (!account_name || !account_bday || !account_username || !account_password) {
       this.toastMessage('Don\'t leave a blank in your information.');
       return;
@@ -63,10 +63,10 @@ export class RegisterPage {
     }).subscribe(account => {
       this.toastMessage(account['message'], account['success']);
       if (account['success']) {
-        this.name.value = '';
+        this.name['value'] = '';
         this.birthDay = new Date().toISOString();
-        this.username.value = '';
-        this.password.value = '';
+        this.username['value'] = '';
+        this.password['value'] = '';
       }
     });
   }
