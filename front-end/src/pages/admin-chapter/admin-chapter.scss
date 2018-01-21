@@ -6,13 +6,49 @@ page-admin-chapter {
     padding: 15px 15px 0;
     @at-root #{&}-content {
       margin-bottom: 15px;
+      padding-right: 16px;
     }
   }
 
   .item-border {
     border-bottom: 1px solid #e0e0e0;
+    &:first-child {
+      border-top: 1px solid #e0e0e0;
+    }
     &:last-child {
       border-bottom: none;
     }
   }
+
+  ion-select {
+    width: 120px;
+  }
+
+  .select-md .select-icon .select-icon-inner {
+    margin-top: 5px;
+  }
+
+  .no-padding {
+    padding-bottom: 0;
+  }
+
+}
+
+.alert-md .alert-button.delete-button,
+.delete-button {
+  color: #f53d3d;
+}
+
+.alert-edit-header.alert-md .alert-head,
+.alert-delete-header.alert-md .alert-head {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.alert-delete-header.alert-md .alert-head {
+  background: #f53d3d;
+}
+
+.alert-edit-header.alert-md .alert-head {
+  background: #488aff;
 }

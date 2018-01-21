@@ -18,8 +18,8 @@ import { api } from '../../config'
 })
 export class LogInPage {
 
-  @ViewChild('username') username: string;
-  @ViewChild('password') password: string;
+  @ViewChild('username') username: Object = {};
+  @ViewChild('password') password: Object = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController, public storage: Storage) { }
 
@@ -56,6 +56,7 @@ export class LogInPage {
       "account_password": pass
     }).subscribe(account => {
       if (account.hasOwnProperty('user')) {
+        account['user']['token'] = account['token'];
         this.storage.set('account', account['user']).then(response => {
           this.goToPage(response['type_id'], response['type_slog']);
         });

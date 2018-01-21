@@ -32,10 +32,10 @@
   
       <ion-item class="chapter-title-content">
         <ion-label floating>Chapter Title</ion-label>
-        <ion-input type="text" #chapterTitle></ion-input>
+        <ion-textarea type="text" #chapterTitle></ion-textarea>
       </ion-item>
 
-      <button ion-button block round large icon-left>
+      <button (click)="addChapterTitle()" ion-button block round large icon-left>
         <ion-icon name="ios-send"></ion-icon>
         Submit
       </button>
@@ -46,27 +46,46 @@
 
   <ion-card>
 
-    <ion-card-header>
+    <ion-card-header class="no-padding">
 
-      <h3 class="chapter-title">List of Chapters</h3>
+      <ion-list>
+
+        <ion-item>
+          <ion-label>List of Chapters</ion-label>
+          <ion-select [(ngModel)]="sort" (ionChange)="chapterSort()" #chapter>
+            <ion-option value="all">All</ion-option>
+            <ion-option value="1">Active</ion-option>
+            <ion-option value="0">Inactive</ion-option>
+          </ion-select>
+        </ion-item>
+
+      </ion-list>
 
     </ion-card-header>
 
     <ion-card-content>
 
-      <ion-list>
+      <ion-list *ngIf="chapterLists; else showNoRecords">
 
-        <ion-item class="item-border">
-          <p>Chapter 1: Digression in Praise of Digressions</p>
-          <button ion-button clear item-end>View</button>
-        </ion-item>
-
-        <ion-item class="item-border">
-          <p>Chapter 1: Digression in Praise of Digressions</p>
-          <button ion-button clear item-end>View</button>
+        <ion-item *ngFor="let chapterList of chapterLists" class="item-border">
+          <p>{{ chapterList.chapter_text }}</p>
+          <button (click)="editChapter(chapterList.chapter_id)" ion-button clear item-end>EDIT</button>
+          <button (click)="deleteChapter(chapterList.chapter_id)" class="delete-button" ion-button clear item-end>DELETE</button>
         </ion-item>
 
       </ion-list>
+
+      <ng-template #showNoRecords>
+
+        <ion-list>
+
+          <ion-item class="item-border">
+            <p>No chapter found.</p>
+          </ion-item>
+
+        </ion-list>
+
+      </ng-template>
 
     </ion-card-content>
 
