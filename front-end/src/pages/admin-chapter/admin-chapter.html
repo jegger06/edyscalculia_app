@@ -48,7 +48,18 @@
 
     <ion-card-header>
 
-      <h3 class="chapter-title">List of Chapters</h3>
+      <ion-list>
+
+        <ion-item>
+          <ion-label>List of Chapters</ion-label>
+          <ion-select [(ngModel)]="sort" (ionChange)="chapterSort()" #chapter>
+            <ion-option value="all">All</ion-option>
+            <ion-option value="1">Active</ion-option>
+            <ion-option value="0">Inactive</ion-option>
+          </ion-select>
+        </ion-item>
+
+      </ion-list>
 
     </ion-card-header>
 
@@ -56,13 +67,8 @@
 
       <ion-list>
 
-        <ion-item class="item-border">
-          <p>Chapter 1: Digression in Praise of Digressions</p>
-          <button ion-button clear item-end>View</button>
-        </ion-item>
-
-        <ion-item class="item-border">
-          <p>Chapter 1: Digression in Praise of Digressions</p>
+        <ion-item *ngFor="let chapterList of chapterLists" class="item-border">
+          <p>{{ chapterList.chapter_text }}</p>
           <button ion-button clear item-end>View</button>
         </ion-item>
 

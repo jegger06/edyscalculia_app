@@ -56,6 +56,7 @@ export class LogInPage {
       "account_password": pass
     }).subscribe(account => {
       if (account.hasOwnProperty('user')) {
+        account['user']['token'] = account['token'];
         this.storage.set('account', account['user']).then(response => {
           this.goToPage(response['type_id'], response['type_slog']);
         });

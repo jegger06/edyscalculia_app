@@ -15,4 +15,12 @@ page-admin-chapter {
       border-bottom: none;
     }
   }
+
+  ion-select {
+    width: 120px;
+  }
+
+  .select-md .select-icon .select-icon-inner {
+    margin-top: 5px;
+  }
 }
