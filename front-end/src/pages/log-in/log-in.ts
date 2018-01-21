@@ -18,8 +18,8 @@ import { api } from '../../config'
 })
 export class LogInPage {
 
-  @ViewChild('username') username: string;
-  @ViewChild('password') password: string;
+  @ViewChild('username') username: Object = {};
+  @ViewChild('password') password: Object = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController, public storage: Storage) { }
 
