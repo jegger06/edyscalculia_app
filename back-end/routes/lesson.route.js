@@ -114,7 +114,7 @@ router.get('/lists/:chapter_id', (req, res) => {
         }
 
         if (!result.length) {
-          let message = (params == 1) ? 'No active lessons for this chapter.' : 'No inactive lessons for this chapter.';
+          let message = (params == 1) ? 'No active lessons for this chapter.' : ((params == '') ? 'No lessons added for this chapter.' : 'No inactive lessons for this chapter.');
           return res.json({
             success: false,
             message: message
@@ -241,10 +241,10 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, re
     });
   } else {
     return res.json({
-      message: 'Not authorized...'
+      success: false,
+      message: 'You don\'t have the rights to delete a lesson.'
     });
   }
-  
 });
 
 module.exports = router;
