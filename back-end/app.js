@@ -33,6 +33,7 @@ const accounts = require('./routes/account.route');
 const chapters = require('./routes/chapter.route');
 const uploads = require('./routes/upload.route');
 const lessons = require('./routes/lesson.route');
+const difficulties = require('./routes/difficulty.route');
 
 // Use Routes
 app.use('/api/user', users);
@@ -40,6 +41,7 @@ app.use('/api/account', accounts);
 app.use('/api/chapter', chapters);
 app.use('/api/upload', uploads);
 app.use('/api/lesson', lessons);
+app.use('/api/difficulty', difficulties);
 
 // Create a folder for uploading files
 const filesDir = path.join(path.dirname(require.main.filename), 'uploads');

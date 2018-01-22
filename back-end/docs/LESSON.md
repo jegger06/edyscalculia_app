@@ -7,7 +7,7 @@ Protected: Yes
 
 Endpoint: /api/lesson/create
 
-## Variable
+### Variable
 ```json
 {
   "chapter_id": number,
@@ -40,7 +40,7 @@ Type: GET
 
 Protected: No
 
-Endpoint: /api/lesson/lists/:chapter_id
+Endpoint: /api/lesson/lists | /api/lesson/lists/:chapter_id
 
 Params: sort=number [0 = inactive | 1 = active] (Optional)
 

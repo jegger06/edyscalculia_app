@@ -121,6 +121,16 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/lists', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (req.user.type_slog === 'admin') {
+    
+  } else {
+    return res.json({
+      success: false,
+      message: 'You don\'t have the rights to view the lists of users.'
+    })
+  }
+
+
     let sql = 'SELECT * FROM tbl_account';
     db.query(sql, (err, result) => {
         if (err) {
@@ -133,27 +143,27 @@ router.get('/lists', passport.authenticate('jwt', { session: false }), (req, res
     });
 });
 
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let sql = 'SELECT * FROM tbl_account WHERE account_id = ?';
-    db.query(sql, req.params.id, (err, result) => {
-        if (err) {
-            console.log('Error in fetching data...');
-        }
-        if (result.length < 1) {
-            res.json({
-                success: false,
-                message: 'The person does not exist...',
-                data: result.length
-            });
-        } else {
-            res.json({
-                success: true,
-                message: 'Here is the details for this person...',
-                result,
-                data: result.length
-            });
-        }
-    });
-});
+// router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     let sql = 'SELECT * FROM tbl_account WHERE account_id = ?';
+//     db.query(sql, req.params.id, (err, result) => {
+//       if (err) {
+//           console.log('Error in fetching data...');
+//       }
+//       if (result.length < 1) {
+//           res.json({
+//               success: false,
+//               message: 'The person does not exist...',
+//               data: result.length
+//           });
+//       } else {
+//           res.json({
+//               success: true,
+//               message: 'Here is the details for this person...',
+//               result,
+//               data: result.length
+//           });
+//       }
+//     });
+// });
 
 module.exports = router;

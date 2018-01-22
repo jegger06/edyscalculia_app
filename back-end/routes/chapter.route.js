@@ -83,9 +83,7 @@ router.get('/lists', (req, res) => {
                 message: 'No chapters added yet. Try to add a chapter.'
             });
         } else {
-            
             return res.json({
-                query: req.query.sort,
                 success: true,
                 chapters: result
             });

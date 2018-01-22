@@ -74,6 +74,36 @@ router.post('/create', passport.authenticate('jwt', { session: false }), (req, r
   
 });
 
+// Lists of all lessons
+router.get('/lists', (req, res) => {
+  let params = req.query.sort;
+  let sql = 'SELECT l.lesson_id, l.account_id, l.chapter_id, l.lesson_title, l.lesson_slog, l.lesson_content, l.lesson_status, l.lesson_date, c.chapter_id, c.chapter_text, c.chapter_status, a.account_id, a.account_name, a.account_username FROM tbl_lesson AS l INNER JOIN tbl_chapter AS c ON l.chapter_id = c.chapter_id INNER JOIN tbl_account AS a ON l.account_id = a.account_id ORDER BY ';
+  switch(params) {
+    case '1':
+      sql += 'l.lesson_status DESC,  ';
+    break;
+    case '0':
+      sql += 'l.lesson_status ASC, ';
+    break;
+    default:
+      sql += '';
+  }
+  sql += 'lesson_date DESC';
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.json({
+        success: false,
+        message: 'Something wen\'t wrong fetching lessons in DB. Please try again later.'
+      });
+    }
+
+    return res.json({
+      success: true,
+      lessons: result
+    });
+  })
+});
+
 // List of Lessons
 router.get('/lists/:chapter_id', (req, res) => {
   const chapter_id = req.params.chapter_id;
@@ -114,7 +144,7 @@ router.get('/lists/:chapter_id', (req, res) => {
         }
 
         if (!result.length) {
-          let message = (params == 1) ? 'No active lessons for this chapter.' : ((params == '') ? 'No lessons added for this chapter.' : 'No inactive lessons for this chapter.');
+          let message = (params == 1) ? 'No active lessons for this chapter.' : ((params == '') ? 'No lessons added for this chapter.' : 'No inactive lessons for this chapter.');  
           return res.json({
             success: false,
             message: message
