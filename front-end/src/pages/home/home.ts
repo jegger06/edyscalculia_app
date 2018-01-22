@@ -20,16 +20,16 @@ export class HomePage {
   buttonText: string = 'Login';
   routeDirection: string = 'LogInPage';
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage) { }
 
-  routeTo (param) {
+  routeTo (param: string): void {
     this.navCtrl.push(param);
   }
   
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (response) {
         this.isLoggedIn = response['authenticated'];

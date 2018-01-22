@@ -18,12 +18,12 @@ export class UserHomePage {
 
   account: Object = {};
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage) { }
 
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => this.account = response);
   }
 

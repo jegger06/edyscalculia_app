@@ -20,14 +20,14 @@ export class AdminDashboardPage {
 
   dashboardList: Object = {};
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage,
     public http: HttpClient,
     public alertCtrl: AlertController) { }
 
-  showDetails (details) {
+  showDetails (details: string[]): void {
     const detailsMessage = details.map(item => `<li>${ item['chapter_text'] }</li>`);
     const alert = this.alertCtrl.create({
       title: 'List of all Chapter',
@@ -48,7 +48,7 @@ export class AdminDashboardPage {
     alert.present();
   }
 
-  ionViewDidEnter () {
+  ionViewDidEnter (): void {
     Promise.all([
       this.http.get(`${ api.host }/chapter/lists`).subscribe(response => {
         this.dashboardList['chapters'] = response['chapters'];
@@ -57,7 +57,7 @@ export class AdminDashboardPage {
     ]);
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.storage.get('account').then(response => !response && this.navCtrl.push('LogInPage'));
   }
 
