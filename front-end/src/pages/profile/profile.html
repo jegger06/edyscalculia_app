@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar [hideBackButton]="account && account.type_id === 1">
-    <button *ngIf="account && account.type_id === 1" ion-button icon-only menuToggle>
+  <ion-navbar [hideBackButton]="account && account['type_id'] === 1">
+    <button *ngIf="account && account['type_id'] === 1" ion-button icon-only menuToggle>
       <ion-icon name="md-menu"></ion-icon>
     </button>
     <ion-title>Profile</ion-title>

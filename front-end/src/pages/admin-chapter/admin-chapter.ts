@@ -41,14 +41,6 @@ export class AdminChapterPage {
     public alterCtrl: AlertController,
     public toastCtrl: ToastController) { }
 
-  ionViewDidEnter () {
-    this.fetchAllRecords();
-  }
-
-  ionViewWillEnter() {
-    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
-  }
-
   toastMessage (message, type = false) {
     this.toastCtrl.create({
       message,
@@ -160,6 +152,14 @@ export class AdminChapterPage {
       ]
     });
     deleteAlert.present();
+  }
+
+  ionViewDidEnter () {
+    this.fetchAllRecords();
+  }
+
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }
 
 }

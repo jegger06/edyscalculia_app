@@ -23,11 +23,12 @@ export class RegisterPage {
   @ViewChild('username') username: string;
   @ViewChild('password') password: string;
 
-  constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController) { }
-
-  ionViewWillEnter() {
-    this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
-  }
+  constructor(
+    public storage: Storage,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: HttpClient,
+    public toastCtrl: ToastController) { }
 
   goToPage (id, slog) {
     if (id === 1 && slog === 'admin') {
@@ -73,6 +74,10 @@ export class RegisterPage {
 
   toLogin () {
     this.navCtrl.push('LogInPage');
+  }
+
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
   }
 
 }

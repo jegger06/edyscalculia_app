@@ -18,7 +18,10 @@ export class ProfilePage {
 
   account: Object = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public storage: Storage) { }
 
   ionViewWillEnter () {
     this.storage.get('account').then(response => response ? this.account = response : this.navCtrl.push('LogInPage'));
