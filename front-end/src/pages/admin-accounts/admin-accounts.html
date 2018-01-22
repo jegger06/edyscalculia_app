@@ -20,4 +20,52 @@
 
 <ion-content padding>
 
+  <ion-list>
+    
+    <ion-item>
+      <h3 float-left class="accounts-title">List of Accounts</h3>
+      <div float-right>
+        <button (click)="toggleSortByType()" round ion-button icon-left>
+          <ion-icon name="md-swap"></ion-icon>
+          {{ sortByType === 1 ? 'Admin' : 'User' }}
+        </button>
+        <button (click)="toggleSortByDate()" round ion-button icon-left>
+          <ion-icon [name]="dateClassname"></ion-icon>
+          {{ sortByDate === 1 ? 'Ascending' : 'Descending' }}
+        </button>
+      </div>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list *ngIf="accounts; else showNoRecord">
+
+    <ion-item *ngFor="let account of accounts">
+      <div float-left>
+        <h3 class="account-name">{{ account['account_name'] }}</h3>
+        <p class="account-details">{{ account['account_bday'] | date:'mediumDate' }}</p>
+        <ion-badge>{{ account['type_description'] }}</ion-badge>
+      </div>
+      <div float-right>
+        <button (click)="viewDetails(account)" class="view-details" ion-button round icon-left>
+          <ion-icon name="md-open"></ion-icon>
+          View details
+        </button>
+      </div>
+    </ion-item>
+
+  </ion-list>
+
+  <ng-template #showNoRecord>
+
+    <ion-list>
+    
+      <ion-item>
+        <h3>No record available for now.</h3>
+      </ion-item>
+    
+    </ion-list>
+
+  </ng-template>
+
 </ion-content>

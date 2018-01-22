@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -27,8 +27,19 @@ export class AdminDashboardPage {
     public http: HttpClient,
     public alertCtrl: AlertController) { }
 
-  showDetails (details: string[]): void {
-    const detailsMessage = details.map(item => `<li>${ item['chapter_text'] }</li>`);
+  showDetails (details: string[], type: string): void {
+    let detailsMessage: string[];
+    let routePage: string;
+    switch (type) {
+      case 'account':
+        routePage = 'AdminAccountsPage';
+        detailsMessage = details.map(item => `<li>${ item['account_name'] }</li>`);
+        break;
+      default:
+        routePage = 'AdminChapterPage';
+        detailsMessage = details.map(item => `<li>${ item['chapter_text'] }</li>`);
+        break;
+    }
     const alert = this.alertCtrl.create({
       title: 'List of all Chapter',
       cssClass: 'alert-edit-header',
@@ -39,7 +50,7 @@ export class AdminDashboardPage {
           text: 'Settings',
           handler: () => {
             alert.dismiss();
-            this.navCtrl.push('AdminChapterPage');
+            this.navCtrl.push(routePage);
             return false;
           }
         }
@@ -58,7 +69,18 @@ export class AdminDashboardPage {
   }
 
   ionViewWillEnter(): void {
-    this.storage.get('account').then(response => !response && this.navCtrl.push('LogInPage'));
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.http.get(`${ api.host }/user/lists?type=1&date=1`, {
+          headers: new HttpHeaders().set('Authorization', response['token'])
+        }).subscribe(response => {
+          this.dashboardList['accounts'] = response['accounts'];
+          this.dashboardList['accountsList'] = response['accounts']['length'];
+        });
+        return;
+      }
+      this.navCtrl.push('LogInPage');
+    });
   }
 
 }

@@ -18,8 +18,8 @@ import { api } from '../../config/index';
 })
 export class AdminChapterLessonPage {
 
-  user: Object = {};
   sort: number = 2;
+  user: Object = {};
   lessons: Object = {};
   lessonsCount: number = 0;
 
@@ -28,10 +28,6 @@ export class AdminChapterLessonPage {
     public storage: Storage,
     public http: HttpClient,
     public navParams: NavParams) { }
-
-  goBack (): void {
-    this.navCtrl.pop();
-  }
 
   createLesson (): void {
     this.lessons = {
@@ -58,7 +54,7 @@ export class AdminChapterLessonPage {
     this.storage.remove('chapter');
   }
 
-  ionViewDidEnter (): void {
+  ionViewDidEnter () {
     this.fetchLesson(this.sort);
   }
 
