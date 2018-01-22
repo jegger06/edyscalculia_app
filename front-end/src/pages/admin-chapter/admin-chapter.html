@@ -67,7 +67,7 @@
 
       <ion-list *ngIf="chapterLists; else showNoRecords">
 
-        <ion-item *ngFor="let chapterList of chapterLists" class="item-border">
+        <ion-item *ngFor="let chapterList of chapterLists" (click)="chapterDetails(chapterList.chapter_id)" class="item-border">
           <p>{{ chapterList.chapter_text }}</p>
           <button (click)="editChapter(chapterList.chapter_id)" ion-button clear item-end>EDIT</button>
           <button (click)="deleteChapter(chapterList.chapter_id)" class="delete-button" ion-button clear item-end>DELETE</button>
