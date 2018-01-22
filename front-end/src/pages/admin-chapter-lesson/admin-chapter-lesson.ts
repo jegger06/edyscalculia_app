@@ -21,6 +21,7 @@ export class AdminChapterLessonPage {
   user: Object = {};
   sort: number = 2;
   lessons: Object = {};
+  lessonsCount: number = 0;
 
   constructor (
     public navCtrl: NavController,
@@ -42,7 +43,10 @@ export class AdminChapterLessonPage {
   fetchLesson (sort: number): void {
     this.storage.get('chapter').then(chapter => {
       const route = chapter ? chapter['chapter_id'] : '';
-      this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(lessons => this.lessons = lessons);
+      this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(lessons => {
+        this.lessons = lessons;
+        this.lessonsCount = lessons['lessons'] ? lessons['lessons']['length'] : 0;
+      });
     });
   }
 
