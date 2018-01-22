@@ -1,0 +1,61 @@
+<!--
+  Generated template for the AdminChapterLessonPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Chapter Lesson</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+  
+    <ion-item>
+      <ion-label>List of Lessons</ion-label>
+      <ion-select (ionChange)="sortNow(sort)" [(ngModel)]="sort">
+        <ion-option value="2">All</ion-option>
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
+  
+  </ion-list>
+
+  <ion-list *ngIf="lessons['success']; else showNoRecord">
+
+    <ion-item>
+      {{ lessons | json }}
+    </ion-item>
+
+  </ion-list>
+
+  <ng-template #showNoRecord>
+
+    <ion-list>
+
+      <ion-item>
+        <h3 class="no-result-title">No lesson found.</h3>
+        <p class="margin-top-bottom">{{ lessons['message'] }}</p>
+        <div text-right>
+          <button (click)="goBack()" ion-button round icon-left>
+            <ion-icon name="md-arrow-back"></ion-icon>
+            back
+          </button>
+          <button (click)="createLesson()" ion-button round icon-left>
+            <ion-icon name="md-create"></ion-icon>
+            create
+          </button>
+        </div>
+      </ion-item>
+
+    </ion-list>
+
+  </ng-template>
+
+</ion-content>

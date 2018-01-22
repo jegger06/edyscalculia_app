@@ -3,21 +3,20 @@ page-admin-chapter {
     font-size: 20px;
     font-weight: bold;
     color: rgb(48, 134, 214);
-    padding: 15px 15px 0;
     @at-root #{&}-content {
-      margin-bottom: 15px;
       padding-right: 16px;
     }
   }
 
   .item-border {
     border-bottom: 1px solid #e0e0e0;
-    &:first-child {
-      border-top: 1px solid #e0e0e0;
-    }
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  .list-md .item-block .item-inner {
+    border-bottom: none;
   }
 
   ion-select {
