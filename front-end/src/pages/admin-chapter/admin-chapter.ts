@@ -41,14 +41,6 @@ export class AdminChapterPage {
     public alterCtrl: AlertController,
     public toastCtrl: ToastController) { }
 
-  ionViewDidEnter () {
-    this.fetchAllRecords();
-  }
-
-  ionViewWillEnter() {
-    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
-  }
-
   toastMessage (message, type = false) {
     this.toastCtrl.create({
       message,
@@ -58,7 +50,7 @@ export class AdminChapterPage {
   }
 
   chapterSort () {
-    this.fetchAllRecords(this.chapter.value);
+    this.fetchAllRecords(this.chapter['value']);
   }
 
   fetchAllRecords (sort = 'all') {
@@ -66,7 +58,7 @@ export class AdminChapterPage {
   }
 
   addChapterTitle () {
-    const title = this.title.value;
+    const title = this.title['value'];
     if (!title || title.trim() === '') {
       this.toastMessage('Chapter Title should not be empty.');
       return;
@@ -81,7 +73,7 @@ export class AdminChapterPage {
         this.http.get(`${ api.host }/chapter/${ response['chapter_id'] }`).subscribe(chapter => {
           this.chapterLists ? this.chapterLists.unshift(chapter['details']) : this.chapterLists = Array(1).fill(chapter['details']);
           this.toastMessage('New chapter title has been added.', true);
-          this.title.value = '';
+          this.title['value'] = '';
         }, error => this.toastMessage(error['message']));
         return;
       }
@@ -160,6 +152,14 @@ export class AdminChapterPage {
       ]
     });
     deleteAlert.present();
+  }
+
+  ionViewDidEnter () {
+    this.fetchAllRecords();
+  }
+
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }
 
 }
