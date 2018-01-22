@@ -41,7 +41,27 @@ export class AdminChapterPage {
     public alterCtrl: AlertController,
     public toastCtrl: ToastController) { }
 
-  toastMessage (message, type = false) {
+  chapterDetails (chapter: Object): void {
+    const alert = this.alterCtrl.create({
+      title: 'Chapter Details',
+      cssClass: 'alert-edit-header',
+      message: chapter['chapter_text'],
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: 'View Lessons',
+          handler: () => {
+            alert.dismiss();
+            this.storage.set('chapter', chapter).then(() => this.navCtrl.push('AdminChapterLessonPage'));
+            return false;
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
       message,
       cssClass: type ? 'toast-success-message' : 'toast-error-message',
@@ -49,15 +69,15 @@ export class AdminChapterPage {
     }).present();
   }
 
-  chapterSort () {
+  chapterSort (): void {
     this.fetchAllRecords(this.chapter['value']);
   }
 
-  fetchAllRecords (sort = 'all') {
+  fetchAllRecords (sort: string | number = 'all'): void {
     this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
   }
 
-  addChapterTitle () {
+  addChapterTitle (): void {
     const title = this.title['value'];
     if (!title || title.trim() === '') {
       this.toastMessage('Chapter Title should not be empty.');
@@ -82,7 +102,8 @@ export class AdminChapterPage {
     }, error => this.toastMessage(error['message']));
   }
 
-  editChapter (id) {
+  editChapter (event: any, id: number): void {
+    event.stopPropagation();
     this.http.get(`${ api.host }/chapter/${ id }`).subscribe(chapter => {
       const edit = this.alterCtrl.create({
         title: 'Edit Chapter',
@@ -126,7 +147,8 @@ export class AdminChapterPage {
     }, error => this.toastMessage(error['message']));
   }
 
-  deleteChapter (id) {
+  deleteChapter (event: any, id: number): void {
+    event.stopPropagation();
     const deleteAlert = this.alterCtrl.create({
       title: 'Delete Chapter',
       cssClass: 'alert-delete-header',
@@ -154,11 +176,11 @@ export class AdminChapterPage {
     deleteAlert.present();
   }
 
-  ionViewDidEnter () {
+  ionViewDidEnter (): void {
     this.fetchAllRecords();
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }
 

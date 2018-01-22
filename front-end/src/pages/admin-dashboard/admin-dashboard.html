@@ -20,19 +20,19 @@
 
 <ion-content padding>
 
-  <ion-card>
+  <ion-list>
 
-    <ion-card-header>
+    <ion-item>
       <h2>Total of Chapter</h2>
-    </ion-card-header>
-
-    <ion-card-content>
       <p class="numbers-rep" text-center>{{ dashboardList['chaptersCount'] }}</p>
       <div *ngIf="dashboardList['chaptersCount'] > 0" class="padding-top" text-right>
-        <button (click)="showDetails(dashboardList['chapters'])" ion-button end>View details</button>
+        <button (click)="showDetails(dashboardList['chapters'])" large ion-button end round icon-left>
+          <ion-icon name="md-open"></ion-icon>
+          View details
+        </button>
       </div>
-    </ion-card-content>
+    </ion-item>
 
-  </ion-card>
+  </ion-list>
 
 </ion-content>

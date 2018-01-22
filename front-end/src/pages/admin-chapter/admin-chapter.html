@@ -19,76 +19,56 @@
 </ion-header>
 
 <ion-content padding>
-  
-  <ion-card>
 
-    <ion-card-header>
-
+  <ion-list>
+    
+    <ion-item class="item-border">
       <h3 class="chapter-title">Adding of Chapter</h3>
+    </ion-item>
 
-    </ion-card-header>
-  
-    <ion-card-content>
-  
-      <ion-item class="chapter-title-content">
-        <ion-label floating>Chapter Title</ion-label>
-        <ion-textarea type="text" #chapterTitle></ion-textarea>
-      </ion-item>
-
+    <ion-item class="chapter-title-content">
+      <ion-label floating>Chapter Title</ion-label>
+      <ion-textarea type="text" #chapterTitle></ion-textarea>
+    </ion-item>
+    
+    <ion-item>
       <button (click)="addChapterTitle()" ion-button block round large icon-left>
         <ion-icon name="ios-send"></ion-icon>
         Submit
       </button>
-  
-    </ion-card-content>
-  
-  </ion-card>
+    </ion-item>
 
-  <ion-card>
+  </ion-list>
 
-    <ion-card-header class="no-padding">
+  <ion-list *ngIf="chapterLists; else showNoRecords">
 
-      <ion-list>
+    <ion-item class="item-border">
+      <ion-label>List of Chapters</ion-label>
+      <ion-select [(ngModel)]="sort" (ionChange)="chapterSort()" #chapter>
+        <ion-option value="all">All</ion-option>
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
 
-        <ion-item>
-          <ion-label>List of Chapters</ion-label>
-          <ion-select [(ngModel)]="sort" (ionChange)="chapterSort()" #chapter>
-            <ion-option value="all">All</ion-option>
-            <ion-option value="1">Active</ion-option>
-            <ion-option value="0">Inactive</ion-option>
-          </ion-select>
-        </ion-item>
+    <ion-item *ngFor="let chapterList of chapterLists" (click)="chapterDetails(chapterList)" class="item-border">
+      <p>{{ chapterList.chapter_text }}</p>
+      <button (click)="editChapter($event, chapterList.chapter_id)" ion-button clear item-end>EDIT</button>
+      <button (click)="deleteChapter($event, chapterList.chapter_id)" class="delete-button" ion-button clear item-end>DELETE</button>
+    </ion-item>
 
-      </ion-list>
+  </ion-list>
 
-    </ion-card-header>
+  <ng-template #showNoRecords>
 
-    <ion-card-content>
+    <ion-list>
 
-      <ion-list *ngIf="chapterLists; else showNoRecords">
+      <ion-item class="item-border">
+        <p>No chapter found.</p>
+      </ion-item>
 
-        <ion-item *ngFor="let chapterList of chapterLists" class="item-border">
-          <p>{{ chapterList.chapter_text }}</p>
-          <button (click)="editChapter(chapterList.chapter_id)" ion-button clear item-end>EDIT</button>
-          <button (click)="deleteChapter(chapterList.chapter_id)" class="delete-button" ion-button clear item-end>DELETE</button>
-        </ion-item>
+    </ion-list>
 
-      </ion-list>
-
-      <ng-template #showNoRecords>
-
-        <ion-list>
-
-          <ion-item class="item-border">
-            <p>No chapter found.</p>
-          </ion-item>
-
-        </ion-list>
-
-      </ng-template>
-
-    </ion-card-content>
-
-  </ion-card>
+  </ng-template>
 
 </ion-content>

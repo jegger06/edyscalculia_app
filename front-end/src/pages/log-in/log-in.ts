@@ -21,14 +21,14 @@ export class LogInPage {
   @ViewChild('username') username: Object = {};
   @ViewChild('password') password: Object = {};
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public http: HttpClient,
     public toastCtrl: ToastController,
     public storage: Storage) { }
   
-  toastMessage (message) {
+  toastMessage (message: string): void {
     this.toastCtrl.create({
       message,
       cssClass: 'toast-error-message',
@@ -36,7 +36,7 @@ export class LogInPage {
     }).present();
   }
 
-  goToPage (id, slog) {
+  goToPage (id: number, slog: string): boolean {
     if (id === 1 && slog === 'admin') {
       this.navCtrl.push('AdminDashboardPage');
       return;
@@ -45,7 +45,7 @@ export class LogInPage {
     return;
   }
 
-  requestAuth () {
+  requestAuth (): void {
     const user = this.username['value'];
     const pass = this.password['value'];
     if (!user || !pass) {
@@ -67,11 +67,11 @@ export class LogInPage {
     }, error => this.toastMessage(`${ error['name'] }: ${ error['message'] }`));
   }
 
-  toRegister () {
+  toRegister (): void {
     this.navCtrl.push('RegisterPage');
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
   }
 

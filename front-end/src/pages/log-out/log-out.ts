@@ -15,12 +15,12 @@ import { Storage } from '@ionic/storage';
 })
 export class LogOutPage {
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage) { }
 
-  ionViewDidEnter () {
+  ionViewDidEnter (): void {
     this.storage.remove('account').then(() => this.navCtrl.push('HomePage'));
   }
 
