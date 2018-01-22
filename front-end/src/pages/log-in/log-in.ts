@@ -21,11 +21,12 @@ export class LogInPage {
   @ViewChild('username') username: Object = {};
   @ViewChild('password') password: Object = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public toastCtrl: ToastController, public storage: Storage) { }
-
-  ionViewWillEnter () {
-    this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: HttpClient,
+    public toastCtrl: ToastController,
+    public storage: Storage) { }
   
   toastMessage (message) {
     this.toastCtrl.create({
@@ -45,8 +46,8 @@ export class LogInPage {
   }
 
   requestAuth () {
-    const user = this.username.value;
-    const pass = this.password.value;
+    const user = this.username['value'];
+    const pass = this.password['value'];
     if (!user || !pass) {
       this.toastMessage('Both fields are required! Check and try again.');
       return;
@@ -68,6 +69,10 @@ export class LogInPage {
 
   toRegister () {
     this.navCtrl.push('RegisterPage');
+  }
+
+  ionViewWillEnter () {
+    this.storage.get('account').then(response => response && (this.goToPage(response['type_id'], response['type_slog'])));
   }
 
 }

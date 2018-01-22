@@ -20,7 +20,14 @@ export class HomePage {
   buttonText: string = 'Login';
   routeDirection: string = 'LogInPage';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) { }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public storage: Storage) { }
+
+  routeTo (param) {
+    this.navCtrl.push(param);
+  }
   
   ionViewWillEnter () {
     this.storage.get('account').then(response => {
@@ -30,10 +37,6 @@ export class HomePage {
         this.buttonText = 'Profile';
       }
     });
-  }
-
-  routeTo (param) {
-    this.navCtrl.push(param);
   }
 
 }
