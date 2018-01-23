@@ -27,15 +27,28 @@
         <ion-label>Birthday</ion-label>
         <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="birthDay"></ion-datetime>
       </ion-item>
+
+      <ion-item>
+        <ion-label>Account Type</ion-label>
+        <ion-select [(ngModel)]="type">
+          <ion-option value="1">Admin</ion-option>
+          <ion-option value="2">User</ion-option>
+        </ion-select>
+      </ion-item>
   
       <ion-item>
-        <ion-label floating>Password</ion-label>
-        <ion-input type="password" #password></ion-input>
+        <ion-label floating class="margin-bottom">Password</ion-label>
+        <ion-input type="password" #password placeholder="(Leave empty if there's no update)"></ion-input>
       </ion-item>
 
       <button (click)="requestUpdateAccount()" ion-button block round large icon-left>
         <ion-icon name="ios-send"></ion-icon>
-        Submit
+        Save changes
+      </button>
+
+      <button (click)="requestDeleteAccount(id)" color="danger" ion-button block round large icon-left>
+        <ion-icon name="ios-trash"></ion-icon>
+        Delete Account
       </button>
   
     </ion-card-content>

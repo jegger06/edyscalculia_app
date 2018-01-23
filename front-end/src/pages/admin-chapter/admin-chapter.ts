@@ -75,7 +75,7 @@ export class AdminChapterPage {
 
   addChapterTitle (): void {
     const title = this.title['value'];
-    if (!title || title.trim() === '') {
+    if ((/^\s*$/).test(title)) {
       this.toastMessage('Chapter Title should not be empty.');
       return;
     }
@@ -122,7 +122,7 @@ export class AdminChapterPage {
                 chapter_text: data[0],
                 chapter_status: chapter['details']['chapter_status']
               };
-              if (!data[0] || data[0].trim() === '') {
+              if ((/^\s*$/).test(data[0])) {
                 this.toastMessage('Chapter title update should not be empty.');
                 return false;
               }

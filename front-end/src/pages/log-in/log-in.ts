@@ -48,7 +48,7 @@ export class LogInPage {
   requestAuth (): void {
     const user = this.username['value'];
     const pass = this.password['value'];
-    if (!user || !pass) {
+    if ((/^\s*$/).test(user) || (/^\s*$/).test(pass)) {
       this.toastMessage('Both fields are required! Check and try again.');
       return;
     }

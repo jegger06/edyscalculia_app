@@ -52,9 +52,12 @@ export class RegisterPage {
     const account_bday = this.birthDay;
     const account_username = this.username['value'];
     const account_password = this.password['value'];
-    if (!account_name || !account_bday || !account_username || !account_password) {
-      this.toastMessage('Don\'t leave a blank in your information.');
-      return;
+    const test = [ account_name, account_bday, account_username, account_password ];
+    for (let i = 0; i < (test.length - 1); i++) {
+      if ((/^\s*$/).test(test[i])) {
+        this.toastMessage('Don\'t leave a blank in your information.');
+        return;
+      }
     }
     this.http.post(`${ api.host }/user/register`, {
       account_name,
