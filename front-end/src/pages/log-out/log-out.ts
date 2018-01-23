@@ -20,7 +20,7 @@ export class LogOutPage {
     public navParams: NavParams,
     public storage: Storage) { }
 
-  ionViewDidEnter (): void {
+  ionViewWillEnter (): void {
     this.storage.remove('account').then(() => this.navCtrl.push('HomePage'));
   }
 

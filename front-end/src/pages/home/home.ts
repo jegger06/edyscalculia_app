@@ -28,7 +28,7 @@ export class HomePage {
   routeTo (param: string): void {
     this.navCtrl.push(param);
   }
-  
+
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (response) {

@@ -16,13 +16,15 @@ import { Storage } from '@ionic/storage';
 })
 export class AdminTopscorePage {
 
+  user: Object = {};
+
   constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage) { }
 
-  ionViewWillEnter(): void {
-    this.storage.get('account').then(response => !response && this.navCtrl.push('LogInPage'));
+  ionViewWillEnter (): void {
+    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }
 
 }

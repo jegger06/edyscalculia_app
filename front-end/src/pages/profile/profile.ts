@@ -16,7 +16,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  account: Object = {};
+  user: Object = {};
 
   constructor (
     public navCtrl: NavController,
@@ -24,7 +24,7 @@ export class ProfilePage {
     public storage: Storage) { }
 
   ionViewWillEnter (): void {
-    this.storage.get('account').then(response => response ? this.account = response : this.navCtrl.push('LogInPage'));
+    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }
 
 }

@@ -39,7 +39,9 @@ export class AdminAccountsPage {
     public storage: Storage) { }
 
   viewDetails (account: Object): void {
-    console.log(account);
+    this.storage.set('account-details', account).then(() => {
+      this.navCtrl.push('AdminAccountsDetailsPage');
+    });
   }
 
   toggleSortByType () {

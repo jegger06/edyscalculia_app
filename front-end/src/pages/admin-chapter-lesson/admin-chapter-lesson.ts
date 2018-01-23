@@ -54,12 +54,15 @@ export class AdminChapterLessonPage {
     this.storage.remove('chapter');
   }
 
-  ionViewDidEnter () {
-    this.fetchLesson(this.sort);
-  }
-
   ionViewWillEnter (): void {
-    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
+    this.storage.get('account').then(response => {
+      if (!response) {
+        this.navCtrl.push('LogInPage');
+        return;
+      }
+      this.user = response;
+      this.fetchLesson(this.sort);
+    });
   }
 
 }

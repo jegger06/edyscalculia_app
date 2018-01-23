@@ -32,23 +32,23 @@
           <ion-input type="password" #password></ion-input>
         </ion-item>
 
+        <div class="main-button">
+        
+          <button (click)="requestAuth()" ion-button block round large icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            Submit
+          </button>
+        
+          <button (click)="toRegister()" ion-button block round large icon-left>
+            <ion-icon name="md-person-add"></ion-icon>
+            Register
+          </button>
+        
+        </div>
+
       </ion-card-content>
 
     </ion-card>
-    
-    <div class="main-button">
-    
-      <button (click)="requestAuth()" ion-button block round large icon-left>
-        <ion-icon name="ios-send"></ion-icon>
-        Submit
-      </button>
-
-      <button (click)="toRegister()" ion-button block round large icon-left>
-        <ion-icon name="md-person-add"></ion-icon>
-        Register
-      </button>
-    
-    </div>
 
   </div>
 
