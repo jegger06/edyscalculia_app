@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
@@ -16,15 +16,35 @@ import { Storage } from '@ionic/storage';
 })
 export class AdminAccountsDetailsPage {
 
-  user: Object = {};
+  id: number;
+  birthDay: string;
+
+  @ViewChild('name') name: string;
+  @ViewChild('password') password: string;
 
   constructor (
     public navCtrl: NavController,
     public storage: Storage,
     public navParams: NavParams) { }
 
+  requestUpdateAccount () {
+    console.log(123);
+  }
+
+  ionViewWillLeave() {
+    this.storage.remove('account-details');
+  }
+
   ionViewWillEnter (): void {
-    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
+    this.storage.get('account').then(response => {
+      if (!response) {
+        this.navCtrl.push('LogInPage');
+        return;
+      }
+      this.id = response['account_id'];
+      this.name['value'] = response['account_name'];
+      this.birthDay = new Date(response['account_bday']).toISOString();
+    });
   }
 
 }

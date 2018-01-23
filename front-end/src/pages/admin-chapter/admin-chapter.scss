@@ -1,18 +1,27 @@
 page-admin-chapter {
+
   .chapter-title {
     font-size: 20px;
     font-weight: bold;
     color: rgb(48, 134, 214);
+
     @at-root #{&}-content {
       padding-right: 16px;
     }
+
+  }
+
+  .button-round-md {
+    font-weight: bold;
   }
 
   .item-border {
     border-bottom: 1px solid #e0e0e0;
+
     &:last-child {
       border-bottom: none;
     }
+
   }
 
   .list-md .item-block .item-inner {

@@ -42,24 +42,24 @@
           <ion-label floating>Password</ion-label>
           <ion-input type="password" #password></ion-input>
         </ion-item>
+
+        <div class="main-button">
+        
+          <button (click)="requestNewAccount()" ion-button block round large icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            Submit
+          </button>
+        
+          <button (click)="toLogin()" ion-button block round large icon-left>
+            <ion-icon name="ios-contacts"></ion-icon>
+            Login
+          </button>
+        
+        </div>
   
       </ion-card-content>
   
     </ion-card>
-  
-    <div class="main-button">
-  
-      <button (click)="requestNewAccount()" ion-button block round large icon-left>
-        <ion-icon name="ios-send"></ion-icon>
-        Submit
-      </button>
-  
-      <button (click)="toLogin()" ion-button block round large icon-left>
-        <ion-icon name="ios-contacts"></ion-icon>
-        Login
-      </button>
-  
-    </div>
   
   </div>
 

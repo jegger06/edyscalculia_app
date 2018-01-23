@@ -13,5 +13,33 @@
 </ion-header>
 
 <ion-content padding>
-  {{ user | json }}
+
+  <ion-card>
+  
+    <ion-card-content>
+  
+      <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input type="text" #name></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Birthday</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="birthDay"></ion-datetime>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" #password></ion-input>
+      </ion-item>
+
+      <button (click)="requestUpdateAccount()" ion-button block round large icon-left>
+        <ion-icon name="ios-send"></ion-icon>
+        Submit
+      </button>
+  
+    </ion-card-content>
+  
+  </ion-card>
+
 </ion-content>
