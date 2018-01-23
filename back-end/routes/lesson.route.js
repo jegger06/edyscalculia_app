@@ -190,9 +190,9 @@ router.get('/:id', (req, res) => {
 // Update a lesson
 router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   if (req.user.type_slog === 'admin') {
-    const lesson_id = req.params.id;
+    const id = req.params.id;
     let sql = 'SELECT lesson_title FROM tbl_lesson WHERE lesson_id = ? LIMIT 1';
-    db.query(sql, [lesson_id], (err, result) => {
+    db.query(sql, [id], (err, result) => {
       if (err) {
         return res.json({
           success: false,
@@ -206,23 +206,41 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
           message: 'The lesson does not exist. Please don\'t edit the URL.'
         });
       } else {
-        const lesson_title = req.body.lesson_title;
+        // Check if the lesson exists in DB
         const lesson_slog = req.body.lesson_slog;
-        const lesson_content = req.body.lesson_content;
-        const status = req.body.lesson_status;
-        let sql = 'UPDATE tbl_lesson SET lesson_title = ?, lesson_slog = ?, lesson_content = ?, lesson_status = ? WHERE lesson_id = ?';
-        db.query(sql, [lesson_title, lesson_slog, lesson_content, status, lesson_id], (err, result) => {
+        let sql = 'SELECT lesson_id FROM tbl_lesson WHERE lesson_slog = ? LIMIT 1';
+        db.query(sql, [lesson_slog], (err, result) => {
           if (err) {
             return res.json({
               success: false,
-              message: 'Unable to update lesson. Please try again later.'
+              message: 'Something wen\'t wrong in checking for duplicate. Please try again later.'
             });
           }
 
-          return res.json({
-            success: true,
-            message: 'Lesson has been updated.'
-          });
+          if ((result[0] && result[0].lesson_id == id) || !result.length) {
+            const lesson_title = req.body.lesson_title;
+            const lesson_content = req.body.lesson_content;
+            const status = req.body.lesson_status;
+            let sql = 'UPDATE tbl_lesson SET lesson_title = ?, lesson_slog = ?, lesson_content = ?, lesson_status = ? WHERE lesson_id = ?';
+            db.query(sql, [lesson_title, lesson_slog, lesson_content, status, id], (err, result) => {
+              if (err) {
+                return res.json({
+                  success: false,
+                  message: 'Unable to update lesson. Please try again later.'
+                });
+              }
+
+              return res.json({
+                success: true,
+                message: 'Lesson has been updated.'
+              });
+            });
+          } else {
+            return res.json({
+              success: false,
+              message: 'Lesson title already exists. Please check the list of lessons.'
+            });
+          }
         });
       }
     });

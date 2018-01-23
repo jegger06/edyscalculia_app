@@ -121,22 +121,41 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
           message: 'The difficulty does not exist. Please don\'t edit the URL.'
         });
       } else {
+        // Check if the lesson exists in DB
         const slog = req.body.difficulty_slog;
-        const text = req.body.difficulty_text;
-        let sql = 'UPDATE tbl_difficulty SET difficulty_slog = ?, difficulty_text = ? WHERE difficulty_id = ?';
-        db.query(sql, [slog, text, id], (err, result) => {
+        let sql = 'SELECT difficulty_id FROM tbl_difficulty WHERE difficulty_slog = ? LIMIT 1';
+        db.query(sql, [slog], (err, result) => {
           if (err) {
             return res.json({
               success: false,
-              message: 'Error in updating the difficulty. Please try again later.'
+              message: 'Something wen\'t wrong in checking for duplicate. Please try again later.'
             });
           }
 
-          return res.json({
-            success: true,
-            message: 'Difficulty has been updated.'
-          });
+          if ((result[0] && result[0].difficulty_id == id) || !result.length) {
+            const text = req.body.difficulty_text;
+            let sql = 'UPDATE tbl_difficulty SET difficulty_slog = ?, difficulty_text = ? WHERE difficulty_id = ?';
+            db.query(sql, [slog, text, id], (err, result) => {
+              if (err) {
+                return res.json({
+                  success: false,
+                  message: 'Error in updating the difficulty. Please try again later.'
+                });
+              }
+
+              return res.json({
+                success: true,
+                message: 'Difficulty has been updated.'
+              });
+            });
+          } else {
+            return res.json({
+              success: false,
+              message: 'Difficulty already exists. Please check the list of difficulties.'
+            });
+          }
         });
+        
       }
     });
   } else {

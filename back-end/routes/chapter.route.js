@@ -121,7 +121,7 @@ router.get('/:id', (req, res) => {
 router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     if (req.user.type_slog === 'admin') {
         const id = req.params.id;
-        let sql = 'SELECT chapter_id, chapter_slog, chapter_text, chapter_date FROM tbl_chapter WHERE chapter_id = ? LIMIT 1';
+        let sql = 'SELECT chapter_id, chapter_slog FROM tbl_chapter WHERE chapter_id = ? LIMIT 1';
         db.query(sql, [id], (err, result) => {
             if (err) {
                 return res.json({
@@ -136,23 +136,42 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
                     message: 'The chapter does not exist. Please don\'t edit the URL.'
                 });
             } else {
+                // Check if the chapter exists in DB
                 const chapter_slog = req.body.chapter_slog;
-                const chapter_text = req.body.chapter_text;
-                const chapter_status = req.body.chapter_status;
-                const date_updated = new Date();
-                let sql = 'UPDATE tbl_chapter SET chapter_slog = ?, chapter_text = ?, chapter_status = ?, chapter_date = ? WHERE chapter_id = ?';
-                db.query(sql, [chapter_slog, chapter_text, chapter_status, date_updated, id], (err, result) => {
+                let sql = 'SELECT chapter_id FROM tbl_chapter WHERE chapter_slog = ? LIMIT 1';
+                db.query(sql, [chapter_slog], (err, result) => {
                     if (err) {
                         return res.json({
                             success: false,
-                            message: 'Error in updating chapter in DB. Please try again later.'
+                            message: 'Something wen\'t wrong in checking for duplicate. Please try again later.'
                         });
                     }
-                    return res.json({
-                        success: true,
-                        message: 'Chapter has been updated.'
-                    });
+
+                    if ((result[0] && result[0].chapter_id == id) || !result.length) {
+                        const chapter_text = req.body.chapter_text;
+                        const chapter_status = req.body.chapter_status;
+                        const date_updated = new Date();
+                        let sql = 'UPDATE tbl_chapter SET chapter_slog = ?, chapter_text = ?, chapter_status = ?, chapter_date = ? WHERE chapter_id = ?';
+                        db.query(sql, [chapter_slog, chapter_text, chapter_status, date_updated, id], (err, result) => {
+                            if (err) {
+                                return res.json({
+                                    success: false,
+                                    message: 'Error in updating chapter in DB. Please try again later.'
+                                });
+                            }
+                            return res.json({
+                                success: true,
+                                message: 'Chapter has been updated.'
+                            });
+                        });
+                    } else {
+                        return res.json({
+                            success: false,
+                            message: 'Chapter text already exist. Please check the list of chapters.'
+                        });
+                    }
                 });
+                
             }
         });
     } else {

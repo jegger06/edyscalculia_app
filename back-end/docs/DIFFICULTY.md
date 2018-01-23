@@ -10,7 +10,7 @@ Endpoint: /api/difficulty/create
 ### Variable
 ```json
 {
-  "difficulty_slog": number,
+  "difficulty_slog": string,
   "difficulty_text": string
 }
 ``` 
