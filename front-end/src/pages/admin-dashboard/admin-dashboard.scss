@@ -1,4 +1,5 @@
 page-admin-dashboard {
+
   .item-md h2 {
     font-size: 20px;
     color: #488aff;
@@ -11,4 +12,13 @@ page-admin-dashboard {
   .button-large-md {
     font-size: 1.5rem;
   }
+
+  .list-md .item-block .item-inner {
+    border-bottom: none;
+  }
+
+  .margin-bottom {
+    margin-bottom: 15px;
+  }
+
 }

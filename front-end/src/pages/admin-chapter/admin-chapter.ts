@@ -73,10 +73,6 @@ export class AdminChapterPage {
     this.fetchAllRecords(this.chapter['value']);
   }
 
-  fetchAllRecords (sort: string | number = 'all'): void {
-    this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
-  }
-
   addChapterTitle (): void {
     const title = this.title['value'];
     if (!title || title.trim() === '') {
@@ -176,8 +172,12 @@ export class AdminChapterPage {
     deleteAlert.present();
   }
 
-  ionViewDidEnter (): void {
-    this.fetchAllRecords();
+  fetchAllRecords (sort: string | number = 'all'): void {
+    this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
+  }
+
+  ionViewDidEnter () {
+    this.fetchAllRecords()
   }
 
   ionViewWillEnter (): void {

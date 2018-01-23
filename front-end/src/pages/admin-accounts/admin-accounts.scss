@@ -1,3 +1,21 @@
 page-admin-accounts {
 
+  .item-md .item-button {
+    padding: 0 1em;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .accounts-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #3086d6;
+  }
+
+  .item-md .item-button.view-details {
+    font-size: 1rem;
+    height: 30px;
+    padding: 0 1.5em;
+  }
+
 }

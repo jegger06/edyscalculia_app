@@ -24,7 +24,6 @@ export class MyApp {
     this.navItem = [
       { icon: 'logo-buffer', link: 'AdminDashboardPage', text: 'Dashboard' },
       { icon: 'md-paper', link: 'AdminChapterPage', text: 'Chapter' },
-      { icon: 'md-list', link: 'AdminChapterLessonPage', text: 'Lessons' },
       { icon: 'md-star', link: 'AdminTopscorePage', text: 'Top Score' },
       { icon: 'md-people', link: 'AdminAccountsPage', text: 'Accounts' },
       { icon: 'md-person', link: 'ProfilePage', text: 'Profile' },
