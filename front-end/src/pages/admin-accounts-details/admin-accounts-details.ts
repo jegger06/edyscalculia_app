@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 /**
- * Generated class for the ProfilePage page.
+ * Generated class for the AdminAccountsDetailsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -11,17 +11,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-profile',
-  templateUrl: 'profile.html',
+  selector: 'page-admin-accounts-details',
+  templateUrl: 'admin-accounts-details.html',
 })
-export class ProfilePage {
+export class AdminAccountsDetailsPage {
 
   user: Object = {};
 
   constructor (
     public navCtrl: NavController,
-    public navParams: NavParams,
-    public storage: Storage) { }
+    public storage: Storage,
+    public navParams: NavParams) { }
 
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);

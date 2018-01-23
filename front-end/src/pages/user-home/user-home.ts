@@ -16,7 +16,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class UserHomePage {
 
-  account: Object = {};
+  user: Object = {};
 
   constructor (
     public navCtrl: NavController,
@@ -24,7 +24,7 @@ export class UserHomePage {
     public storage: Storage) { }
 
   ionViewWillEnter (): void {
-    this.storage.get('account').then(response => this.account = response);
+    this.storage.get('account').then(response => this.user = response);
   }
 
 }

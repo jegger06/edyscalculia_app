@@ -176,12 +176,15 @@ export class AdminChapterPage {
     this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
   }
 
-  ionViewDidEnter () {
-    this.fetchAllRecords()
-  }
-
   ionViewWillEnter (): void {
-    this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
+    this.storage.get('account').then(response => {
+      if (!response) {
+        this.navCtrl.push('LogInPage');
+        return;
+      }
+      this.user = response;
+      this.fetchAllRecords();
+    });
   }
 
 }
