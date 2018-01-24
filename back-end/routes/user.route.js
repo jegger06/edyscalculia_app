@@ -122,7 +122,8 @@ router.post('/login', (req, res) => {
 
 router.get('/lists', passport.authenticate('jwt', { session: false }), (req, res) => {
   if (req.user.type_slog === 'admin') {
-    let sql = 'SELECT a.account_id, a.account_name, a.account_bday, a.account_username, a.account_date, a.type_id, t.type_description FROM tbl_account AS a INNER JOIN tbl_type AS t ON a.type_id = t.type_id ORDER BY ';
+    const adminId = req.user.account_id;
+    let sql = 'SELECT a.account_id, a.account_name, a.account_bday, a.account_username, a.account_date, a.type_id, t.type_description FROM tbl_account AS a INNER JOIN tbl_type AS t ON a.type_id = t.type_id WHERE account_id != ? ORDER BY ';
     let param_type = req.query.type;
     let param_date = req.query.date;
     switch(param_type) {
@@ -145,7 +146,7 @@ router.get('/lists', passport.authenticate('jwt', { session: false }), (req, res
       default:
         sql += 'a.account_date DESC';
     }
-    db.query(sql, (err, result) => {
+    db.query(sql, [adminId], (err, result) => {
       if (err) {
         return res.json({
           success: false,
