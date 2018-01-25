@@ -132,6 +132,8 @@ export class AdminChapterPage {
                 if (chapterUpdated['success']) {
                   this.chapterLists = this.chapterLists.map(list => list['chapter_id'] === id ? { ...list, ...dataToSave } : list);
                   this.toastMessage(chapterUpdated['message'], chapterUpdated['success']);
+                } else {
+                  this.toastMessage(chapterUpdated['message']);
                 }
               }, error => this.toastMessage(error['message']));
               return false;
@@ -162,6 +164,8 @@ export class AdminChapterPage {
               if (response['success']) {
                 this.chapterLists = this.chapterLists.filter(chapter => chapter.chapter_id !== id);
                 this.toastMessage(response['message'], response['success']);
+              } else {
+                this.toastMessage(response['message']);
               }
             }, error => this.toastMessage(error['message']));
             return false;

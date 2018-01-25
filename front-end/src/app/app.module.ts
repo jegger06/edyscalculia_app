@@ -8,9 +8,6 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 
-import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-
 @NgModule({
   declarations: [
     MyApp
@@ -18,8 +15,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
   imports: [
     BrowserModule,
     HttpClientModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
     IonicStorageModule.forRoot({
       name: 'dyscalculia_db',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
