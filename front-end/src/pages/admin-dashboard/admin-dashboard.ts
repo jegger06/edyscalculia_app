@@ -38,7 +38,12 @@ export class AdminDashboardPage {
         title = 'List of all Account';
         detailsMessage = details.map(item => `<li>${ item['account_name'] }</li>`);
         break;
-        default:
+      case 'lesson':
+        routePage = 'AdminChapterLessonPage';
+        title = 'List of all Account';
+        detailsMessage = details.map(item => `<li>${ item['lesson_title'] }</li>`);
+        break;
+      default:
         routePage = 'AdminChapterPage';
         title = 'List of all Chapter';
         detailsMessage = details.map(item => `<li>${ item['chapter_text'] }</li>`);
@@ -79,7 +84,13 @@ export class AdminDashboardPage {
           headers: new HttpHeaders().set('Authorization', this.user['token'])
         }).subscribe(response => {
           this.dashboardList['accounts'] = response['accounts'];
-          this.dashboardList['accountsList'] = response['accounts']['length'];
+          this.dashboardList['accountsCount'] = response['accounts']['length'];
+        }),
+        this.http.get(`${api.host}/lesson/lists`, {
+          headers: new HttpHeaders().set('Authorization', this.user['token'])
+        }).subscribe(response => {
+          this.dashboardList['lessons'] = response['lessons'];
+          this.dashboardList['lessonsCount'] = response['lessons']['length'];
         })
       ]);
     });
