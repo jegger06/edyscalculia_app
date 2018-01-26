@@ -12,11 +12,19 @@ page-admin-chapter-lesson {
     width: 120px;
   }
 
-  .item-md .item-button {
+  .item-md .item-button,
+  .button-round-md {
     padding: 0 1em;
     height: 45px;
     font-size: 1.7rem;
     font-weight: bold;
+  }
+
+  .item-md .item-button.no-bold {
+    font-weight: normal;
+    padding: 0 0.6em;
+    height: 25px;
+    font-size: 1.2rem;
   }
 
   .select-md .select-icon .select-icon-inner {
@@ -25,6 +33,14 @@ page-admin-chapter-lesson {
 
   #imageManager-1 {
     display: none;
+  }
+
+  .editor {
+    margin-bottom: 15px;
+    .fr-box {
+      margin-bottom: 10px;
+    }
+
   }
 
 }

@@ -2,6 +2,7 @@ import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
+import * as $ from 'jquery';
 
 /**
  * Generated class for the AdminChapterLessonPage page.
@@ -18,14 +19,22 @@ import { api } from '../../config/index';
 })
 export class AdminChapterLessonPage {
 
+  // TODO: 
+  // "chapter_id": number,
+  // "lesson_title": string,
+  // "lesson_slog": string,
+  // "lesson_content": string | text
+
   sort: number = 2;
   user: Object = {};
   lessons: Object = {};
+  chapter: Object = {};
   lessonsCount: number = 0;
+  public editorContent: string;
   public options: Object = {
-    imageUploadURL: 'http://localhost:8000/api/upload/image_upload',
-    videoUploadURL: 'http://localhost:8000/api/upload/video_upload',
-    placeholderText: 'Hello, Admin!',
+    imageUploadURL: `${ api.host }/upload/image_upload`,
+    videoUploadURL: `${ api.host }/upload/video_upload`,
+    placeholderText: 'Create some awesome lesson today!',
     pastePlain: true,
     charCounterCount: false,
     toolbarButtonsMD: ['bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', 'spellChecker', 'help', 'html', 'undo', 'redo'],
@@ -39,19 +48,17 @@ export class AdminChapterLessonPage {
     public http: HttpClient,
     public navParams: NavParams) { }
 
-  createLesson (): void {
-    this.lessons = {
-      success: true,
-      data: 'asdasd'
-    };
+  submitLesson (): void {
+    console.log(this.chapter, this.editorContent)
   }
 
   fetchLesson (sort: number): void {
     this.storage.get('chapter').then(chapter => {
+      this.chapter = chapter;
       const route = chapter ? chapter['chapter_id'] : '';
       this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(lessons => {
         this.lessons = lessons;
-        this.lessonsCount = lessons['lessons'] ? lessons['lessons']['length'] : 0;
+        lessons['lessons'] && (this.lessonsCount = lessons['lessons']['length']);
       });
     });
   }
