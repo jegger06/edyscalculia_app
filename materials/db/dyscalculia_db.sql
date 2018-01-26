@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2018 at 09:03 AM
+-- Generation Time: Jan 26, 2018 at 09:26 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -66,7 +66,10 @@ CREATE TABLE `tbl_answer` (
 --
 
 INSERT INTO `tbl_answer` (`answer_id`, `question_id`, `answer_choices`, `answer_key`, `answer_date`) VALUES
-(1, 5, 'an object | array in here...', 'sample answer', '2018-01-25 10:33:56');
+(1, 1, '[6, 5, 7]', '6', '2018-01-26 10:57:23'),
+(2, 2, '[9, 11, 10]', '10', '2018-01-26 10:58:41'),
+(3, 3, '[4, 3, 10]', '4', '2018-01-26 15:55:24'),
+(4, 4, '[15, 5, 10]', '5', '2018-01-26 15:56:25');
 
 -- --------------------------------------------------------
 
@@ -163,9 +166,10 @@ CREATE TABLE `tbl_question` (
 --
 
 INSERT INTO `tbl_question` (`question_id`, `lesson_id`, `question_range_id`, `question_type_id`, `account_id`, `difficulty_id`, `question_content`, `question_status`, `question_date`) VALUES
-(3, 2, 1, 3, 1, 1, 'asdasd', 0, '2018-01-15 00:00:00'),
-(4, 1, 1, 1, 5, 2, 'asdasd', 0, '2018-01-15 00:00:00'),
-(5, 1, 1, 3, 5, 2, 'Some question description in here...', 0, '2018-01-25 10:33:56');
+(1, 1, 1, 3, 5, 3, 'Whats the sum of 1 and 5?', 0, '2018-01-26 10:57:23'),
+(2, 1, 1, 3, 5, 3, 'Whats the sum of 3 and 7?', 1, '2018-01-26 10:58:41'),
+(3, 1, 0, 3, 5, 1, 'Whats the difference of 7 and 3?', 0, '2018-01-26 15:55:24'),
+(4, 1, 0, 3, 5, 1, 'Whats the difference of 10 and 5?', 1, '2018-01-26 15:56:25');
 
 -- --------------------------------------------------------
 
@@ -187,12 +191,12 @@ CREATE TABLE `tbl_question_range` (
 --
 
 INSERT INTO `tbl_question_range` (`question_range_id`, `account_id`, `question_range_slog`, `question_range_from`, `question_range_to`, `question_range_date`) VALUES
-(1, 1, '0-20%', '0%', '20%', '2018-01-24 12:53:15'),
+(0, 5, '0', '0', '0', '2018-01-25 15:17:31'),
+(1, 1, '0%-20%', '0%', '20%', '2018-01-24 12:53:15'),
 (2, 5, '21%-40%', '21%', '40%', '2018-01-24 13:33:26'),
 (3, 5, '41%-60%', '41%', '60%', '2018-01-24 13:34:19'),
 (4, 5, '61%-80%', '61%', '80%', '2018-01-24 15:39:29'),
-(5, 5, '81%-100%', '81%', '100%', '2018-01-25 15:17:31'),
-(6, 5, '0', '0', '0', '2018-01-25 15:17:31');
+(5, 5, '81%-100%', '81%', '100%', '2018-01-25 15:17:31');
 
 -- --------------------------------------------------------
 
@@ -327,19 +331,19 @@ ALTER TABLE `tbl_account`
 -- AUTO_INCREMENT for table `tbl_answer`
 --
 ALTER TABLE `tbl_answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_chapter`
 --
 ALTER TABLE `tbl_chapter`
-  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tbl_difficulty`
 --
 ALTER TABLE `tbl_difficulty`
-  MODIFY `difficulty_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `difficulty_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_lesson`
@@ -351,13 +355,13 @@ ALTER TABLE `tbl_lesson`
 -- AUTO_INCREMENT for table `tbl_question`
 --
 ALTER TABLE `tbl_question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_question_range`
 --
 ALTER TABLE `tbl_question_range`
-  MODIFY `question_range_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `question_range_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_question_type`

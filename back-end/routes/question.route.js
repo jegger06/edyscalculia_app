@@ -51,49 +51,37 @@ router.post('/create', passport.authenticate('jwt', { session: false }), (req, r
   }
 });
 
-router.get('/lists/:id', (req, res) => {
-  const id = req.params.id;
-  const difficulty = req.query.difficulty;
-  let sql = `SELECT 
-            q.question_id, 
-            q.question_range_id, 
-            q.question_type_id, 
-            q.account_id, 
-            q.difficulty_id, 
-            q.question_content, 
-            q.question_status, 
-            q.question_date, 
-            qa.answer_id, 
-            qa.answer_choices, 
-            qa.answer_key, 
-            d.difficulty_text, 
-            qr.question_range_slog 
-            FROM tbl_question AS q 
-            INNER JOIN tbl_answer AS qa 
-            ON q.question_id = qa.question_id 
-            INNER JOIN tbl_difficulty AS d 
-            ON q.difficulty_id = d.difficulty_id 
-            INNER JOIN tbl_question_range AS qr 
-            ON q.question_range_id = qr.question_range_id 
-            WHERE q.lesson_id = ? 
-            AND q.difficulty_id = ? 
-            AND q.question_status = ?`;
+router.get('/lists/:lesson_id', (req, res) => {
+  const id = req.params.lesson_id;
+  let difficulty = req.query.difficulty;
+  let range = req.query.range;
+  let status = req.query.status;
+  let sql = `SELECT q.question_id, q.question_range_id, q.question_type_id, q.account_id, q.difficulty_id, q.question_content, q.question_status, q.question_date, a.account_name, qa.answer_id, qa.answer_choices, qa.answer_key FROM tbl_question AS q INNER JOIN tbl_account AS a ON q.account_id = a.account_id INNER JOIN tbl_answer AS qa ON q.question_id = qa.question_id WHERE q.lesson_id = ? AND `;
 
-  switch(difficulty) {
-    case '1':
-
-    break;
-    case '2':
-
-    break;
-    case '3':
-
-    break;
-    default:
-
+  if (difficulty) {
+    sql += 'q.difficulty_id = ? AND '
+  } else {
+    sql += 'q.difficulty_id = ? AND ';
+    difficulty = 1;
   }
 
-  db.query(sql, [id], (err, result) => {
+  // Check if difficulty is not a pre-test which has an Id of 1 in our DB
+  if ((difficulty != 1) && range) {
+    sql += 'q.question_range_id = ? ';
+  } else {
+    sql += 'q.question_range_id = ? ';
+    range = 0;
+  }
+  
+  const data = [id, difficulty, range];
+  if (status) {
+    data.push(status);
+    sql += 'AND q.question_status = ? ';
+  } else {
+    sql += 'ORDER By q.question_status DESC';
+  }
+
+  db.query(sql, data, (err, result) => {
     if (err) {
       return res.json({
         success: false,
@@ -108,7 +96,6 @@ router.get('/lists/:id', (req, res) => {
       });
     } else {
       return res.json({
-        type,
         success: true,
         questions: result,
       });
