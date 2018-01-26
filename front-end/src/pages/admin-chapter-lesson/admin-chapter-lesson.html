@@ -14,13 +14,42 @@
 
 <ion-content padding>
 
+  <ion-list>
+
+    <ion-item *ngIf="isUpdate">
+      <ion-label>Lesson Status</ion-label>
+      <ion-select [(ngModel)]="lessonStatus">
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Lesson Title</ion-label>
+      <ion-input type="text" [(ngModel)]="lessonTitle"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
   <div class="editor">
-    <div [froalaEditor]="options" [(froalaModel)]="editorContent"></div>
+    <div [froalaEditor]="options" [(ngModel)]="editorContent"></div>
     <div text-right>
-      <button (click)="submitLesson()" ion-button round icon-left>
-        <ion-icon name="ios-send"></ion-icon>
-        submit
-      </button>
+      <div *ngIf="isUpdate; else showCreate">
+        <button (click)="updateLessonProceed()" ion-button round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          Save changes
+        </button>
+        <button (click)="cancelUpdateLesson()" color="danger" ion-button round icon-left>
+          <ion-icon name="md-close"></ion-icon>
+          cancel
+        </button>
+      </div>
+      <ng-template #showCreate>
+        <button (click)="addLesson()" ion-button round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          submit
+        </button>
+      </ng-template>
     </div>
   </div>
 
@@ -35,10 +64,13 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let lesson of lessons['lessons']" class="item-border">
-      <p>{{ lesson['lesson_title'] }}</p>
-      <button class=" no-bold" ion-button clear item-end>EDIT</button>
-      <button class="delete-button no-bold" ion-button clear item-end>DELETE</button>
+    <ion-item (click)="addQuestion(lesson)" *ngFor="let lesson of lessons['lessons']" class="item-border">
+      <p class="title-link">
+        <ion-icon name="md-arrow-dropright"></ion-icon>
+        {{ lesson['lesson_title'] }}
+      </p>
+      <button (click)="updateLesson($event, lesson)" class=" no-bold" ion-button clear item-end>EDIT</button>
+      <button (click)="deleteLesson($event, lesson['lesson_id'])" class="delete-button no-bold" ion-button clear item-end>DELETE</button>
     </ion-item>
 
   </ion-list>
