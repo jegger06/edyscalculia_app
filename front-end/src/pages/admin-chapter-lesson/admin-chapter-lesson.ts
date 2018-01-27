@@ -66,7 +66,9 @@ export class AdminChapterLessonPage {
           text: 'Proceed',
           handler: () => {
             alert.dismiss();
-            this.navCtrl.push('AdminChapterLessonQuestionsPage');
+            this.storage.set('chapter-lesson', lesson).then(() => this.navCtrl.push('AdminChapterLessonQuestionsPage')).catch(() => {
+              this.toastMessage('Error encountered when putting a lesson in to your storage.');
+            });
             return false;
           }
         }
@@ -176,6 +178,11 @@ export class AdminChapterLessonPage {
 
   sortNow (sort: number): void {
     this.fetchLesson(sort);
+  }
+
+  viewAll () {
+    this.sort = 2;
+    this.fetchLesson(this.sort);
   }
 
   ionViewDidLeave (): void {

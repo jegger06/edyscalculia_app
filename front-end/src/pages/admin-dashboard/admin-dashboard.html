@@ -34,7 +34,7 @@
     </ion-item>
 
     <ion-item class="margin-bottom">
-      <h2>Total of Lessons</h2>
+      <h2>Total of Lesson</h2>
       <p class="numbers-rep" text-center>{{ dashboardList['lessonsCount'] }}</p>
       <div *ngIf="dashboardList['lessonsCount'] > 0" class="padding-top" text-right>
         <button (click)="showDetails(dashboardList['lessons'], 'lesson')" large ion-button end round icon-left>
@@ -45,7 +45,7 @@
     </ion-item>
     
     <ion-item>
-      <h2>Total of Accounts</h2>
+      <h2>Total of Account</h2>
       <p class="numbers-rep" text-center>{{ dashboardList['accountsCount'] }}</p>
       <div *ngIf="dashboardList['accountsCount'] > 0" class="padding-top" text-right>
         <button (click)="showDetails(dashboardList['accounts'], 'account')" large ion-button end round icon-left>

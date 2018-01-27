@@ -40,4 +40,16 @@ page-admin-chapter {
     padding-bottom: 0;
   }
 
+  .item-md .item-button:not(.not-included),
+  .button-round-md:not(.not-included) {
+    padding: 0 1em;
+    height: 45px;
+    font-size: 1.7rem;
+    font-weight: bold;
+  }
+
+  .margin-right {
+    margin-right: 10px;
+  }
+
 }

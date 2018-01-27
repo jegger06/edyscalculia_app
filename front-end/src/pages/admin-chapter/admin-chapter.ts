@@ -30,6 +30,9 @@ export class AdminChapterPage {
   }> = [];
   sort: string = 'all';
   user: Object = {};
+  chapterStatus: number;
+  isUpdate: boolean = false;
+  updateChapterContent: Object = {};
   @ViewChild('chapter') chapter: Object = {};
   @ViewChild('chapterTitle') title: Object = {};
 
@@ -98,51 +101,42 @@ export class AdminChapterPage {
     }, error => this.toastMessage(error['message']));
   }
 
-  editChapter (event: any, id: number): void {
+  editChapter (event: any, chapter: Object): void {
     event.stopPropagation();
-    this.http.get(`${ api.host }/chapter/${ id }`).subscribe(chapter => {
-      const edit = this.alterCtrl.create({
-        title: 'Edit Chapter',
-        cssClass: 'alert-edit-header',
-        inputs: [
-          {
-            type: 'text',
-            id: 'edit-chapter',
-            value: chapter['details']['chapter_text']
-          }
-        ],
-        buttons: [
-          { text: 'Cancel' },
-          {
-            text: 'Update',
-            handler: data => {
-              edit.dismiss();
-              const dataToSave = {
-                chapter_slog: data[0].toLowerCase().split(' ').join('-'),
-                chapter_text: data[0],
-                chapter_status: chapter['details']['chapter_status']
-              };
-              if ((/^\s*$/).test(data[0])) {
-                this.toastMessage('Chapter title update should not be empty.');
-                return false;
-              }
-              this.http.put(`${ api.host }/chapter/${ id }`, dataToSave, {
-                headers: new HttpHeaders().set('Authorization', this.user['token'])
-              }).subscribe(chapterUpdated => {
-                if (chapterUpdated['success']) {
-                  this.chapterLists = this.chapterLists.map(list => list['chapter_id'] === id ? { ...list, ...dataToSave } : list);
-                  this.toastMessage(chapterUpdated['message'], chapterUpdated['success']);
-                } else {
-                  this.toastMessage(chapterUpdated['message']);
-                }
-              }, error => this.toastMessage(error['message']));
-              return false;
-            }
-          }
-        ]
-      });
-      edit.present();
+    this.isUpdate = true;
+    this.updateChapterContent = chapter;
+    this.chapterStatus = chapter['chapter_status'];
+    this.title['value'] = chapter['chapter_text'];
+  }
+
+  updateChapter (): void {
+    if ((/^\s*$/).test(this.title['value'])) {
+      this.toastMessage('Chapter title update should not be empty.');
+      return;
+    }
+    const id = this.updateChapterContent['chapter_id'];
+    const dataToSave = {
+      chapter_slog: this.title['value'].toLowerCase().split(' ').join('-'),
+      chapter_text: this.title['value'],
+      chapter_status: this.chapterStatus
+    };
+    this.http.put(`${ api.host }/chapter/${ id }`, dataToSave, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(chapterUpdated => {
+      if (chapterUpdated['success']) {
+        this.isUpdate = false;
+        this.title['value'] = '';
+        this.chapterLists = this.chapterLists.map(list => list['chapter_id'] === id ? { ...list, ...dataToSave } : list);
+        this.toastMessage(chapterUpdated['message'], chapterUpdated['success']);
+      } else {
+        this.toastMessage(chapterUpdated['message']);
+      }
     }, error => this.toastMessage(error['message']));
+  }
+
+  cancelUpdate (): void {
+    this.isUpdate = false;
+    this.title['value'] = '';
   }
 
   deleteChapter (event: any, id: number): void {
@@ -174,6 +168,11 @@ export class AdminChapterPage {
       ]
     });
     deleteAlert.present();
+  }
+
+  viewAll () {
+    this.sort = 'all';
+    this.fetchAllRecords();
   }
 
   fetchAllRecords (sort: string | number = 'all'): void {

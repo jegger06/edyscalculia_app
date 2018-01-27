@@ -1,3 +1,4 @@
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -15,11 +16,33 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AdminChapterLessonQuestionsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  user: Object = {};
+  lesson: Object = {};
+  sort: string | number = 2;
+  questions: Object = {};
+
+  constructor (
+    public navCtrl: NavController,
+    public storage: Storage,
+    public navParams: NavParams) { }
+
+  fetchQuestions (sort: string | number) {
+    this.questions['questionsCount'] = 0;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AdminChapterLessonQuestionsPage');
+  ionViewDidLeave (): void {
+    this.storage.remove('chapter-lesson');
+  }
+
+  ionViewWillEnter (): void {
+    this.storage.get('account').then(response => {
+      if (!response) {
+        this.navCtrl.push('LogInPage');
+        return;
+      }
+      this.user = response;
+      this.storage.get('chapter-lesson').then(lesson => (this.lesson = lesson) && this.fetchQuestions(this.sort));
+    });
   }
 
 }
