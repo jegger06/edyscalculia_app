@@ -26,16 +26,34 @@
       <h3 class="chapter-title">Adding of Chapter</h3>
     </ion-item>
 
+    <ion-item *ngIf="isUpdate" class="chapter-title-content">
+      <ion-label>Chapter Status</ion-label>
+      <ion-select [(ngModel)]="chapterStatus">
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
+
     <ion-item class="chapter-title-content">
       <ion-label floating>Chapter Title</ion-label>
       <ion-textarea type="text" #chapterTitle></ion-textarea>
     </ion-item>
     
     <ion-item>
-      <button (click)="addChapterTitle()" ion-button block round large icon-left>
+      <button *ngIf="!isUpdate; else showUpdateButton" (click)="addChapterTitle()" ion-button block round icon-left>
         <ion-icon name="ios-send"></ion-icon>
         Submit
       </button>
+      <ng-template #showUpdateButton>
+        <button float-right (click)="cancelUpdate()" color="danger" ion-button round icon-left>
+          <ion-icon name="ios-close"></ion-icon>
+          Cancel
+        </button>
+        <button float-right (click)="updateChapter()" class="margin-right" ion-button round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          Update
+        </button>
+      </ng-template>
     </ion-item>
 
   </ion-list>
@@ -52,9 +70,12 @@
     </ion-item>
 
     <ion-item *ngFor="let chapterList of chapterLists" (click)="chapterDetails(chapterList)" class="item-border">
-      <p>{{ chapterList.chapter_text }}</p>
-      <button (click)="editChapter($event, chapterList.chapter_id)" ion-button clear item-end>EDIT</button>
-      <button (click)="deleteChapter($event, chapterList.chapter_id)" class="delete-button" ion-button clear item-end>DELETE</button>
+      <p class="title-link">
+        <ion-icon name="md-arrow-dropright"></ion-icon>
+        {{ chapterList.chapter_text }}
+      </p>
+      <button class="not-included" (click)="editChapter($event, chapterList)" ion-button clear item-end>EDIT</button>
+      <button (click)="deleteChapter($event, chapterList.chapter_id)" class="delete-button not-included" ion-button clear item-end>DELETE</button>
     </ion-item>
 
   </ion-list>
@@ -64,7 +85,8 @@
     <ion-list>
 
       <ion-item class="item-border">
-        <p>{{ chapterLists['message'] }}</p>
+        <p>No result found.</p>
+        <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
       </ion-item>
 
     </ion-list>

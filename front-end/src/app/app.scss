@@ -61,24 +61,33 @@
 
 .alert-md .alert-button.delete-button,
 .delete-button {
-  color: #f53d3d;
+    color: #f53d3d;
 }
 
 .alert-edit-header.alert-md .alert-head,
 .alert-delete-header.alert-md .alert-head {
-  color: #fff;
-  margin-bottom: 15px;
+    color: #fff;
+    margin-bottom: 15px;
 }
 
 .alert-delete-header.alert-md .alert-head {
-  background: #f53d3d;
+    background: #f53d3d;
 }
 
 .alert-edit-header.alert-md .alert-head {
-  background: #488aff;
+    background: #488aff;
 }
 
 ion-alert.alert-top {
     padding-top: 0;
     align-items: center;
+}
+
+.item-md p.title-link {
+    color: #488aff;
+}
+
+button[small] {
+    font-size: 15px;
+    height: 38px;
 }

@@ -1,0 +1,87 @@
+<!--
+  Generated template for the AdminChapterLessonQuestionsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Lesson Question</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+
+    <ion-item>
+      <h3 class="lesson-detail">Lesson Details</h3>
+      <button ion-button item-right round icon-left>
+        <ion-icon name="md-add"></ion-icon>
+        Add question
+      </button>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        <strong>Chapter:</strong>
+      </p>
+      <p>{{ lesson['chapter_text'] }}</p>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        <strong>Title:</strong>
+      </p>
+      <p>{{ lesson['lesson_title'] }}</p>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        <strong>Content:</strong>
+      </p>
+      <p [innerHTML]="lesson['lesson_content']"></p>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        <strong>Created:</strong>
+      </p>
+      <p>{{ lesson['lesson_date'] | date:medium }}</p>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list *ngIf="questions['questionsCount']; else showNoRecord">
+
+    <ion-item>
+      <ion-label>List of Question</ion-label>
+      <ion-select [(ngModel)]="sort">
+        <ion-option value="2">All</ion-option>
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      
+    </ion-item>
+
+  </ion-list>
+
+  <ng-template #showNoRecord>
+
+    <ion-list>
+
+      <ion-item>
+        <p>No record of question for now.</p>
+      </ion-item>
+
+    </ion-list>
+
+  </ng-template>
+
+</ion-content>
