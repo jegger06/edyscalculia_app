@@ -32,6 +32,7 @@ export class AdminChapterPage {
   user: Object = {};
   chapterStatus: number;
   isUpdate: boolean = false;
+  header: string = 'Adding';
   updateChapterContent: Object = {};
   @ViewChild('chapter') chapter: Object = {};
   @ViewChild('chapterTitle') title: Object = {};
@@ -104,6 +105,7 @@ export class AdminChapterPage {
   editChapter (event: any, chapter: Object): void {
     event.stopPropagation();
     this.isUpdate = true;
+    this.header = 'Updating';
     this.updateChapterContent = chapter;
     this.chapterStatus = chapter['chapter_status'];
     this.title['value'] = chapter['chapter_text'];
@@ -137,6 +139,7 @@ export class AdminChapterPage {
   cancelUpdate (): void {
     this.isUpdate = false;
     this.title['value'] = '';
+    this.header = 'Adding';
   }
 
   deleteChapter (event: any, id: number): void {
