@@ -97,10 +97,156 @@ router.get('/lists/:lesson_id', (req, res) => {
     } else {
       return res.json({
         success: true,
-        questions: result,
+        questions: result
       });
     }
   })
 });
+
+router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false }), (req, res) => {
+  const id = req.query.difficulty;
+  // query 5 question base on difficulty, range and lesson
+
+
+  if (req.user) {
+    res.json({
+      'user': req.user,
+      id
+    });
+  } else {
+    res.json({
+      'noUser': true
+
+    });
+  }
+});
+
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  let sql = 'SELECT q.question_range_id, q.question_type_id, q.account_id, q.difficulty_id, q.question_content, q.question_status, q.question_date, a.account_name, qa.answer_id, qa.answer_choices, qa.answer_key FROM tbl_question AS q INNER JOIN tbl_account AS a ON q.account_id = a.account_id INNER JOIN tbl_answer AS qa ON q.question_id = qa.question_id WHERE q.question_id = ?';
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.json({
+        success: false,
+        message: 'Something wen\'t wrong fetching question details. Please try again later.'
+      });
+    }
+
+    if (!result.length) {
+      return res.json({
+        success: false,
+        message: 'The question does not exist. Please don\'t edit the URL.'
+      });
+    }
+
+    return res.json({
+      success: true,
+      details: result[0]
+    });
+  })
+});
+
+router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (req.user.type_slog === 'admin') {
+    const id = req.params.id;
+    let sql = 'SELECT lesson_id FROM tbl_question WHERE question_id = ? LIMIT 1';
+    db.query(sql, [id], (err, result) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Something wen\'t wrong in checking the question to update. Please try again later.'
+        });
+      }
+
+      if (!result.length) {
+        return res.json({
+          success: false,
+          message: 'The question does not exist. Please don\'t edit the URL.'
+        });
+      } else {
+        const range_id = req.body.question_range_id;
+        const type_id = req.body.question_type_id;
+        const difficulty_id = req.body.difficulty_id;
+        const content = req.body.question_content;
+        const status = req.body.question_status;
+        const choices = req.body.answer_choices;
+        const key = req.body.answer_key;
+        let sql = 'UPDATE tbl_question SET question_range_id = ?, question_type_id = ?, difficulty_id = ?, question_content = ?, question_status = ? WHERE question_id = ?';
+        db.query(sql, [range_id, type_id, difficulty_id, content, status, id], (err, result) => {
+          if (err) {
+            return res.json({
+              success: false,
+              message: 'Something wen\'t wrong in updating the question in DB. Please try again later.'
+            });
+          }
+
+          let sql = 'UPDATE tbl_answer SET answer_choices = ?, answer_key = ? WHERE question_id = ?';
+          db.query(sql, [choices, key, id], (err, result) => {
+            if (err) {
+              return res.json({
+                success: false,
+                message: 'Something wen\'t wrong in updating the question answers in DB. Please try again later.'
+              });
+            }
+
+            return res.json({
+              success: true,
+              message: 'Question has been updated.'
+            });
+          })
+        });
+      }
+    });
+  } else {
+    res.json({
+      success: false,
+      message: 'You don\'t have the rights to update a question.'
+    });
+  }
+});
+
+router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (req.user.type_slog === 'admin') {
+    const id = req.params.id;
+    let sql = 'SELECT lesson_id FROM tbl_question WHERE question_id = ? LIMIT 1';
+    db.query(sql, [id], (err, result) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Something wen\'t wrong in checking the question to update. Please try again later.'
+        });
+      }
+
+      if (!result.length) {
+        return res.json({
+          success: false,
+          message: 'The question does not exist. Please don\'t edit the URL.'
+        });
+      } else {
+        let sql = 'DELETE FROM tbl_question WHERE question_id = ?';
+        db.query(sql, [id], (err, result) => {
+          if (err) {
+            return res.json({
+              success: false,
+              message: 'Something wen\'t wrong in deleting the question. Please try again later.'
+            });
+          }
+
+          return res.json({
+            success: true,
+            message: 'Question has been deleted.'
+          });
+        });
+      }
+    });
+  } else {
+    res.json({
+      success: false,
+      message: 'You don\'t have the rights to delete a question.'
+    });
+  }
+});
+
+
 
 module.exports = router;

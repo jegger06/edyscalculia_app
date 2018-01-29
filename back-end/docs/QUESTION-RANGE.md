@@ -11,7 +11,8 @@ Endpoint: /api/question-range/create
 ```json
 {
   "question_range_slog": string,
-  "question_range_text": string
+  "question_range_from": string,
+  "question_range_to": string
 }
 ``` 
 ### Response
@@ -59,7 +60,8 @@ There are question ranges in DB
       "question_range_id": number,
       "account_id": number,
       "question_range_slog": string,
-      "question_range_text": string,
+      "question_range_from": string,
+      "question_range_to": string,
       "question_range_date": string | date,
       "account_name": string,
       "account_username": string
@@ -91,7 +93,8 @@ Details are fetched in DB
   "details": {
     "account_id": number,
     "question_range_slog": string,
-    "question_range_text": string,
+    "question_range_from": string,
+    "question_range_to": string,
     "question_range_date": string | date,
     "account_name": string,
     "account_username": string
@@ -110,7 +113,8 @@ Endpoint: /api/question-range/:question_range_id
 ```json
 {
   "question_range_slog": string,
-  "question_range_text": string
+  "question_range_from": string,
+  "question_range_to": string
 }
 ```
 

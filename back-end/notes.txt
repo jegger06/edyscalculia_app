@@ -1,5 +1,3 @@
-* Need to update the docs for the QUESTION-RANGE.md
-
 * Need to continue working on the question route.
 
   * About the Update only the following fields.
@@ -13,3 +11,6 @@
 
   * About the Delete
     delete the question as well as the answer.
+
+
+Work on giving 5 questions to the user.

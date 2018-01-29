@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const AnonymousStrategy = require('passport-anonymous').Strategy;
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // passport Middleware
+passport.use(new AnonymousStrategy());
 app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport')(passport);
