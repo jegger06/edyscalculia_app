@@ -144,7 +144,7 @@ export class AdminManageAccountsPage {
     })
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (!response) {
         this.navCtrl.push('LogInPage');
