@@ -104,21 +104,67 @@ router.get('/lists/:lesson_id', (req, res) => {
 });
 
 router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false }), (req, res) => {
-  const id = req.query.difficulty;
-  // query 5 question base on difficulty, range and lesson
+  const lessonId = req.query.lesson_id;
+  const difficultyId = req.query.difficulty;
+  let sql = `SELECT
+              q.question_id,
+              q.question_range_id,
+              q.question_type_id,
+              q.difficulty_id,
+              q.question_content,
+              q.question_status,
+              qa.answer_id,
+              qa.answer_choices,
+              qa.answer_key
+            FROM
+              tbl_question AS q
+            INNER JOIN tbl_answer AS qa
+            ON
+              q.question_id = qa.question_id
+            WHERE
+              q.lesson_id = 1 AND q.difficulty_id = 1 AND q.question_status = 1 `;
+  if (difficultyId != 1 && req.user) {
+      const accountId = req.user.account_id;
+      const preTest = 1; // pre-test in DB
+      let sql = `SELECT
+                  question_range_id,
+                  question_range_slog
+                FROM
+                  tbl_question_range
+                WHERE 
+                (SELECT score_count FROM tbl_score WHERE account_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
+                BETWEEN question_range_from AND question_range_to`;
+      db.query(sql, [accountId, preTest], (err, result) => {
+        if (err) {
+          return res.json({
+            success: false,
+            message: 'Something wen\'t wrong in getting the range of exam to take. Please try again later.'
+          });
+        }
+  
+        if (result.length) {
+          // query of questions 
+          // conditions
 
+          
+        } else {
+          return res.json({
+            success: true,
+            questions: []
+          });
+        }
+        })
+    } else {
+      // get 5 questions of pre-test based on lessons
+      // conditions
+      // where lesson_id = lessonId AND difficultyId = 1 AND question_status = 1 LIMIT 5;
+    }
+  
+    // query 5 question base on difficulty, range and lesson
+    // query
+    // db.query(sql)
 
-  if (req.user) {
-    res.json({
-      'user': req.user,
-      id
-    });
-  } else {
-    res.json({
-      'noUser': true
-
-    });
-  }
+  
 });
 
 router.get('/:id', (req, res) => {

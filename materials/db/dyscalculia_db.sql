@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2018 at 09:44 AM
+-- Generation Time: Jan 30, 2018 at 09:52 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -43,7 +43,7 @@ CREATE TABLE `tbl_account` (
 --
 
 INSERT INTO `tbl_account` (`account_id`, `type_id`, `account_name`, `account_bday`, `account_username`, `account_password`, `account_date`) VALUES
-(1, 2, 'John Doe', '2018-01-15', 'jdoe', 'bcrypt datap', '2018-01-11'),
+(1, 2, 'John Doe', '2018-01-15', 'jdoe', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-01-11'),
 (4, 1, 'John Rey Baylen', '1995-07-21', 'jrey', '$2a$10$GSib7MV0TloyMUIVVYJPV.wcDQLGajy23ULqfBqAEDNF7PdGhdogG', '2018-01-15'),
 (5, 1, 'Jegger Saren', '1990-06-13', 'jegger06', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-01-17');
 
@@ -84,7 +84,23 @@ INSERT INTO `tbl_answer` (`answer_id`, `question_id`, `answer_choices`, `answer_
 (18, 18, '[3, 4, 2]', '3', '2018-01-29 16:42:20'),
 (19, 19, '[26, 10, 39]', '39', '2018-01-29 16:43:00'),
 (20, 20, '[35, 2, 21]', '35', '2018-01-29 16:43:37'),
-(21, 21, '[2, 24, 10]', '24', '2018-01-29 16:44:07');
+(21, 21, '[2, 24, 10]', '24', '2018-01-29 16:44:07'),
+(22, 22, '[2, 30, 40]', '30', '2018-01-30 10:11:43'),
+(23, 23, '[100, 90, 56]', '100', '2018-01-30 10:12:34'),
+(24, 24, '[219, 199, 209]', '209', '2018-01-30 10:13:33'),
+(25, 25, '[20, 120, 130]', '130', '2018-01-30 10:14:10'),
+(26, 26, '[320, 620, 520]', '620', '2018-01-30 10:15:21'),
+(27, 27, '[290, 280, 300]', '290', '2018-01-30 14:12:58'),
+(28, 28, '[248, 238, 228]', '238', '2018-01-30 14:14:47'),
+(29, 29, '[302, 102, 292]', '302', '2018-01-30 14:15:54'),
+(30, 30, '[522, 501, 511]', '511', '2018-01-30 14:16:32'),
+(31, 31, '[400, 500, 450]', '500', '2018-01-30 14:17:53'),
+(32, 32, '[855, 755, 835]', '855', '2018-01-30 14:18:34'),
+(33, 33, '[10, 22, 18]', '10', '2018-01-30 14:20:50'),
+(34, 34, '[2, 20, 1]', '1', '2018-01-30 14:21:52'),
+(35, 35, '[70, 6, 50]', '6', '2018-01-30 14:22:23'),
+(36, 36, '[183, 177, 60]', '60', '2018-01-30 14:23:15'),
+(37, 37, '[570, 3426, 3414]', '570', '2018-01-30 14:24:19');
 
 -- --------------------------------------------------------
 
@@ -182,24 +198,40 @@ CREATE TABLE `tbl_question` (
 
 INSERT INTO `tbl_question` (`question_id`, `lesson_id`, `question_range_id`, `question_type_id`, `account_id`, `difficulty_id`, `question_content`, `question_status`, `question_date`) VALUES
 (2, 1, 1, 3, 5, 3, 'Whats the sum of 3 and 7?', 1, '2018-01-26 10:58:41'),
-(3, 1, 0, 3, 5, 1, 'Whats the difference of 7 and 3?', 0, '2018-01-26 15:55:24'),
+(3, 1, 0, 3, 5, 1, 'Whats the difference of 7 and 3?', 1, '2018-01-26 15:55:24'),
 (4, 1, 0, 3, 5, 1, 'Whats the difference of 10 and 5?', 1, '2018-01-26 15:56:25'),
-(6, 1, 0, 3, 5, 1, 'Whats the sum of 6 and 3?', 0, '2018-01-29 15:52:51'),
-(7, 1, 0, 3, 5, 1, 'Whats the sum of 4 and 4?', 0, '2018-01-29 15:53:42'),
-(8, 1, 0, 3, 5, 1, 'Whats the sum of 1 and 2?', 0, '2018-01-29 15:54:13'),
-(9, 1, 0, 3, 5, 1, 'Whats the sum of 12 and 5?', 0, '2018-01-29 15:55:23'),
-(10, 1, 1, 3, 5, 2, 'How may days are there in a week?', 0, '2018-01-29 16:32:46'),
-(11, 1, 1, 3, 5, 2, 'What is the difference between 20 and 10?', 0, '2018-01-29 16:34:49'),
-(12, 1, 1, 3, 5, 2, 'What is the difference between 30 and 5?', 0, '2018-01-29 16:35:25'),
-(13, 1, 1, 3, 5, 2, 'What is the difference between 5 and 1?', 0, '2018-01-29 16:35:48'),
-(14, 1, 1, 3, 5, 2, 'What is the difference between 8 and 5?', 0, '2018-01-29 16:36:27'),
-(15, 1, 1, 3, 5, 2, 'What is the difference between 28 and 8?', 0, '2018-01-29 16:37:27'),
-(16, 1, 2, 3, 5, 2, 'What is the multiple between 2 and 2?', 0, '2018-01-29 16:40:49'),
-(17, 1, 2, 3, 5, 2, 'What is the multiple between 5 and 3?', 0, '2018-01-29 16:41:40'),
-(18, 1, 2, 3, 5, 2, 'What is the multiple between 3 and 1?', 0, '2018-01-29 16:42:20'),
-(19, 1, 2, 3, 5, 2, 'What is the multiple between 13 and 3?', 0, '2018-01-29 16:43:00'),
-(20, 1, 2, 3, 5, 2, 'What is the multiple between 7 and 5?', 0, '2018-01-29 16:43:37'),
-(21, 1, 2, 3, 5, 2, 'What is the multiple between 6 and 4?', 0, '2018-01-29 16:44:07');
+(6, 1, 0, 3, 5, 1, 'Whats the sum of 6 and 3?', 1, '2018-01-29 15:52:51'),
+(7, 1, 0, 3, 5, 1, 'Whats the sum of 4 and 4?', 1, '2018-01-29 15:53:42'),
+(8, 1, 0, 3, 5, 1, 'Whats the sum of 1 and 2?', 1, '2018-01-29 15:54:13'),
+(9, 1, 0, 3, 5, 1, 'Whats the sum of 12 and 5?', 1, '2018-01-29 15:55:23'),
+(10, 1, 1, 3, 5, 2, 'How may days are there in a week?', 1, '2018-01-29 16:32:46'),
+(11, 1, 1, 3, 5, 2, 'What is the difference between 20 and 10?', 1, '2018-01-29 16:34:49'),
+(12, 1, 1, 3, 5, 2, 'What is the difference between 30 and 5?', 1, '2018-01-29 16:35:25'),
+(13, 1, 1, 3, 5, 2, 'What is the difference between 5 and 1?', 1, '2018-01-29 16:35:48'),
+(14, 1, 1, 3, 5, 2, 'What is the difference between 8 and 5?', 1, '2018-01-29 16:36:27'),
+(15, 1, 1, 3, 5, 2, 'What is the difference between 28 and 8?', 1, '2018-01-29 16:37:27'),
+(16, 1, 2, 3, 5, 2, 'What is the multiple between 2 and 2?', 1, '2018-01-29 16:40:49'),
+(17, 1, 2, 3, 5, 2, 'What is the multiple between 5 and 3?', 1, '2018-01-29 16:41:40'),
+(18, 1, 2, 3, 5, 2, 'What is the multiple between 3 and 1?', 1, '2018-01-29 16:42:20'),
+(19, 1, 2, 3, 5, 2, 'What is the multiple between 13 and 3?', 1, '2018-01-29 16:43:00'),
+(20, 1, 2, 3, 5, 2, 'What is the multiple between 7 and 5?', 1, '2018-01-29 16:43:37'),
+(21, 1, 2, 3, 5, 2, 'What is the multiple between 6 and 4?', 1, '2018-01-29 16:44:07'),
+(22, 1, 3, 3, 5, 2, 'What is the sum of 16 and 14?', 1, '2018-01-30 10:11:43'),
+(23, 1, 3, 3, 5, 2, 'What is the sum of 78 and 22?', 1, '2018-01-30 10:12:34'),
+(24, 1, 3, 3, 5, 2, 'What is the sum of 59 and 150?', 1, '2018-01-30 10:13:33'),
+(25, 1, 3, 3, 5, 2, 'What is the sum of 70 and 50?', 1, '2018-01-30 10:14:10'),
+(26, 1, 3, 3, 5, 2, 'What is the sum of 470 and 150?', 1, '2018-01-30 10:15:21'),
+(27, 1, 3, 3, 5, 2, 'What is the sum of 234 and 56?', 1, '2018-01-30 14:12:58'),
+(28, 1, 4, 3, 5, 2, 'What is the difference between 294 and 56?', 1, '2018-01-30 14:14:47'),
+(29, 1, 4, 3, 5, 2, 'What is the difference between 537 and 235?', 1, '2018-01-30 14:15:54'),
+(30, 1, 4, 3, 5, 2, 'What is the difference between 863 and 352?', 1, '2018-01-30 14:16:32'),
+(31, 1, 4, 3, 5, 2, 'What is the difference between 734 and 234?', 1, '2018-01-30 14:17:53'),
+(32, 1, 4, 3, 5, 2, 'What is the difference between 978 and 123?', 1, '2018-01-30 14:18:34'),
+(33, 1, 5, 3, 5, 2, 'What is 20 divided by 2?', 1, '2018-01-30 14:20:50'),
+(34, 1, 5, 3, 5, 2, 'What is 10 divided by 10?', 1, '2018-01-30 14:21:52'),
+(35, 1, 5, 3, 5, 2, 'What is 60 divided by 10?', 1, '2018-01-30 14:22:23'),
+(36, 1, 5, 3, 5, 2, 'What is 180 divided by 3?', 1, '2018-01-30 14:23:15'),
+(37, 1, 5, 3, 5, 2, 'What is 3420 divided by 6?', 1, '2018-01-30 14:24:19');
 
 -- --------------------------------------------------------
 
@@ -211,8 +243,8 @@ CREATE TABLE `tbl_question_range` (
   `question_range_id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   `question_range_slog` varchar(255) NOT NULL,
-  `question_range_from` varchar(255) NOT NULL,
-  `question_range_to` varchar(255) NOT NULL,
+  `question_range_from` decimal(11,0) NOT NULL,
+  `question_range_to` decimal(11,0) NOT NULL,
   `question_range_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -222,12 +254,12 @@ CREATE TABLE `tbl_question_range` (
 
 INSERT INTO `tbl_question_range` (`question_range_id`, `account_id`, `question_range_slog`, `question_range_from`, `question_range_to`, `question_range_date`) VALUES
 (0, 5, '0', '0', '0', '2018-01-25 15:17:31'),
-(1, 1, '0%-20%', '0%', '20%', '2018-01-24 12:53:15'),
-(2, 5, '21%-40%', '21%', '40%', '2018-01-24 13:33:26'),
-(3, 5, '41%-60%', '41%', '60%', '2018-01-24 13:34:19'),
-(4, 5, '61%-80%', '61%', '80%', '2018-01-24 15:39:29'),
-(5, 5, '81%-100%', '81%', '100%', '2018-01-25 15:17:31'),
-(6, 5, 'sample-range1', 'sample1', 'rang1e', '2018-01-29 14:28:24');
+(1, 1, '0-20', '0', '20', '2018-01-24 12:53:15'),
+(2, 5, '21-40', '21', '40', '2018-01-24 13:33:26'),
+(3, 5, '41-60', '41', '60', '2018-01-24 13:34:19'),
+(4, 5, '61-80', '61', '80', '2018-01-24 15:39:29'),
+(5, 5, '81-100', '81', '100', '2018-01-25 15:17:31'),
+(6, 5, 'sample-range1', '0', '0', '2018-01-29 14:28:24');
 
 -- --------------------------------------------------------
 
@@ -252,6 +284,27 @@ INSERT INTO `tbl_question_type` (`question_type_id`, `account_id`, `question_typ
 (3, 5, 'multiple-choice', 'Multiple Choice', '2018-01-24 14:35:58'),
 (5, 5, 'drag-and-drop1', 'Drag and Drop', '2018-01-24 14:43:02'),
 (6, 5, 'true-or-false', 'true or false', '2018-01-25 09:26:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_score`
+--
+
+CREATE TABLE `tbl_score` (
+  `score_id` int(11) NOT NULL,
+  `difficulty_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `score_count` decimal(3,0) NOT NULL,
+  `score_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_score`
+--
+
+INSERT INTO `tbl_score` (`score_id`, `difficulty_id`, `account_id`, `score_count`, `score_date`) VALUES
+(1, 1, 1, '100', '2018-01-30 15:10:09');
 
 -- --------------------------------------------------------
 
@@ -343,6 +396,14 @@ ALTER TABLE `tbl_question_type`
   ADD KEY `account_id` (`account_id`);
 
 --
+-- Indexes for table `tbl_score`
+--
+ALTER TABLE `tbl_score`
+  ADD PRIMARY KEY (`score_id`),
+  ADD KEY `difficulty_id` (`difficulty_id`),
+  ADD KEY `account_id` (`account_id`);
+
+--
 -- Indexes for table `tbl_type`
 --
 ALTER TABLE `tbl_type`
@@ -362,7 +423,7 @@ ALTER TABLE `tbl_account`
 -- AUTO_INCREMENT for table `tbl_answer`
 --
 ALTER TABLE `tbl_answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `tbl_chapter`
@@ -386,7 +447,7 @@ ALTER TABLE `tbl_lesson`
 -- AUTO_INCREMENT for table `tbl_question`
 --
 ALTER TABLE `tbl_question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `tbl_question_range`
@@ -399,6 +460,12 @@ ALTER TABLE `tbl_question_range`
 --
 ALTER TABLE `tbl_question_type`
   MODIFY `question_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tbl_score`
+--
+ALTER TABLE `tbl_score`
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_type`
@@ -462,6 +529,13 @@ ALTER TABLE `tbl_question_range`
 --
 ALTER TABLE `tbl_question_type`
   ADD CONSTRAINT `tbl_question_type_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `tbl_account` (`account_id`);
+
+--
+-- Constraints for table `tbl_score`
+--
+ALTER TABLE `tbl_score`
+  ADD CONSTRAINT `tbl_score_ibfk_1` FOREIGN KEY (`difficulty_id`) REFERENCES `tbl_difficulty` (`difficulty_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tbl_score_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `tbl_account` (`account_id`) ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
