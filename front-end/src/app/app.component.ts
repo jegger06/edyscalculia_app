@@ -22,11 +22,12 @@ export class MyApp {
     public menuCtrl: MenuController,
     public storage: Storage) {
     this.navItem = [
+      { icon: 'md-person', link: 'ProfilePage', text: 'Profile' },
       { icon: 'logo-buffer', link: 'AdminDashboardPage', text: 'Dashboard' },
       { icon: 'md-paper', link: 'AdminChapterPage', text: 'Chapter' },
       { icon: 'md-star', link: 'AdminTopscorePage', text: 'Top Score' },
       { icon: 'md-people', link: 'AdminAccountsPage', text: 'Accounts' },
-      { icon: 'md-person', link: 'ProfilePage', text: 'Profile' },
+      { icon: 'md-settings', link: 'AdminSettingsPage', text: 'Settings' },
       { icon: 'md-exit', link: 'LogOutPage', text: 'Logout' }
     ];
 
