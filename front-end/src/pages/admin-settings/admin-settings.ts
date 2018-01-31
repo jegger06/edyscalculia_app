@@ -34,7 +34,8 @@ export class AdminSettingsPage implements OnInit {
   ngOnInit (): void {
     this.tileItem = [
       { title: 'Accounts', link: 'AdminManageAccountsPage' },
-      { title: 'Difficulty', link: 'AdminManageDifficultyPage' }
+      { title: 'Difficulty', link: 'AdminManageDifficultyPage' },
+      { title: 'Difficulty Range', link: 'AdminManageDifficultyRangePage' }
     ];
   }
 
