@@ -106,8 +106,10 @@ router.get('/lists/:lesson_id', (req, res) => {
 router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false }), (req, res) => {
   const lessonId = req.query.lesson_id;
   const difficultyId = req.query.difficulty;
-  let sql = `SELECT
+  const status = 1;
+  let questionQuery = `SELECT
               q.question_id,
+              q.lesson_id,
               q.question_range_id,
               q.question_type_id,
               q.difficulty_id,
@@ -121,8 +123,8 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
             INNER JOIN tbl_answer AS qa
             ON
               q.question_id = qa.question_id
-            WHERE
-              q.lesson_id = 1 AND q.difficulty_id = 1 AND q.question_status = 1 `;
+            WHERE q.lesson_id = ? AND q.question_status = ? AND q.difficulty_id = ? `;
+  const queryData = [lessonId, status, difficultyId];
   if (difficultyId != 1 && req.user) {
       const accountId = req.user.account_id;
       const preTest = 1; // pre-test in DB
@@ -132,9 +134,9 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
                 FROM
                   tbl_question_range
                 WHERE 
-                (SELECT score_count FROM tbl_score WHERE account_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
+                (SELECT score_count FROM tbl_score WHERE account_id = ? AND lesson_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
                 BETWEEN question_range_from AND question_range_to`;
-      db.query(sql, [accountId, preTest], (err, result) => {
+      db.query(sql, [accountId, lessonId, preTest], (err, result) => {
         if (err) {
           return res.json({
             success: false,
@@ -145,20 +147,42 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
         if (result.length) {
           // query of questions 
           // conditions
+          questionQuery += ' AND q.question_range_id = ?';
+          queryData.push(result[0].question_range_id);
 
-          
-        } else {
+        } 
+        // else {
+        //   // No pre-test found for this user on the lesson_id provided
+        //   // query pre-test based on lesson id passed.
+        //   return res.json({
+        //     success: true,
+        //     questions: []
+        //   });
+        // }
+        })
+    }
+    //  else {
+    //   // get 5 questions of pre-test based on lessons
+    //   // conditions
+    //   // where lesson_id = lessonId AND difficultyId = 1 AND question_status = 1 LIMIT 5;
+    // }
+    setTimeout(() => {
+      questionQuery += ' LIMIT 5';
+      db.query(questionQuery, queryData, (err, result) => {
+        if (err) {
           return res.json({
-            success: true,
-            questions: []
+            success: false,
+            message: 'Something wen\'t wrong fetching the questions. Please try again later.'
           });
         }
-        })
-    } else {
-      // get 5 questions of pre-test based on lessons
-      // conditions
-      // where lesson_id = lessonId AND difficultyId = 1 AND question_status = 1 LIMIT 5;
-    }
+  
+        return res.json({
+          success: true,
+          numberOfQuestions: result.length,
+          questions: result
+        });
+      });
+    }, 200)
   
     // query 5 question base on difficulty, range and lesson
     // query
