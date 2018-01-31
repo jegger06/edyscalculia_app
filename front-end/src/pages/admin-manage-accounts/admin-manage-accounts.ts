@@ -1,6 +1,6 @@
 import { Storage } from '@ionic/storage';
 import { api } from './../../config/index';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -19,9 +19,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AdminManageAccountsPage {
 
   user: Object = {};
-  sort: string | number = 'all';
   accountTypeList: any;
+  accountId: number;
+  accountStatus: string | number;
+  isUpdate: boolean = false;
+  sort: string | number = 'all';
+  accountTitle: string = 'Adding';
   accountTypeListCount: number = 0;
+
+  @ViewChild('accountTypeDesc') typeDesc: string;
 
   constructor (
     public navCtrl: NavController,
@@ -37,6 +43,62 @@ export class AdminManageAccountsPage {
       cssClass: type ? 'toast-success-message' : 'toast-error-message',
       duration: 3000
     }).present();
+  }
+
+  accountTypeSort(): void {
+    this.fetchAccountType(this.sort);
+  }
+
+  addAccountType (): void {
+    const accountType = this.typeDesc['value'];
+    if ((/^\s*$/).test(accountType)) {
+      this.toastMessage('Account type description should not be empty.');
+      return;
+    }
+    this.http.post(`${ api.host }/account/create`, {
+      type_slog: accountType.toLowerCase().split(' ').join('-'),
+      type_description: accountType
+    }, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(response => {
+      this.toastMessage(response['message'], response['success']);
+      this.fetchAccountType(this.sort);
+    }, error => this.toastMessage(error['message'], error['success']));
+  }
+
+  updateAccountType (account: Object): void {
+    this.isUpdate = true;
+    this.accountId = account['type_id'];
+    this.accountTitle = 'Updating';
+    this.accountStatus = account['type_status'];
+    this.typeDesc['value'] = account['type_description'];
+  }
+
+  updateProceed (): void {
+    const accountType = this.typeDesc['value'];
+    if ((/^\s*$/).test(accountType)) {
+      this.toastMessage('Account type description should not be empty.');
+      return;
+    }
+    this.http.put(`${ api.host }/account/${ this.accountId }`, {
+      type_slog: accountType.toLowerCase().split('-').join('-'),
+      type_description: accountType,
+      type_status: this.accountStatus
+    }, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(response => {
+      this.toastMessage(response['message'], response['success']);
+      if (response['success']) {
+        this.fetchAccountType(this.sort);
+        this.cancelUpdate();
+      }
+    }, error => this.toastMessage(error['message'], error['success']));
+  }
+
+  cancelUpdate (): void {
+    this.isUpdate = false;
+    this.accountTitle = 'Adding';
+    this.typeDesc['value'] = '';
   }
 
   deleteAccountType (id: number): void {
@@ -65,10 +127,6 @@ export class AdminManageAccountsPage {
     alert.present();
   }
 
-  accountTypeSort () {
-    this.fetchAccountType(this.sort);
-  }
-
   fetchAccountType (sort: string | number): void {
     let sortMessage = `?sort=${ sort }`;
     if (sort === 'all') {
@@ -86,7 +144,7 @@ export class AdminManageAccountsPage {
     })
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (!response) {
         this.navCtrl.push('LogInPage');
