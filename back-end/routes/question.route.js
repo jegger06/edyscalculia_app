@@ -1,4 +1,5 @@
 const express = require('express');
+const async = require('async');
 const router = express.Router();
 const passport = require('passport');
 
@@ -123,66 +124,76 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
             INNER JOIN tbl_answer AS qa
             ON
               q.question_id = qa.question_id
-            WHERE q.lesson_id = ? AND q.question_status = ? AND q.difficulty_id = ? `;
+            WHERE q.lesson_id = ? AND q.question_status = ? AND `;
   const queryData = [lessonId, status, difficultyId];
-  if (difficultyId != 1 && req.user) {
-      const accountId = req.user.account_id;
-      const preTest = 1; // pre-test in DB
-      let sql = `SELECT
-                  question_range_id,
-                  question_range_slog
-                FROM
-                  tbl_question_range
-                WHERE 
-                (SELECT score_count FROM tbl_score WHERE account_id = ? AND lesson_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
-                BETWEEN question_range_from AND question_range_to`;
-      db.query(sql, [accountId, lessonId, preTest], (err, result) => {
-        if (err) {
-          return res.json({
-            success: false,
-            message: 'Something wen\'t wrong in getting the range of exam to take. Please try again later.'
-          });
-        }
-  
-        if (result.length) {
-          // query of questions 
-          // conditions
-          questionQuery += ' AND q.question_range_id = ?';
-          queryData.push(result[0].question_range_id);
-
-        } 
-        // else {
-        //   // No pre-test found for this user on the lesson_id provided
-        //   // query pre-test based on lesson id passed.
-        //   return res.json({
-        //     success: true,
-        //     questions: []
-        //   });
-        // }
-        })
-    }
-    //  else {
-    //   // get 5 questions of pre-test based on lessons
-    //   // conditions
-    //   // where lesson_id = lessonId AND difficultyId = 1 AND question_status = 1 LIMIT 5;
-    // }
-    setTimeout(() => {
+  let questions = '';
+  async.series([
+    (callback) => {
+      if (difficultyId != 1 && req.user) {
+        const accountId = req.user.account_id;
+        const preTest = 1; // pre-test in DB
+        let sql = `SELECT
+                    question_range_id,
+                    question_range_slog
+                  FROM
+                    tbl_question_range
+                  WHERE 
+                  (SELECT score_count FROM tbl_score WHERE account_id = ? AND lesson_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
+                  BETWEEN question_range_from AND question_range_to`;
+        db.query(sql, [accountId, lessonId, preTest], (err, result) => {
+          if (err) {
+            return callback('Something wen\'t wrong in getting the range of exam to take. Please try again later.');
+          }
+    
+          if (result.length) {
+            // query of questions 
+            // conditions
+            questionQuery += 'q.difficulty_id = ? AND q.question_range_id = ?';
+            queryData.push(difficultyId);
+            queryData.push(result[0].question_range_id);
+          } else {
+            // questionQuery += 'q.difficulty_id = ?';
+            // queryData.push(1);
+            return callback('The user does not have any records in pre-test for this lesson. Please take the pre-test for this lesson first.');
+          }
+          callback();
+        });
+      }
+    },
+    (callback) => {
       questionQuery += ' LIMIT 5';
       db.query(questionQuery, queryData, (err, result) => {
         if (err) {
-          return res.json({
-            success: false,
-            message: 'Something wen\'t wrong fetching the questions. Please try again later.'
-          });
+          // return res.json({
+          //   success: false,
+          //   message: 'Something wen\'t wrong fetching the questions. Please try again later.'
+          // });
+          return callback('Something wen\'t wrong fetching the questions. Please try again later.');
         }
   
-        return res.json({
-          success: true,
-          numberOfQuestions: result.length,
-          questions: result
-        });
+        // return res.json({
+        //   success: true,
+        //   questions: result
+        // });
+        questions = result;
+        callback();
       });
-    }, 200)
+    }
+  ], (err) => {
+    if (err) {
+      return res.json({
+        success: false,
+        message: err
+      });
+    }
+    res.json({
+      success: true,
+      questions: questions
+    });
+  });
+  
+    
+    
   
     // query 5 question base on difficulty, range and lesson
     // query

@@ -9,6 +9,7 @@
   "author": "Jegger Saren & John Rey Baylen",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.6.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "busboy": "^0.2.14",

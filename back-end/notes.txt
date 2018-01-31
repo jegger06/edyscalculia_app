@@ -1,16 +1,7 @@
-* Need to continue working on the question route.
-
-  * About the Update only the following fields.
-    question_range
-    question_type
-    difficulty_id
-    question_content
-    question_status
-    answer_choices
-    answer_key
-
-  * About the Delete
-    delete the question as well as the answer.
-
-
 Work on giving 5 questions to the user.
+  - The 5 questions are now working.. 
+  - Need to check about if the user has no records in pre-test for the specific lesson. What should be done?
+  - Code clean-up
+
+Reference for nodejs async.
+  http://www.sebastianseilund.com/nodejs-async-in-practice
