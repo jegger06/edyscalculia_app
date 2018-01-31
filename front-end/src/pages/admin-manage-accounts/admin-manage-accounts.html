@@ -64,6 +64,7 @@
   </ion-item>
 
   <ion-list *ngIf="accountTypeListCount > 0; else showNoRecord">
+    
     <ion-item *ngFor="let accountType of accountTypeList">
       <p>{{ accountType['type_description'] }}</p>
       <button (click)="updateAccountType(accountType)" class="not-included" clear ion-button item-end>Edit</button>

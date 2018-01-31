@@ -1,5 +1,4 @@
 import { Storage } from '@ionic/storage';
-import { api } from './../../config/index';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,6 +9,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+import { api } from './../../config/index';
 
 @IonicPage()
 @Component({
