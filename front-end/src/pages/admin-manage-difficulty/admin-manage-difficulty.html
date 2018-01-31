@@ -49,6 +49,7 @@
   </ion-item>
   
   <ion-list *ngIf="difficultyTypeListCount > 0; else showNoRecord">
+    
     <ion-item *ngFor="let difficultyType of difficultyTypeList">
       <p>{{ difficultyType['difficulty_text'] }}</p>
       <button (click)="updateDifficultyType(difficultyType)" class="not-included" clear ion-button item-end>Edit</button>

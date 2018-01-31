@@ -1,4 +1,3 @@
-import { api } from './../../config/index';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Component, ViewChild } from '@angular/core';
@@ -10,6 +9,7 @@ import { IonicPage, NavController, NavParams, ToastController, AlertController }
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+import { api } from './../../config/index';
 
 @IonicPage()
 @Component({
@@ -36,7 +36,7 @@ export class AdminManageDifficultyPage {
 
   @ViewChild('difficultyTypeDesc') diffType: string;
 
-  constructor(
+  constructor (
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
