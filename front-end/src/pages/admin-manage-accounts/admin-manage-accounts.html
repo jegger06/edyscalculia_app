@@ -19,7 +19,15 @@
   <ion-list>
 
     <ion-item>
-      <h3 class="chapter-title">Adding of Account Type</h3>
+      <h3 class="chapter-title">{{ accountTitle }} of Account Type</h3>
+    </ion-item>
+
+    <ion-item *ngIf="isUpdate" class="chapter-title-content">
+      <ion-label>Chapter Status</ion-label>
+      <ion-select [(ngModel)]="accountStatus">
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
     </ion-item>
 
     <ion-item class="no-border">
@@ -27,11 +35,21 @@
       <ion-input #accountTypeDesc></ion-input>
     </ion-item>
 
-    <ion-item>
-      <button ion-button round block icon-left>
+    <ion-item text-right>
+      <button *ngIf="!isUpdate; else showUpdateButton" (click)="addAccountType()" ion-button round block icon-left>
         <ion-icon name="ios-send"></ion-icon>
         Submit
       </button>
+      <ng-template #showUpdateButton>
+        <button (click)="updateProceed()" ion-button round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          Update
+        </button>
+        <button (click)="cancelUpdate()" color="danger" ion-button round icon-left>
+          <ion-icon name="md-close"></ion-icon>
+          Cancel
+        </button>
+      </ng-template>
     </ion-item>
   
   </ion-list>
@@ -48,7 +66,7 @@
   <ion-list *ngIf="accountTypeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let accountType of accountTypeList">
       <p>{{ accountType['type_description'] }}</p>
-      <button class="not-included" clear ion-button item-end>Edit</button>
+      <button (click)="updateAccountType(accountType)" class="not-included" clear ion-button item-end>Edit</button>
       <button (click)="deleteAccountType(accountType['type_id'])" class="not-included delete-button" clear ion-button item-end>Delete</button>
     </ion-item>
 
