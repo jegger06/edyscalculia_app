@@ -35,7 +35,8 @@ export class AdminSettingsPage implements OnInit {
     this.tileItem = [
       { title: 'Accounts', link: 'AdminManageAccountsPage' },
       { title: 'Difficulty', link: 'AdminManageDifficultyPage' },
-      { title: 'Difficulty Range', link: 'AdminManageDifficultyRangePage' }
+      { title: 'Question Range', link: 'AdminManageQuestionRangePage' },
+      { title: 'Question Type', link: 'AdminManageQuestionTypePage' }
     ];
   }
 
