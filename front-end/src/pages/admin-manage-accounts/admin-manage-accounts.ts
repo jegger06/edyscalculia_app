@@ -27,7 +27,7 @@ export class AdminManageAccountsPage {
   accountTitle: string = 'Adding';
   accountTypeListCount: number = 0;
 
-  @ViewChild('accountTypeDesc') typeDesc: string;
+  @ViewChild('accountTypeDesc') typeDesc: Object;
 
   constructor (
     public navCtrl: NavController,
