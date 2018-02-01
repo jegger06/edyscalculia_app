@@ -4,7 +4,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 
 /**
- * Generated class for the AdminManageDifficultyPage page.
+ * Generated class for the AdminManageQuestionTypePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -13,35 +13,33 @@ import { api } from './../../config/index';
 
 @IonicPage()
 @Component({
-  selector: 'page-admin-manage-difficulty',
-  templateUrl: 'admin-manage-difficulty.html',
+  selector: 'page-admin-manage-question-type',
+  templateUrl: 'admin-manage-question-type.html',
 })
-export class AdminManageDifficultyPage {
+export class AdminManageQuestionTypePage {
 
   user: Object = {};
-  difficultyId: number;
+  questionTypeId: number;
   isUpdate: boolean = false;
-  sort: string | number = 'all';
-  difficultyTitle: string = 'Adding';
-  difficultyTypeList: Array<{
-    difficulty_id: number,
+  questionTitle: string = 'Adding';
+  questionTypeList: Array<{
     account_id: number,
-    difficulty_slog: string,
-    difficulty_text: string,
-    difficulty_date: string,
+    question_type_slog: string,
+    question_type_text: string,
+    question_type_date: string,
     account_name: string,
     account_username: string
   }>;
-  difficultyTypeListCount: number = 0;
+  questionTypeListCount: number = 0;
 
-  @ViewChild('difficultyTypeDesc') diffType: Object;
+  @ViewChild('questionTypeDesc') questionType: Object;
 
   constructor (
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
-    public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
     public navParams: NavParams) { }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -52,61 +50,60 @@ export class AdminManageDifficultyPage {
     }).present();
   }
 
-  addDiffcultyType (): void {
-    const diffType = this.diffType['value'];
-    if ((/^\s*$/).test(diffType)) {
+  addQuestionType (): void {
+    const type = this.questionType['value'];
+    if ((/^\s*$/).test(type)) {
       this.toastMessage('Difficulty type should not be empty');
       return;
     }
-    this.http.post(`${ api.host }/difficulty/create`, {
-      difficulty_slog: diffType.toLowerCase().split(' ').join('-'),
-      difficulty_text: diffType
+    this.http.post(`${ api.host }/question-type/create`, {
+      question_type_slog: type.toLowerCase().split('-').join('-'),
+      question_type_text: type
     }, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
       this.toastMessage(response['message'], response['success']);
-      this.fetchDifficulty();
+      if (response['success']) {
+        this.questionType['value'] = '';
+        this.fetchQuestionType();
+      }
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
+  updateQuestionType(question: Object): void {
+    this.isUpdate = true;
+    this.questionTitle = 'Updating';
+    this.questionTypeId = question['question_type_id'];
+    this.questionType['value'] = question['question_type_text'];
+  }
+
+  cancelUpdate (): void {
+    this.isUpdate = false;
+    this.questionTitle = 'Adding';
+    this.questionType['value'] = '';
+  }
+
   updateProceed (): void {
-    const diffType = this.diffType['value'];
-    if ((/^\s*$/).test(diffType)) {
-      this.toastMessage('Difficulty type should not be empty');
-      return;
-    }
-    this.http.put(`${ api.host }/difficulty/${ this.difficultyId }`, {
-      difficulty_slog: diffType.toLowerCase().split(' ').join('-'),
-      difficulty_text: diffType
+    const type = this.questionType['value'];
+    this.http.put(`${ api.host }/question-type/${ this.questionTypeId }`, {
+      question_type_slog: type.toLowerCase().split('-').join('-'),
+      question_type_text: type
     }, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
       this.toastMessage(response['message'], response['success']);
       if (response['success']) {
         this.cancelUpdate();
-        this.fetchDifficulty();
+        this.fetchQuestionType();
       }
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
-  cancelUpdate (): void {
-    this.isUpdate = false;
-    this.difficultyTitle = 'Adding';
-    this.diffType['value'] = '';
-  }
-
-  updateDifficultyType (difficulty: Object): void {
-    this.isUpdate = true;
-    this.difficultyId = difficulty['difficulty_id'];
-    this.difficultyTitle = 'Updating';
-    this.diffType['value'] = difficulty['difficulty_text'];
-  }
-
-  deleteDifficultyType (id: number): void {
+  deleteQuestionType (id: number): void {
     const alert = this.alertCtrl.create({
-      title: 'Delete Difficulty Type',
+      title: 'Delete Question Type',
       cssClass: 'alert-delete-header',
-      message: 'This difficulty type will be deleted permanently. Are you sure to continue?',
+      message: 'This question type will be deleted permanently. Are you sure to continue?',
       buttons: [
         { text: 'Cancel' },
         {
@@ -114,12 +111,14 @@ export class AdminManageDifficultyPage {
           cssClass: 'delete-button',
           handler: () => {
             alert.dismiss();
-            this.http.delete(`${ api.host }/difficulty/${ id }`, {
+            this.http.delete(`${ api.host }/question-type/${ id }`, {
               headers: new HttpHeaders().set('Authorization', this.user['token'])
             }).subscribe(response => {
               this.toastMessage(response['message'], response['success']);
-              this.fetchDifficulty();
-            });
+              if (response['success']) {
+                this.fetchQuestionType();
+              }
+            }, error => this.toastMessage(error['message'], error['success']));
             return false;
           }
         }
@@ -128,16 +127,14 @@ export class AdminManageDifficultyPage {
     alert.present();
   }
 
-  fetchDifficulty (): void {
-    this.http.get(`${ api.host }/difficulty/lists`, {
+  fetchQuestionType (): void {
+    this.http.get(`${ api.host }/question-type/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
       if (response['success']) {
-        this.difficultyTypeList = response['difficulties'];
-        this.difficultyTypeListCount = response['difficulties']['length'];
-        return;
+        this.questionTypeList = response['question_types'];
+        this.questionTypeListCount = response['question_types']['length'];
       }
-      this.toastMessage(response['message'], response['success']);
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
@@ -148,8 +145,8 @@ export class AdminManageDifficultyPage {
         return;
       }
       this.user = response;
-      this.fetchDifficulty();
-    });
+      this.fetchQuestionType();
+    })
   }
 
 }
