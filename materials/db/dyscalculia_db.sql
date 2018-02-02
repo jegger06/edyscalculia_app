@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2018 at 09:52 AM
+-- Generation Time: Feb 02, 2018 at 09:33 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -45,7 +45,11 @@ CREATE TABLE `tbl_account` (
 INSERT INTO `tbl_account` (`account_id`, `type_id`, `account_name`, `account_bday`, `account_username`, `account_password`, `account_date`) VALUES
 (1, 2, 'John Doe', '2018-01-15', 'jdoe', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-01-11'),
 (4, 1, 'John Rey Baylen', '1995-07-21', 'jrey', '$2a$10$GSib7MV0TloyMUIVVYJPV.wcDQLGajy23ULqfBqAEDNF7PdGhdogG', '2018-01-15'),
-(5, 1, 'Jegger Saren', '1990-06-13', 'jegger06', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-01-17');
+(5, 1, 'Jegger Saren', '1990-06-13', 'jegger06', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-01-17'),
+(6, 1, 'Dominick Sanchez', '1995-04-16', 'doms', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-02-02'),
+(7, 2, 'Grace Dumandan', '1997-02-13', 'grace', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-02-01'),
+(8, 2, 'Jane Smith', '1990-02-12', 'jane', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-02-06'),
+(9, 2, 'Will Traverse', '1997-02-06', 'will', '$2a$10$G2BPx41cgs.UNv5Y7c2vhenhiaqddZwb8WOqhfaol8hsttRKKj.D6', '2018-02-04');
 
 -- --------------------------------------------------------
 
@@ -293,6 +297,7 @@ INSERT INTO `tbl_question_type` (`question_type_id`, `account_id`, `question_typ
 
 CREATE TABLE `tbl_score` (
   `score_id` int(11) NOT NULL,
+  `lesson_id` int(11) NOT NULL,
   `difficulty_id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   `score_count` decimal(3,0) NOT NULL,
@@ -303,8 +308,20 @@ CREATE TABLE `tbl_score` (
 -- Dumping data for table `tbl_score`
 --
 
-INSERT INTO `tbl_score` (`score_id`, `difficulty_id`, `account_id`, `score_count`, `score_date`) VALUES
-(1, 1, 1, '100', '2018-01-30 15:10:09');
+INSERT INTO `tbl_score` (`score_id`, `lesson_id`, `difficulty_id`, `account_id`, `score_count`, `score_date`) VALUES
+(1, 1, 2, 1, '55', '2018-01-30 15:10:09'),
+(2, 1, 1, 5, '100', '2018-02-02 09:50:06'),
+(3, 1, 1, 4, '95', '2018-02-02 09:50:06'),
+(4, 1, 1, 7, '75', '2018-02-02 10:17:54'),
+(5, 1, 1, 6, '97', '2018-02-02 10:17:54'),
+(6, 1, 2, 6, '78', '2018-02-02 10:18:35'),
+(7, 1, 1, 8, '70', '2018-02-02 10:18:35'),
+(8, 1, 2, 9, '89', '2018-02-02 10:19:33'),
+(9, 1, 2, 8, '95', '2018-02-02 10:19:33'),
+(10, 1, 2, 8, '90', '2018-02-02 16:02:56'),
+(11, 1, 3, 9, '98', '2018-02-02 16:04:06'),
+(12, 1, 2, 6, '85', '2018-02-02 16:04:44'),
+(13, 1, 2, 6, '85', '2018-02-02 16:05:09');
 
 -- --------------------------------------------------------
 
@@ -401,7 +418,8 @@ ALTER TABLE `tbl_question_type`
 ALTER TABLE `tbl_score`
   ADD PRIMARY KEY (`score_id`),
   ADD KEY `difficulty_id` (`difficulty_id`),
-  ADD KEY `account_id` (`account_id`);
+  ADD KEY `account_id` (`account_id`),
+  ADD KEY `lesson_id` (`lesson_id`);
 
 --
 -- Indexes for table `tbl_type`
@@ -417,7 +435,7 @@ ALTER TABLE `tbl_type`
 -- AUTO_INCREMENT for table `tbl_account`
 --
 ALTER TABLE `tbl_account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tbl_answer`
@@ -465,7 +483,7 @@ ALTER TABLE `tbl_question_type`
 -- AUTO_INCREMENT for table `tbl_score`
 --
 ALTER TABLE `tbl_score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbl_type`
@@ -535,7 +553,8 @@ ALTER TABLE `tbl_question_type`
 --
 ALTER TABLE `tbl_score`
   ADD CONSTRAINT `tbl_score_ibfk_1` FOREIGN KEY (`difficulty_id`) REFERENCES `tbl_difficulty` (`difficulty_id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `tbl_score_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `tbl_account` (`account_id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `tbl_score_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `tbl_account` (`account_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tbl_score_ibfk_3` FOREIGN KEY (`lesson_id`) REFERENCES `tbl_lesson` (`lesson_id`) ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

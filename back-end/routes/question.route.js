@@ -125,56 +125,51 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
             ON
               q.question_id = qa.question_id
             WHERE q.lesson_id = ? AND q.question_status = ? AND `;
-  const queryData = [lessonId, status, difficultyId];
+  const queryData = [lessonId, status];
   let questions = '';
   async.series([
     (callback) => {
-      if (difficultyId != 1 && req.user) {
-        const accountId = req.user.account_id;
-        const preTest = 1; // pre-test in DB
-        let sql = `SELECT
-                    question_range_id,
-                    question_range_slog
-                  FROM
-                    tbl_question_range
-                  WHERE 
-                  (SELECT score_count FROM tbl_score WHERE account_id = ? AND lesson_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
-                  BETWEEN question_range_from AND question_range_to`;
-        db.query(sql, [accountId, lessonId, preTest], (err, result) => {
-          if (err) {
-            return callback('Something wen\'t wrong in getting the range of exam to take. Please try again later.');
-          }
-    
-          if (result.length) {
-            // query of questions 
-            // conditions
-            questionQuery += 'q.difficulty_id = ? AND q.question_range_id = ?';
-            queryData.push(difficultyId);
-            queryData.push(result[0].question_range_id);
-          } else {
-            // questionQuery += 'q.difficulty_id = ?';
-            // queryData.push(1);
-            return callback('The user does not have any records in pre-test for this lesson. Please take the pre-test for this lesson first.');
-          }
+      if (difficultyId != 1) {
+        if (req.user) {
+          const accountId = req.user.account_id;
+          const preTest = 1; // pre-test in DB
+          let sql = `SELECT
+                      question_range_id,
+                      question_range_slog
+                    FROM
+                      tbl_question_range
+                    WHERE 
+                    (SELECT score_count FROM tbl_score WHERE account_id = ? AND lesson_id = ? AND difficulty_id = ? ORDER BY score_count DESC LIMIT 1)
+                    BETWEEN question_range_from AND question_range_to`;
+          db.query(sql, [accountId, lessonId, preTest], (err, result) => {
+            if (err) {
+              return callback('Something wen\'t wrong in getting the range of exam to take. Please try again later.');
+            }
+      
+            if (result.length) {
+              questionQuery += 'q.difficulty_id = ? AND q.question_range_id = ?';
+              queryData.push(difficultyId);
+              queryData.push(result[0].question_range_id);
+            } else {
+              return callback('You don\'t have any records in pre-test for this lesson. Please take the pre-test for this lesson first.');
+            }
+            callback();
+          });
+        } else {
+            return callback('You are not currently login. Please login to take the questions for this difficulty.');
+        }
+      } else {
+        questionQuery += 'q.difficulty_id = ?';
+          queryData.push(1);
           callback();
-        });
       }
     },
     (callback) => {
       questionQuery += ' LIMIT 5';
       db.query(questionQuery, queryData, (err, result) => {
         if (err) {
-          // return res.json({
-          //   success: false,
-          //   message: 'Something wen\'t wrong fetching the questions. Please try again later.'
-          // });
           return callback('Something wen\'t wrong fetching the questions. Please try again later.');
         }
-  
-        // return res.json({
-        //   success: true,
-        //   questions: result
-        // });
         questions = result;
         callback();
       });
@@ -191,15 +186,7 @@ router.get('/exam', passport.authenticate(['jwt', 'anonymous'], { session: false
       questions: questions
     });
   });
-  
-    
-    
-  
-    // query 5 question base on difficulty, range and lesson
-    // query
-    // db.query(sql)
 
-  
 });
 
 router.get('/:id', (req, res) => {

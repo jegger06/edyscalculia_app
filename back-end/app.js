@@ -39,6 +39,7 @@ const difficulties = require('./routes/difficulty.route');
 const questionRanges = require('./routes/question-range.route');
 const questionTypes = require('./routes/question-type.route');
 const questions = require('./routes/question.route');
+const scores = require('./routes/score.route');
 
 // Use Routes
 app.use('/api/user', users);
@@ -50,6 +51,7 @@ app.use('/api/difficulty', difficulties);
 app.use('/api/question-range', questionRanges);
 app.use('/api/question-type', questionTypes);
 app.use('/api/question', questions);
+app.use('/api/score', scores);
 
 // Create a folder for uploading files
 const filesDir = path.join(path.dirname(require.main.filename), 'uploads');
