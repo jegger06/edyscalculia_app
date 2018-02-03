@@ -5,28 +5,20 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    
     <ion-title>Settings - Question Type</ion-title>
-    
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
-
   <ion-list>
-
     <ion-item>
       <h3 class="chapter-title">{{ questionTitle }} of Question Type</h3>
     </ion-item>
-
     <ion-item class="no-border">
       <ion-label floating>Question Type</ion-label>
       <ion-input #questionTypeDesc></ion-input>
     </ion-item>
-
     <ion-item text-right>
       <button *ngIf="!isUpdate; else showUpdateButton" (click)="addQuestionType()" ion-button round block icon-left>
         <ion-icon name="ios-send"></ion-icon>
@@ -43,33 +35,23 @@
         </button>
       </ng-template>
     </ion-item>
-
   </ion-list>
 
   <ion-item class="item-border">
     <p>List of Question Type</p>
   </ion-item>
-
   <ion-list *ngIf="questionTypeListCount > 0; else showNoRecord">
-    
     <ion-item *ngFor="let questionType of questionTypeList">
       <p>{{ questionType['question_type_text'] }}</p>
       <button (click)="updateQuestionType(questionType)" class="not-included" clear ion-button item-end>Edit</button>
       <button (click)="deleteQuestionType(questionType['question_type_id'])" class="not-included delete-button" clear ion-button item-end>Delete</button>
     </ion-item>
-  
   </ion-list>
-  
   <ng-template #showNoRecord>
-  
     <ion-list>
-  
       <ion-item>
         <p>No record of question type for now.</p>
       </ion-item>
-  
     </ion-list>
-  
   </ng-template>
-
 </ion-content>

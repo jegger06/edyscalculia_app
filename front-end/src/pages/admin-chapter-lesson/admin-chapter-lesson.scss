@@ -1,50 +1,59 @@
 page-admin-chapter-lesson {
 
-  .margin-top-bottom {
-    margin: 10px 0 15px;
+  .chapter-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(48, 134, 214);
+
+    @at-root #{&}-content {
+      padding-right: 16px;
+    }
+
   }
 
-  .no-result-title {
-    font-size: 20px;
+  .button-round-md {
+    font-weight: bold;
+  }
+
+  .item-border {
+    border-bottom: 1px solid #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+  }
+
+  .list-md .item-block .item-inner {
+    border-bottom: none;
   }
 
   ion-select {
     width: 120px;
   }
 
-  .item-md .item-button,
-  .button-round-md {
-    padding: 0 1em;
-    height: 45px;
-    font-size: 1.7rem;
-    font-weight: bold;
-    &[small] {
-      font-size: 15px;
-      height: 38px;
-    }
-  }
-
-  .item-md .item-button.no-bold {
-    font-weight: normal;
-    padding: 0 0.6em;
-    height: 25px;
-    font-size: 1.2rem;
-  }
-
   .select-md .select-icon .select-icon-inner {
     margin-top: 5px;
   }
 
-  #imageManager-1 {
-    display: none;
+  .no-padding {
+    padding-bottom: 0;
   }
 
-  .editor {
-    margin-bottom: 15px;
-    .fr-box {
-      margin-bottom: 10px;
-    }
+  .item-md .item-button:not(.not-included),
+  .button-round-md:not(.not-included) {
+    padding: 0 1em;
+    height: 45px;
+    font-size: 1.7rem;
+    font-weight: bold;
+  }
 
+  .margin-right {
+    margin-right: 10px;
+  }
+
+  .has-margin {
+    margin: 15px 0;
   }
 
 }

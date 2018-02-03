@@ -5,23 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar hideBackButton>
-
     <button ion-button icon-only menuToggle>
       <ion-icon name="md-menu"></ion-icon>
     </button>
-
     <ion-title>Settings</ion-title>
-
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
-
   <ion-list>
-
     <ion-item *ngFor="let tile of tileItem">
       <p>{{ tile.title }}</p>
       <button (click)="routeTo(tile.link)" ion-button round item-right icon-left>
@@ -29,7 +22,5 @@
         Manage
       </button>
     </ion-item>
-
   </ion-list>
-
 </ion-content>
