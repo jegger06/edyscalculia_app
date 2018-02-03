@@ -5,62 +5,43 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
     <ion-title>Register Account</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-
   <div class="main">
-  
     <img src="../../assets/imgs/test-logo.png" alt="App Logo">
-  
     <ion-card>
-  
       <ion-card-content>
-
         <ion-item>
           <ion-label floating>Name</ion-label>
           <ion-input type="text" #name></ion-input>
         </ion-item>
-
         <ion-item>
           <ion-label>Birthday</ion-label>
           <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="birthDay"></ion-datetime>
         </ion-item>
-  
         <ion-item>
           <ion-label floating>Username</ion-label>
           <ion-input type="text" #username></ion-input>
         </ion-item>
-  
         <ion-item>
           <ion-label floating>Password</ion-label>
           <ion-input type="password" #password></ion-input>
         </ion-item>
-
         <div class="main-button">
-        
           <button (click)="requestNewAccount()" ion-button block round large icon-left>
             <ion-icon name="ios-send"></ion-icon>
             Submit
           </button>
-        
           <button (click)="toLogin()" ion-button block round large icon-left>
             <ion-icon name="ios-contacts"></ion-icon>
             Login
           </button>
-        
         </div>
-  
       </ion-card-content>
-  
     </ion-card>
-  
   </div>
-
 </ion-content>

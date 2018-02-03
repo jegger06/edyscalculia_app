@@ -5,83 +5,46 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
     <ion-title>Lesson Question</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-
   <ion-list>
-
     <ion-item>
-      <h3 class="lesson-detail">Lesson Details</h3>
-      <button ion-button item-right round icon-left>
-        <ion-icon name="md-add"></ion-icon>
-        Add question
-      </button>
+      <h3 class="chapter-title">{{ questionTitle }} of Lesson Question</h3>
     </ion-item>
-
     <ion-item>
-      <p>
-        <strong>Chapter:</strong>
-      </p>
-      <p>{{ lesson['chapter_text'] }}</p>
+      {{ questionsList | json }}
     </ion-item>
-
-    <ion-item>
-      <p>
-        <strong>Title:</strong>
-      </p>
-      <p>{{ lesson['lesson_title'] }}</p>
-    </ion-item>
-
-    <ion-item>
-      <p>
-        <strong>Content:</strong>
-      </p>
-      <p [innerHTML]="lesson['lesson_content']"></p>
-    </ion-item>
-
-    <ion-item>
-      <p>
-        <strong>Created:</strong>
-      </p>
-      <p>{{ lesson['lesson_date'] | date:medium }}</p>
-    </ion-item>
-
   </ion-list>
 
-  <ion-list *ngIf="questions['questionsCount']; else showNoRecord">
-
+  <ion-list *ngIf="questionsListCount > 0; else showNoRecord">
     <ion-item>
-      <ion-label>List of Question</ion-label>
+      <ion-label>List of Lesson Qestions</ion-label>
       <ion-select [(ngModel)]="sort">
-        <ion-option value="2">All</ion-option>
-        <ion-option value="1">Active</ion-option>
-        <ion-option value="0">Inactive</ion-option>
+        <ion-option value="2">Difficulty</ion-option>
+        <ion-option value="1">Range</ion-option>
+        <ion-option value="0">Status</ion-option>
       </ion-select>
     </ion-item>
-
-    <ion-item>
-      
+    <ion-item *ngFor="let question of questionsList" class="item-border">
+      <div class="title-link">
+        <ion-icon name="md-arrow-dropright"></ion-icon>
+        {{ question['question_content'] }}
+      </div>
+      <button (click)="updateQuestion(question)" class="not-included" clear ion-button item-end>Edit</button>
+      <button (click)="deleteQuestion(question['question_id'])" class="not-included delete-button" clear ion-button
+        item-end>Delete</button>
     </ion-item>
-
   </ion-list>
-
   <ng-template #showNoRecord>
-
     <ion-list>
-
       <ion-item>
         <p>No record of question for now.</p>
       </ion-item>
-
     </ion-list>
-
   </ng-template>
 
 </ion-content>
