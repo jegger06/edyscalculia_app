@@ -12,22 +12,25 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngIf="isUpdate">
+    <ion-item>
+      <h3 class="chapter-title">{{ lessonTypeTitle }} of Lesson</h3>
+    </ion-item>
+    <ion-item class="no-border-bottom" *ngIf="isUpdate">
       <ion-label>Lesson Status</ion-label>
       <ion-select [(ngModel)]="lessonStatus">
         <ion-option value="1">Active</ion-option>
         <ion-option value="0">Inactive</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item class="no-border-bottom">
       <ion-label floating>Lesson Title</ion-label>
       <ion-input type="text" [(ngModel)]="lessonTitle"></ion-input>
     </ion-item>
-  </ion-list>
-  <div class="editor">
-    <div [froalaEditor]="options" [(ngModel)]="editorContent"></div>
-    <div text-right class="has-margin">
-      <div *ngIf="isUpdate; else showCreate">
+    <ion-item class="no-border-bottom">
+      <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
+    </ion-item>
+    <ion-item class="no-border-bottom">
+      <div text-right *ngIf="isUpdate; else showCreate">
         <button (click)="updateLessonProceed()" ion-button round icon-left>
           <ion-icon name="ios-send"></ion-icon>
           Update
@@ -38,13 +41,13 @@
         </button>
       </div>
       <ng-template #showCreate>
-        <button (click)="addLesson()" ion-button round icon-left>
+        <button (click)="addLesson()" ion-button block round icon-left>
           <ion-icon name="ios-send"></ion-icon>
           submit
         </button>
       </ng-template>
-    </div>
-  </div>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="lessons['success'] && lessonsCount > 0; else showNoRecord">
     <ion-item>

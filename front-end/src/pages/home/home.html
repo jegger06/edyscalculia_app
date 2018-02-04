@@ -13,7 +13,7 @@
         Discover
       </button>
     </div>
-    <div class="main-button">
+    <div *ngIf="isLoggedIn" class="main-button">
       <button (click)="routeTo('TopScorePage')" ion-button block round large icon-left>
         <ion-icon name="md-bulb"></ion-icon>
         Top Score

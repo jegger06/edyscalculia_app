@@ -11,7 +11,7 @@ page-admin-chapter-lesson-questions {
   }
 
   .list-md .item-block .item-inner {
-    padding-left: 15px;
+    padding: 0 15px;
   }
 
   .item-md .item-button:not(.not-included),
@@ -41,8 +41,18 @@ page-admin-chapter-lesson-questions {
 
   }
 
+  .label-md {
+    margin-right: 0;
+    
+    & .has-border {
+      border: 1px solid #dedede;
+      border-top: none;
+    }
+
+  }
+
   ion-select {
-    width: 120px;
+    width: 170px;
   }
 
   .select-md .select-icon .select-icon-inner {

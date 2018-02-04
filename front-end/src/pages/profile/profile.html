@@ -16,5 +16,30 @@
 </ion-header>
 
 <ion-content padding>
-  {{ user | json }}
+  <ion-list>
+    <ion-item>
+      <img src="../../assets/imgs/test-bg-1.jpg" alt="Background Photo">
+    </ion-item>
+    <ion-item>
+      <strong>Name: </strong>
+      <span>{{ user['account_name'] }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Birthday: </strong>
+      <span>{{ user['account_bday'] | date:"longDate" }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Username: </strong>
+      <span>{{ user['account_username'] }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Access: </strong>
+      <ion-badge>{{ user['type_description'] }}</ion-badge>
+    </ion-item>
+    <ion-item>
+      <strong>Joined: </strong>
+      <span>{{ user['account_date'] | date:"longDate" }}</span>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
