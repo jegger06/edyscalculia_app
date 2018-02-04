@@ -38,6 +38,7 @@ export class AdminChapterLessonPage {
     toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', 'spellChecker', 'help', 'html', 'undo', 'redo'],
     toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', 'spellChecker', 'help', 'html', 'undo', 'redo']
   };
+  lessonTypeTitle: string = 'Adding';
 
   constructor (
     public navCtrl: NavController,

@@ -15,12 +15,54 @@
     <ion-item>
       <h3 class="chapter-title">{{ questionTitle }} of Lesson Question</h3>
     </ion-item>
-    <ion-item>
-      {{ questionsList | json }}
+    <ion-item *ngIf="questionDiffcultiesCount > 0">
+      <ion-label>Question Difficulty</ion-label>
+      <ion-select [(ngModel)]="contentUpdateDifficulty">
+        <ion-option *ngFor="let difficultyItem of questionDiffcultiesList" [value]="difficultyItem['difficulty_id']">
+          {{ difficultyItem['difficulty_text'] }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="questionTypeCount > 0">
+      <ion-label>Question Type</ion-label>
+      <ion-select (ionChange)="showChoicesAndAnswer(contentUpdateType)" [(ngModel)]="contentUpdateType">
+        <ion-option *ngFor="let questionTypeItem of questionTypeList" [value]="questionTypeItem['question_type_id']">
+          {{ questionTypeItem['question_type_text'] }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="questionRangeCount > 0">
+      <ion-label>Question Range</ion-label>
+      <ion-select [(ngModel)]="contentUpdateRange">
+        <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
+          {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="no-border-bottom">
+      <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
+    </ion-item>
+    <ion-item class="no-border-bottom">
+      <div text-right *ngIf="isUpdate; else showCreate">
+        <button ion-button round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          Update
+        </button>
+        <button color="danger" ion-button round icon-left>
+          <ion-icon name="md-close"></ion-icon>
+          cancel
+        </button>
+      </div>
+      <ng-template #showCreate>
+        <button (click)="addQuestion()" ion-button block round icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          submit
+        </button>
+      </ng-template>
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="questionsListCount > 0; else showNoRecord">
+  <ion-list *ngIf="questionsCount > 0; else showNoRecord">
     <ion-item>
       <ion-label>List of Lesson Qestions</ion-label>
       <ion-select [(ngModel)]="sort">
@@ -30,12 +72,12 @@
       </ion-select>
     </ion-item>
     <ion-item *ngFor="let question of questionsList" class="item-border">
-      <div class="title-link">
+      <p class="title-link">
         <ion-icon name="md-arrow-dropright"></ion-icon>
         {{ question['question_content'] }}
-      </div>
-      <button (click)="updateQuestion(question)" class="not-included" clear ion-button item-end>Edit</button>
-      <button (click)="deleteQuestion(question['question_id'])" class="not-included delete-button" clear ion-button
+      </p>
+      <button (click)="updateQuestion($event, question)" class="not-included" clear ion-button item-end>Edit</button>
+      <button (click)="deleteQuestion($event, question['question_id'])" class="not-included delete-button" clear ion-button
         item-end>Delete</button>
     </ion-item>
   </ion-list>
