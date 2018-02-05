@@ -1,27 +1,20 @@
-page-admin-accounts-details {
+page-profile-update {
 
-  .item-md .item-button:not(.not-included),
-  .button-round-md:not(.not-included) {
-    padding: 0 1em;
-    height: 45px;
-    font-size: 1.7rem;
+  .item-md {
+    padding-left: 0;
+  }
+
+  .button-round-md {
     font-weight: bold;
+    margin-top: 20px;
   }
 
   .label-md[stacked], .label-md[floating].margin-bottom {
     margin-bottom: 10px;
   }
 
-  .margin-bottom {
-    margin-bottom: 15px;
-  }
-
   ion-select {
     width: 120px;
-  }
-
-  .item-md {
-    padding-left: 0;
   }
 
   .select-md .select-icon .select-icon-inner {

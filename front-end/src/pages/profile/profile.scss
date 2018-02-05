@@ -1,3 +1,23 @@
 page-profile {
 
+  .item-md .item-button:not(.not-included),
+  .button-round-md:not(.not-included) {
+    padding: 0 1em;
+    height: 45px;
+    font-size: 1.7rem;
+    font-weight: bold;
+  }
+
+  .item-md {
+    padding-left: 0;
+  }
+
+  .label-md {
+    margin-right: 0;
+  }
+
+  .list-md .item-block .item-inner {
+    padding: 0 15px;
+  }
+
 }

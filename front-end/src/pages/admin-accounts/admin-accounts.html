@@ -5,23 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar hideBackButton>
-
     <button ion-button icon-only menuToggle>
       <ion-icon name="md-menu"></ion-icon>
     </button>
-
     <ion-title>Accounts</ion-title>
-
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
-
   <ion-list>
-    
     <ion-item>
       <h3 float-left class="accounts-title">List of Accounts</h3>
       <div float-right>
@@ -35,11 +28,8 @@
         </button>
       </div>
     </ion-item>
-
   </ion-list>
-
   <ion-list *ngIf="accounts; else showNoRecord">
-
     <ion-item *ngFor="let account of accounts">
       <div float-left>
         <h3 class="account-name">{{ account['account_name'] }}</h3>
@@ -53,19 +43,13 @@
         </button>
       </div>
     </ion-item>
-
   </ion-list>
-
   <ng-template #showNoRecord>
-
     <ion-list>
-    
       <ion-item>
         <h3>No record available for now.</h3>
       </ion-item>
-    
     </ion-list>
-
   </ng-template>
 
 </ion-content>

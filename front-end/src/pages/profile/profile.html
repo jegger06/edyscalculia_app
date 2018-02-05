@@ -5,16 +5,45 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar [hideBackButton]="user && user['type_id'] === 1">
     <button *ngIf="user && user['type_id'] === 1" ion-button icon-only menuToggle>
       <ion-icon name="md-menu"></ion-icon>
     </button>
     <ion-title>Profile</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
-  {{ user | json }}
+  <ion-list>
+    <ion-item>
+      <img src="../../assets/imgs/test-bg-1.jpg" alt="Background Photo">
+    </ion-item>
+    <ion-item>
+      <strong>Name: </strong>
+      <span>{{ user['account_name'] }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Birthday: </strong>
+      <span>{{ user['account_bday'] | date:"longDate" }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Username: </strong>
+      <span>{{ user['account_username'] }}</span>
+    </ion-item>
+    <ion-item>
+      <strong>Access: </strong>
+      <ion-badge>{{ user['type_description'] }}</ion-badge>
+    </ion-item>
+    <ion-item>
+      <strong>Joined: </strong>
+      <span>{{ user['account_date'] | date:"longDate" }}</span>
+    </ion-item>
+    <ion-item>
+      <button (click)="routeTo('ProfileUpdatePage')" ion-button icon-left round block>
+        <ion-icon name="ios-send"></ion-icon>
+        Update Information
+      </button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>

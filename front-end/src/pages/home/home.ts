@@ -29,13 +29,19 @@ export class HomePage {
     this.navCtrl.push(param);
   }
 
+  ionViewDidLoad () {
+    ['chapter-selected', 'lesson-selected'].map(store => this.storage.remove(store));
+  }
+
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (response) {
-        this.isLoggedIn = response['authenticated'];
+        this.isLoggedIn = response['authenticated'] || true;
         this.routeDirection = 'ProfilePage';
         this.buttonText = 'Profile';
+        return;
       }
+      this.storage.clear();
     });
   }
 

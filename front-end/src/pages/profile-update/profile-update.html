@@ -1,12 +1,12 @@
 <!--
-  Generated template for the AdminAccountsDetailsPage page.
+  Generated template for the ProfileUpdatePage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Account Details</ion-title>
+    <ion-title>Profile - Update Information</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -15,20 +15,20 @@
     <ion-card-content>
       <ion-item>
         <ion-label floating>Name</ion-label>
-        <ion-input type="text" #name></ion-input>
+        <ion-input type="text" [(ngModel)]="user['account_name']"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Birthday</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="birthDay"></ion-datetime>
+        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="user['account_bday']"></ion-datetime>
       </ion-item>
       <ion-item>
         <ion-label>Account Type</ion-label>
-        <ion-select [(ngModel)]="type">
+        <ion-select [(ngModel)]="user['type_id']">
           <ion-option value="1">Admin</ion-option>
           <ion-option value="2">User</ion-option>
         </ion-select>
       </ion-item>
-      <ion-item class="margin-bottom">
+      <ion-item>
         <ion-label floating class="margin-bottom">Password</ion-label>
         <ion-input type="password" #password placeholder="(Leave empty if there's no update)"></ion-input>
       </ion-item>
@@ -36,7 +36,7 @@
         <ion-icon name="ios-send"></ion-icon>
         Save changes
       </button>
-      <button (click)="requestDeleteAccount(id)" color="danger" ion-button block round large icon-left>
+      <button (click)="requestDeleteAccount(user['account_id'])" color="danger" ion-button block round large icon-left>
         <ion-icon name="ios-trash"></ion-icon>
         Delete Account
       </button>

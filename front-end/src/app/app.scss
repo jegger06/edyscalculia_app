@@ -83,11 +83,33 @@ ion-alert.alert-top {
     align-items: center;
 }
 
-.item-md p.title-link {
+.item-md .title-link {
     color: #488aff;
 }
 
 button[small] {
     font-size: 15px;
     height: 38px;
+}
+
+.item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+.item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    border-bottom-color: #488aff;
+    box-shadow: inset 0 -1px 0 0 #488aff;
+}
+
+.card-md {
+    margin: 15px 0;
+    width: 100%;
+}
+
+.button-round-md.button-clear {
+    padding: 0 1rem;
+}
+
+.ellipse {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 20px;
 }
