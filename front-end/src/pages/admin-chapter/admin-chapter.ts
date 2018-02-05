@@ -126,8 +126,7 @@ export class AdminChapterPage {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(chapterUpdated => {
       if (chapterUpdated['success']) {
-        this.isUpdate = false;
-        this.title['value'] = '';
+        this.cancelUpdate();
         this.chapterLists = this.chapterLists.map(list => list['chapter_id'] === id ? { ...list, ...dataToSave } : list);
         this.toastMessage(chapterUpdated['message'], chapterUpdated['success']);
       } else {

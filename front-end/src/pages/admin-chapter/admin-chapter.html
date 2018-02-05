@@ -47,7 +47,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="chapterLists; else showNoRecords">
+  <ion-list>
     <ion-item class="item-border">
       <ion-label>List of Chapters</ion-label>
       <ion-select [(ngModel)]="sort" (ionChange)="chapterSort()" #chapter>
@@ -56,6 +56,9 @@
         <ion-option value="0">Inactive</ion-option>
       </ion-select>
     </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="chapterLists; else showNoRecords">
     <ion-item *ngFor="let chapterList of chapterLists" (click)="chapterDetails(chapterList)" class="item-border">
       <p class="title-link">
         <ion-icon name="md-arrow-dropright"></ion-icon>
@@ -65,6 +68,7 @@
       <button (click)="deleteChapter($event, chapterList.chapter_id)" class="delete-button not-included" ion-button clear item-end>DELETE</button>
     </ion-item>
   </ion-list>
+
   <ng-template #showNoRecords>
     <ion-list>
       <ion-item class="item-border">
@@ -73,5 +77,4 @@
       </ion-item>
     </ion-list>
   </ng-template>
-
 </ion-content>
