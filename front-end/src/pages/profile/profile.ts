@@ -23,6 +23,10 @@ export class ProfilePage {
     public navParams: NavParams,
     public storage: Storage) { }
 
+  routeTo (route: string): void {
+    this.navCtrl.push(route);
+  }
+
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => !response ? this.navCtrl.push('LogInPage') : this.user = response);
   }

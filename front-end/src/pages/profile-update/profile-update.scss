@@ -1,0 +1,28 @@
+page-profile-update {
+
+  .item-md {
+    padding-left: 0;
+  }
+
+  .button-round-md {
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  .label-md[stacked], .label-md[floating].margin-bottom {
+    margin-bottom: 10px;
+  }
+
+  ion-select {
+    width: 120px;
+  }
+
+  .select-md .select-icon .select-icon-inner {
+    margin-top: 5px;
+  }
+
+  .button-round-md:last-child {
+    margin-top: 10px;
+  }
+
+}

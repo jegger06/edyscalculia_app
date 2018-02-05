@@ -40,6 +40,7 @@
   <ion-item class="item-border">
     <p>List of Question Type</p>
   </ion-item>
+
   <ion-list *ngIf="questionTypeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let questionType of questionTypeList">
       <p>{{ questionType['question_type_text'] }}</p>
@@ -47,6 +48,7 @@
       <button (click)="deleteQuestionType(questionType['question_type_id'])" class="not-included delete-button" clear ion-button item-end>Delete</button>
     </ion-item>
   </ion-list>
+  
   <ng-template #showNoRecord>
     <ion-list>
       <ion-item>
