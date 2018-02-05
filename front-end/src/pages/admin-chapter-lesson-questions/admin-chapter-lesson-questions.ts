@@ -168,22 +168,21 @@ export class AdminChapterLessonQuestionsPage {
 
   fetchLessonQuestions (sort: string | number): void {
     this.http.get(`${ api.host }/question/lists/${ this.lesson['lesson_id'] }`).subscribe(response => {
-      if (response['success']) {
+      if (response['success'] && response['questions']) {
         this.questionsList = response['questions'];
         this.questionsCount = response['questions']['length'];
       }
-    })
+    }, error => this.toastMessage(error['message'], error['success']));
   }
 
   fetchQuestionDifficulty (): void {
     this.http.get(`${ api.host }/difficulty/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      if (response['success']) {
-        this.contentUpdateDifficulty = response['difficulties'][0]['difficulty_id'];
+      if (response['success'] && response['difficulties']) {
         this.questionDiffcultiesList = response['difficulties'];
+        this.contentUpdateDifficulty = response['difficulties'][0]['difficulty_id'];
         this.questionDiffcultiesCount = response['difficulties']['length'];
-        return;
       }
     }, error => this.toastMessage(error['message'], error['success']));
   }
@@ -192,12 +191,11 @@ export class AdminChapterLessonQuestionsPage {
     this.http.get(`${ api.host }/question-type/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      if (response['success']) {
-        this.contentUpdateType = response['question_types'][0]['question_type_id'];
+      if (response['success'] && response['question_types']) {
         this.questionTypeList = response['question_types'];
+        this.contentUpdateType = response['question_types'][0]['question_type_id'];
         this.questionTypeCount = response['question_types']['length'];
       }
-      return response;
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
@@ -205,9 +203,9 @@ export class AdminChapterLessonQuestionsPage {
     this.http.get(`${ api.host }/question-range/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      if (response['success']) {
-        this.contentUpdateRange = response['question_ranges'][0]['question_range_id'];
+      if (response['success'] && response['question_ranges']) {
         this.questionRangeList = response['question_ranges'];
+        this.contentUpdateRange = response['question_ranges'][0]['question_range_id'];
         this.questionRangeCount = response['question_ranges']['length'];
       }
     }, error => this.toastMessage(error['message'], error['success']));
