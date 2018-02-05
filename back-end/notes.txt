@@ -1,26 +1,11 @@
---- Admin ---
-* Score of top 3 users per difficulty - done
-
-NOTE: Jrey, questions of Admin.
-
---- User ---
-
-
-* Work on giving 5 questions to the user. - done
-  - The 5 questions are now working.. 
-  - Need to check about if the user has no records in pre-test for the specific lesson. What should be done?
-  - Code clean-up
-
 Reference for nodejs async.
   http://www.sebastianseilund.com/nodejs-async-in-practice
 
+Credentials
+Gmail
+username: edyscalculia@gmail.com
+password: edyscalculia12345
 
-* Check if user has already taken the pre-test for specific lesson (if true return score details. if false return false) - done
-
-* Saving of score from user - done
-
-* Get all score of specific user per difficulty (response with lesson details and chapter) - done
-
---- Docs ---
-Exam Route for user
-score.route 
+Heroku:
+username: edyscalculia@gmail.com
+password: edyscalculia12#$%
