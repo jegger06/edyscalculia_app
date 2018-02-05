@@ -84,7 +84,9 @@ ion-alert.alert-top {
 }
 
 .item-md .title-link {
-    color: #488aff;
+    & * {
+        color: #488aff;
+    }
 }
 
 button[small] {
@@ -112,4 +114,8 @@ button[small] {
     white-space: nowrap;
     overflow: hidden;
     height: 20px;
+}
+
+.inline-block {
+    display: inline-block;
 }

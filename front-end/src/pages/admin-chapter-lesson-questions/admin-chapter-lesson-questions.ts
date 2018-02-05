@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
@@ -101,6 +102,7 @@ export class AdminChapterLessonQuestionsPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public sanitize: DomSanitizer,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public navParams: NavParams) { }
@@ -318,7 +320,10 @@ export class AdminChapterLessonQuestionsPage {
     const sort = `?difficulty=${ this.sortDifficulty }&range=${ this.sortRange }&status=${ this.sortStatus }`;
     this.http.get(`${ api.host }/question/lists/${ this.lesson['lesson_id'] }${ sort }`).subscribe(response => {
       if (response['success'] && response['questions']) {
-        this.questionsList = response['questions'];
+        this.questionsList = response['questions'].map(question => {
+          question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
+          return question;
+        });
         this.questionsCount = response['questions']['length'];
         return;
       }

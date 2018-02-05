@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the DiscoverLessonPage page.
@@ -19,6 +19,7 @@ import { api } from './../../config/index';
 })
 export class DiscoverLessonPage {
 
+  user: Object = {};
   chapter: any;
   chapterLessonLists: Array<{
     lesson_id: number,
@@ -39,11 +40,44 @@ export class DiscoverLessonPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public sanitizer: DomSanitizer,
     public navParams: NavParams) { }
 
+  toastMessage (message: string, type: boolean = false): void {
+    this.toastCtrl.create({
+      message,
+      cssClass: type ? 'toast-success-message' : 'toast-error-message',
+      duration: 3000
+    }).present();
+  }
+
   lessonDetails (lesson: Object): void {
     this.storage.set('lesson-selected', lesson).then(() => this.navCtrl.push('DiscoverLessonDetailsPage'));
+  }
+
+  requestPreTest (lesson: Object): void {
+    this.storage.set('lesson-selected', lesson).then(response => {
+      if (Object.keys(this.user).length > 0) {
+        this.http.get(`${ api.host }/score/pre-test`, {
+          headers: new HttpHeaders().set('Authorization', this.user['token'])
+        }).subscribe(response => {
+          if (response['success'] && response['detail']) {
+            this.alertCtrl.create({
+              title: 'Pre-Test Information',
+              cssClass: 'alert-edit-header',
+              message: `You have already got a ${ response['detail']['score_count'] }% score in this lesson.`,
+              buttons: [
+                { text: 'Done' }
+              ]
+            }).present();
+          }
+        }, error => this.toastMessage(error['message'], error['success']));
+        return;
+      }
+      this.navCtrl.push('DiscoverLessonExamPrePage');
+    });
   }
 
   fetchLesson (): void {
@@ -59,13 +93,18 @@ export class DiscoverLessonPage {
   }
 
   ionViewWillEnter () {
-    this.storage.get('chapter-selected').then(response => {
+    this.storage.get('account').then(response => {
       if (response) {
-        this.chapter = response;
-        this.fetchLesson();
-        return;
+        this.user = response;
       }
-      this.navCtrl.push('DiscoverPage');
+      this.storage.get('chapter-selected').then(response => {
+        if (response) {
+          this.chapter = response;
+          this.fetchLesson();
+          return;
+        }
+        this.navCtrl.push('DiscoverPage');
+      });
     });
   }
 

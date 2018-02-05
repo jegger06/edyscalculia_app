@@ -60,10 +60,12 @@
 
   <ion-list *ngIf="chapterLists; else showNoRecords">
     <ion-item *ngFor="let chapterList of chapterLists" (click)="chapterDetails(chapterList)" class="item-border">
-      <p class="title-link">
+      <div class="title-link">
         <ion-icon name="md-arrow-dropright"></ion-icon>
-        {{ chapterList.chapter_text }}
-      </p>
+        <div class="inline-block">
+          {{ chapterList.chapter_text }}
+        </div>
+      </div>
       <button class="not-included" (click)="editChapter($event, chapterList)" ion-button clear item-end>EDIT</button>
       <button (click)="deleteChapter($event, chapterList.chapter_id)" class="delete-button not-included" ion-button clear item-end>DELETE</button>
     </ion-item>

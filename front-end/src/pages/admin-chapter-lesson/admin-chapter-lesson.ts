@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
@@ -20,7 +21,20 @@ export class AdminChapterLessonPage {
 
   sort: number = 2;
   user: Object = {};
-  lessons: Object = {};
+  lessons: Array<{
+    lesson_id: number,
+    account_id: number,
+    chapter_id: number,
+    lesson_title: string,
+    lesson_slog: string,
+    lesson_content: string,
+    lesson_status: number,
+    lesson_date: string,
+    chapter_text: string,
+    chapter_status: number,
+    account_name: string,
+    account_username: string
+  }>;
   chapter: Object = {};
   lessonId: number;
   lessonTitle: string;
@@ -44,6 +58,7 @@ export class AdminChapterLessonPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public sanitize: DomSanitizer,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
@@ -170,9 +185,16 @@ export class AdminChapterLessonPage {
     this.storage.get('chapter').then(chapter => {
       this.chapter = chapter;
       const route = chapter ? chapter['chapter_id'] : '';
-      this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(lessons => {
-        this.lessons = lessons;
-        lessons['lessons'] && (this.lessonsCount = lessons['lessons']['length']);
+      this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(response => {
+        if (response['success'] && response['lessons']) {
+          this.lessons = response['lessons'].map(lesson => {
+            lesson['lesson_content'] = this.sanitize.bypassSecurityTrustHtml(lesson['lesson_content']);
+            return lesson;
+          });
+          this.lessonsCount = response['lessons']['length'];
+          return;
+        }
+        this.lessonsCount = 0;
       });
     });
   }
