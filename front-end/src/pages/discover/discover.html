@@ -11,14 +11,23 @@
 </ion-header>
 
 <ion-content padding class="card-background-page">
-  <ion-card *ngFor="let chapterList of chapterLists" (click)="goToChapter(chapterList)">
-    <div class="hightlight"></div>
-    <img src="../../assets/imgs/test-chapter.jpg" alt="Chapter Icon">
-    <div class="card-title">
-      {{ chapterList['chapter_text'] }}
-    </div>
-    <div class="card-subtitle">
-      {{ chapterList['chapter_date'] | date:"longDate" }}
-    </div>
-  </ion-card>
+  <div *ngIf="chapterLists; else showNoRecord">
+    <ion-card *ngFor="let chapterList of chapterLists" (click)="goToChapter(chapterList)">
+      <div class="hightlight"></div>
+      <img src="../../assets/imgs/test-chapter.jpg" alt="Chapter Icon">
+      <div class="card-title">
+        {{ chapterList['chapter_text'] }}
+      </div>
+      <div class="card-subtitle">
+        {{ chapterList['chapter_date'] | date:"longDate" }}
+      </div>
+    </ion-card>
+  </div>
+  <ng-template #showNoRecord>
+    <ion-card>
+      <ion-card-content>
+        No record of chapter for now.
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>
