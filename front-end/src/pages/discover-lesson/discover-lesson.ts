@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { DomSanitizer } from '@angular/platform-browser';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -38,6 +39,7 @@ export class DiscoverLessonPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public sanitizer: DomSanitizer,
     public navParams: NavParams) { }
 
   lessonDetails (lesson: Object): void {
@@ -46,7 +48,14 @@ export class DiscoverLessonPage {
 
   fetchLesson (): void {
     const chapterId = this.chapter['chapter_id'];
-    this.http.get(`${ api.host }/lesson/lists/${ chapterId }?sort=all`).subscribe(data => this.chapterLessonLists = data['lessons']);
+    this.http.get(`${ api.host }/lesson/lists/${ chapterId }?sort=all`).subscribe(response => {
+      if (response['success']) {
+        this.chapterLessonLists = response['lessons'].map(lesson => {
+          lesson['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(lesson['lesson_content']);
+          return lesson;
+        });
+      }
+    });
   }
 
   ionViewWillEnter () {

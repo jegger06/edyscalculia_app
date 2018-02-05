@@ -21,7 +21,7 @@
       <ion-card-content>
         <p>{{ chapterLessonList['account_name'] }}</p>
         <p class="date">{{ chapterLessonList['lesson_date'] | date:"longDate" }}</p>
-        <div [innerHTML]="chapterLessonList['lesson_content']"></div>
+        <div class="ellipse" [innerHTML]="chapterLessonList['lesson_content']"></div>
       </ion-card-content>
       <ion-card-content text-right>
         <button (click)="lessonDetails(chapterLessonList)" ion-button clear round icon-left>
