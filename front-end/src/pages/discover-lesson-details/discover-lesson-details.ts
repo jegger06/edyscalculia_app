@@ -81,6 +81,10 @@ export class DiscoverLessonDetailsPage {
     }
   }
 
+  requestPreTest (lesson: Object): void {
+    console.log(lesson);
+  }
+
   fetchAlllesson (): void {
     this.http.get(`${ api.host }/lesson/lists/${ this.lesson['chapter_id'] }`).subscribe(response => {
       if (response['success']) {
