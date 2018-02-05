@@ -133,10 +133,10 @@
       <ion-label>List of Lesson Qestions</ion-label>
     </ion-item>
     <ion-item *ngFor="let question of questionsList" class="item-border">
-      <p class="title-link">
+      <div class="title-link">
         <ion-icon name="md-arrow-dropright"></ion-icon>
-        {{ question['question_content'] }}
-      </p>
+        <div class="inline-block" [innerHTML]="question['question_content']"></div>
+      </div>
       <button (click)="updateQuestion($event, question)" class="not-included" clear ion-button item-end>Edit</button>
       <button (click)="deleteQuestion($event, question['question_id'])" class="not-included delete-button" clear ion-button
         item-end>Delete</button>

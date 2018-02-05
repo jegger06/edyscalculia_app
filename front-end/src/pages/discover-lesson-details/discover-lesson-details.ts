@@ -81,7 +81,7 @@ export class DiscoverLessonDetailsPage {
     }
   }
 
-  requestPreTest (lesson: Object): void {
+  requestAnExam (lesson: Object): void {
     console.log(lesson);
   }
 
