@@ -11,7 +11,6 @@
 </ion-header>
 
 <ion-content padding>
-  {{ lessonDetails | json }}
   <ion-card>
     <ion-card-title>
       {{ lessonDetails['lesson_title'] }}
@@ -22,7 +21,7 @@
       <div [innerHTML]="lessonDetails['lesson_content']"></div>
     </ion-card-content>
     <ion-card-content text-right>
-      <button *ngIf="lessonsCount > 0" (click)="goToPage('prev')" ion-button clear round icon-left>
+      <button *ngIf="lessonsCount > 1" (click)="goToPage('prev')" ion-button clear round icon-left>
         <ion-icon name="md-arrow-back"></ion-icon>
         Previous
       </button>
@@ -30,7 +29,7 @@
         <ion-icon name="md-medal"></ion-icon>
         Test
       </button>
-      <button *ngIf="lessonsCount > 0" (click)="goToPage('next')" ion-button clear round icon-right>
+      <button *ngIf="lessonsCount > 1" (click)="goToPage('next')" ion-button clear round icon-right>
         Next
         <ion-icon name="md-arrow-forward"></ion-icon>
       </button>

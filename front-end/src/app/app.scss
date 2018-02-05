@@ -105,3 +105,10 @@ button[small] {
 .button-round-md.button-clear {
     padding: 0 1rem;
 }
+
+.ellipse {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 20px;
+}

@@ -1,7 +1,8 @@
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * Generated class for the DiscoverLessonDetailsPage page.
@@ -39,17 +40,54 @@ export class DiscoverLessonDetailsPage {
   constructor (
     public navCtrl: NavController,
     public http: HttpClient,
+    public sanitizer: DomSanitizer,
     public storage: Storage,
+    public toastCtrl: ToastController,
     public navParams: NavParams) { }
 
-  goToPage (route: string): void {
+  toastMessage (message: string, type: boolean = false): void {
+    this.toastCtrl.create({
+      message,
+      cssClass: type ? 'toast-success-message' : 'toast-error-message',
+      duration: 3000
+    }).present();
+  }
 
+  goToPage (route: string): void {
+    const currentLesson = this.lessonDetails;
+    const allLesson = this.lessonsList;
+    const index = allLesson.findIndex(lesson => (lesson['lesson_id'] === currentLesson['lesson_id']));
+    if (route === 'prev') {
+      if (index === 0) {
+        this.toastMessage('No more previous lesson...');
+        return;
+      }
+      this.storage.remove('lesson-selected').then(() => {
+        this.storage.set('lesson-selected', allLesson[index - 1]).then(response => {
+          this.lessonDetails = response;
+        });
+      });
+    }
+    if (route === 'next') {
+      if ((allLesson['length'] - 1) === index) {
+        this.toastMessage('No more next lesson...');
+        return;
+      }
+      this.storage.remove('lesson-selected').then(() => {
+        this.storage.set('lesson-selected', allLesson[index + 1]).then(response => {
+          this.lessonDetails = response;
+        });
+      });
+    }
   }
 
   fetchAlllesson (): void {
-    this.http.get(`${ api.host }/lesson/lists/${ this.lesson['lesson_id'] }`).subscribe(response => {
+    this.http.get(`${ api.host }/lesson/lists/${ this.lesson['chapter_id'] }`).subscribe(response => {
       if (response['success']) {
-        this.lessonsList = response['lessons'];
+        this.lessonsList = response['lessons'].map(lesson => {
+          lesson['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(lesson['lesson_content']);
+          return lesson;
+        });
         this.lessonsCount = response['lessons']['length'];
       }
     })
@@ -58,7 +96,9 @@ export class DiscoverLessonDetailsPage {
   fetchLessonDetails (): void {
     this.http.get(`${ api.host }/lesson/${ this.lesson['lesson_id'] }`).subscribe(response => {
       if (response['success']) {
-        this.lessonDetails = response['details'];
+        const details = response['details'];
+        details['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(details['lesson_content']);
+        this.lessonDetails = details;
       }
     });
   }
