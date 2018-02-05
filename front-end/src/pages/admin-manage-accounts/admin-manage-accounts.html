@@ -44,14 +44,16 @@
     </ion-item>
   </ion-list>
 
-  <ion-item class="item-border">
-    <ion-label>List of Account Type</ion-label>
-    <ion-select [(ngModel)]="sort" (ionChange)="accountTypeSort()">
-      <ion-option value="all">All</ion-option>
-      <ion-option value="1">Active</ion-option>
-      <ion-option value="0">Inactive</ion-option>
-    </ion-select>
-  </ion-item>
+  <ion-list>
+    <ion-item class="item-border">
+      <ion-label>List of Account Type</ion-label>
+      <ion-select [(ngModel)]="sort" (ionChange)="accountTypeSort()">
+        <ion-option value="all">All</ion-option>
+        <ion-option value="1">Active</ion-option>
+        <ion-option value="0">Inactive</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="accountTypeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let accountType of accountTypeList">
@@ -64,7 +66,8 @@
   <ng-template #showNoRecord>
     <ion-list>
       <ion-item>
-        {{ accountTypeList }}
+        No account type available for now.
+        <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
       </ion-item>
     </ion-list>
   </ng-template>

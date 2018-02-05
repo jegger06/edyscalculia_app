@@ -45,9 +45,11 @@
     </ion-item>
   </ion-list>
 
-  <ion-item class="item-border">
-    <p>List of Question Range</p>
-  </ion-item>
+  <ion-list>
+    <ion-item class="item-border">
+      <p>List of Question Range</p>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="questionRangeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let questionRange of questionRangeList">
@@ -57,6 +59,7 @@
         item-end>Delete</button>
     </ion-item>
   </ion-list>
+
   <ng-template #showNoRecord>
     <ion-list>
       <ion-item>

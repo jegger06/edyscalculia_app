@@ -37,9 +37,11 @@
     </ion-item>
   </ion-list>
 
-  <ion-item class="item-border">
-    <p>List of Difficulty</p>
-  </ion-item>
+  <ion-list>
+    <ion-item class="item-border">
+      <p>List of Difficulty</p>
+    </ion-item>
+  </ion-list>
   
   <ion-list *ngIf="difficultyTypeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let difficultyType of difficultyTypeList">

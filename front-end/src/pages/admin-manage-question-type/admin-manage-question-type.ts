@@ -57,7 +57,7 @@ export class AdminManageQuestionTypePage {
       return;
     }
     this.http.post(`${ api.host }/question-type/create`, {
-      question_type_slog: type.toLowerCase().split('-').join('-'),
+      question_type_slog: type.toLowerCase().split(' ').join('-'),
       question_type_text: type
     }, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
@@ -86,7 +86,7 @@ export class AdminManageQuestionTypePage {
   updateProceed (): void {
     const type = this.questionType['value'];
     this.http.put(`${ api.host }/question-type/${ this.questionTypeId }`, {
-      question_type_slog: type.toLowerCase().split('-').join('-'),
+      question_type_slog: type.toLowerCase().split(' ').join('-'),
       question_type_text: type
     }, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])

@@ -37,9 +37,11 @@
     </ion-item>
   </ion-list>
 
-  <ion-item class="item-border">
-    <p>List of Question Type</p>
-  </ion-item>
+  <ion-list>
+    <ion-item class="item-border">
+      <p>List of Question Type</p>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="questionTypeListCount > 0; else showNoRecord">
     <ion-item *ngFor="let questionType of questionTypeList">
