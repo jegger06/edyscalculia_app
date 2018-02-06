@@ -6,7 +6,13 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Discover - Chapter Lesson</ion-title>
+    <ion-title>Chapter Lesson</ion-title>
+    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-right>
+        {{ user['account_name'] }}
+        <ion-icon name="md-exit"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -24,13 +30,13 @@
         <div class="ellipse" [innerHTML]="chapterLessonList['lesson_content']"></div>
       </ion-card-content>
       <ion-card-content text-right>
-        <button (click)="lessonDetails(chapterLessonList)" ion-button clear round icon-left>
+        <button (click)="lessonDetails(chapterLessonList)" ion-button round icon-left>
           <ion-icon name="md-paper"></ion-icon>
           read more
         </button>
-        <button (click)="requestPreTest(chapterLessonList)" ion-button clear round icon-left>
+        <button (click)="requestPreTest(chapterLessonList)" ion-button round icon-left>
           <ion-icon name="md-medal"></ion-icon>
-          Test
+          Pre-test
         </button>
       </ion-card-content>
     </ion-card>

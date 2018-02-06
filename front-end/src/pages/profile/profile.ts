@@ -23,6 +23,10 @@ export class ProfilePage {
     public navParams: NavParams,
     public storage: Storage) { }
 
+  logOut (): void {
+    this.navCtrl.push('LogOutPage');
+  }
+
   routeTo (route: string): void {
     this.navCtrl.push(route);
   }

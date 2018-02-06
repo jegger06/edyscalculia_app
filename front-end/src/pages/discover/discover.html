@@ -6,7 +6,13 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Discover - Chapter</ion-title>
+    <ion-title>Chapter</ion-title>
+    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-right>
+        {{ user['account_name'] }}
+        <ion-icon name="md-exit"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

@@ -18,6 +18,7 @@ import { api } from './../../config/index';
 })
 export class DiscoverPage {
 
+  user: Object = {};
   chapterLists: Array<{
     chapter_id: number,
     account_id: number,
@@ -36,6 +37,10 @@ export class DiscoverPage {
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
 
+  logOut (): void {
+    this.navCtrl.push('LogOutPage');
+  }
+
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
       message,
@@ -53,7 +58,12 @@ export class DiscoverPage {
   }
 
   ionViewWillEnter (): void {
-    this.fetchAllRecords();
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.user = response;
+      }
+      this.fetchAllRecords();
+    }, error => this.toastMessage(error['message'], error['success']));
   }
 
 }
