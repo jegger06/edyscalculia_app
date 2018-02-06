@@ -9,3 +9,5 @@ password: edyscalculia12345
 Heroku:
 username: edyscalculia@gmail.com
 password: edyscalculia12#$%
+
+mysql://b005bfd00ef87c:6cc3119b@us-cdbr-iron-east-05.cleardb.net/heroku_a8660896515fed8?reconnect=true
