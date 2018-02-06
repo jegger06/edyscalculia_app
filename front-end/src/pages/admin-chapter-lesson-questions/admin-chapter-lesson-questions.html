@@ -34,6 +34,7 @@
     <ion-item *ngIf="questionRangeCount > 0">
       <ion-label>Question Range</ion-label>
       <ion-select [(ngModel)]="contentUpdateRange">
+        <ion-option value="0">0% - 0%</ion-option>
         <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
           {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
         </ion-option>
@@ -121,6 +122,7 @@
     <ion-item *ngIf="questionRangeCount > 0">
       <ion-label>Filter by Range</ion-label>
       <ion-select [(ngModel)]="sortRange" (ionChange)="fetchLessonQuestions()">
+        <ion-option value="0">0% - 0%</ion-option>
         <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
           {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
         </ion-option>

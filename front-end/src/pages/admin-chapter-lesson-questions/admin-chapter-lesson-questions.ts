@@ -23,7 +23,7 @@ export class AdminChapterLessonQuestionsPage {
   lesson: Object = {};
   questionTitle: string = 'Adding';
   sortDifficulty: number = 1;
-  sortRange: number = 1;
+  sortRange: number = 0;
   sortStatus: number | string = 1;
   questionsList: Array<{
     question_id: number,
@@ -75,7 +75,7 @@ export class AdminChapterLessonQuestionsPage {
   contentUpdate: any;
   contentUpdateDifficulty: number;
   contentUpdateType: number;
-  contentUpdateRange: number;
+  contentUpdateRange: number = 0;
   questionUpdateId: number;
   questionUpdateStatus: number = 1;
   public editorContent: string = '';
@@ -144,7 +144,7 @@ export class AdminChapterLessonQuestionsPage {
       this.toastMessage('Question should not be empty.');
       return;
     }
-    if ((/^\s*$/).test(contentUpdateChoices)) {
+    if (this.contentAnswerType === 'multiple-choice' && (/^\s*$/).test(contentUpdateChoices)) {
       this.toastMessage('Choices should not be empty.');
       return;
     }
@@ -266,7 +266,7 @@ export class AdminChapterLessonQuestionsPage {
       this.contentUpdateType = 1;
     }
     if (this.questionRangeCount > 0) {
-      this.contentUpdateRange = 1;
+      this.contentUpdateRange = 0;
     }
     if (this.contentAnswerType === 'multiple-choice') {
       this.idA = '';
@@ -311,7 +311,7 @@ export class AdminChapterLessonQuestionsPage {
 
   viewAll (): void {
     this.sortStatus = 1;
-    this.sortRange = 1;
+    this.sortRange = 0;
     this.sortDifficulty = 1;
     this.fetchLessonQuestions();
   }
@@ -359,9 +359,10 @@ export class AdminChapterLessonQuestionsPage {
     this.http.get(`${ api.host }/question-range/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      console.log(response['question_ranges']);
       if (response['success'] && response['question_ranges']) {
         this.questionRangeList = response['question_ranges'];
-        this.contentUpdateRange = response['question_ranges'][0]['question_range_id'];
+        this.contentUpdateRange = 0;
         this.questionRangeCount = response['question_ranges']['length'];
       }
     }, error => this.toastMessage(error['message'], error['success']));

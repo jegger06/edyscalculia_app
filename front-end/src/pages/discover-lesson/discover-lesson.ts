@@ -45,6 +45,10 @@ export class DiscoverLessonPage {
     public sanitizer: DomSanitizer,
     public navParams: NavParams) { }
 
+  logOut (): void {
+    this.navCtrl.push('LogOutPage');
+  }
+
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
       message,
@@ -60,7 +64,7 @@ export class DiscoverLessonPage {
   requestPreTest (lesson: Object): void {
     this.storage.set('lesson-selected', lesson).then(response => {
       if (Object.keys(this.user).length > 0) {
-        this.http.get(`${ api.host }/score/pre-test`, {
+        this.http.get(`${ api.host }/score/pre-test/${ lesson['lesson_id'] }`, {
           headers: new HttpHeaders().set('Authorization', this.user['token'])
         }).subscribe(response => {
           if (response['success'] && response['detail']) {
@@ -72,7 +76,9 @@ export class DiscoverLessonPage {
                 { text: 'Done' }
               ]
             }).present();
+            return;
           }
+          this.navCtrl.push('DiscoverLessonExamPrePage');
         }, error => this.toastMessage(error['message'], error['success']));
         return;
       }
