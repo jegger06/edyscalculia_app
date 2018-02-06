@@ -81,7 +81,7 @@ export class AdminManageAccountsPage {
       return;
     }
     this.http.put(`${ api.host }/account/${ this.accountId }`, {
-      type_slog: accountType.toLowerCase().split('-').join('-'),
+      type_slog: accountType.toLowerCase().split(' ').join('-'),
       type_description: accountType,
       type_status: this.accountStatus
     }, {
@@ -127,6 +127,11 @@ export class AdminManageAccountsPage {
     alert.present();
   }
 
+  viewAll (): void {
+    this.sort = 'all';
+    this.fetchAccountType(this.sort);
+  }
+
   fetchAccountType (sort: string | number): void {
     let sortMessage = `?sort=${ sort }`;
     if (sort === 'all') {
@@ -135,12 +140,12 @@ export class AdminManageAccountsPage {
     this.http.get(`${ api.host }/account/lists${sortMessage}`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      if (response['success']) {
+      if (response['success'] && response['account_types']) {
         this.accountTypeList = response['account_types'];
         this.accountTypeListCount = response['account_types']['length'];
         return;
       }
-      !response['success'] && (this.accountTypeList = response['message']);
+      this.accountTypeListCount = 0;
     })
   }
 

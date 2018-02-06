@@ -16,4 +16,18 @@ page-discover-lesson-details {
     margin-bottom: 10px;
   }
 
+  .test-button {
+    display: flex;
+
+    button {
+      flex: 1 0 auto;
+      margin: 0 5px 5px;
+    }
+
+  }
+
+  .margin-top {
+    margin-top: 10px;
+  }
+
 }

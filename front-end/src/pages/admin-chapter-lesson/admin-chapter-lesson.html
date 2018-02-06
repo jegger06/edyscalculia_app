@@ -49,7 +49,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="lessons['success'] && lessonsCount > 0; else showNoRecord">
+  <ion-list>
     <ion-item>
       <ion-label>List of Lessons</ion-label>
       <ion-select (ionChange)="sortNow(sort)" [(ngModel)]="sort">
@@ -58,23 +58,25 @@
         <ion-option value="0">Inactive</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item (click)="addQuestion(lesson)" *ngFor="let lesson of lessons['lessons']" class="item-border">
-      <p class="title-link">
+  </ion-list>
+
+  <ion-list *ngIf="lessonsCount > 0; else showNoRecord">
+    <ion-item (click)="addQuestion(lesson)" *ngFor="let lesson of lessons" class="item-border">
+      <div class="title-link">
         <ion-icon name="md-arrow-dropright"></ion-icon>
-        {{ lesson['lesson_title'] }}
-      </p>
+        <div class="inline-block" [innerHTML]="lesson['lesson_title']"></div>
+      </div>
       <button (click)="updateLesson($event, lesson)" class="not-included no-bold" ion-button clear item-end>EDIT</button>
       <button (click)="deleteLesson($event, lesson['lesson_id'])" class="delete-button not-included no-bold" ion-button clear item-end>DELETE</button>
     </ion-item>
   </ion-list>
-
+  
   <ng-template #showNoRecord>
     <ion-list>
       <ion-item>
-        <p>{{ lessons['message'] }}</p>
+        <p>No record of lesson for now.</p>
         <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
       </ion-item>
     </ion-list>
   </ng-template>
-  
 </ion-content>

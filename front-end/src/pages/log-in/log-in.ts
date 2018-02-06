@@ -41,7 +41,7 @@ export class LogInPage {
       this.navCtrl.push('AdminDashboardPage');
       return;
     }
-    this.navCtrl.push('UserHomePage');
+    this.navCtrl.push('DiscoverPage');
     return;
   }
 

@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
@@ -20,8 +21,10 @@ export class AdminChapterLessonQuestionsPage {
 
   user: Object = {};
   lesson: Object = {};
-  sort: string | number = 2;
   questionTitle: string = 'Adding';
+  sortDifficulty: number = 1;
+  sortRange: number = 0;
+  sortStatus: number | string = 1;
   questionsList: Array<{
     question_id: number,
     question_range_id: number,
@@ -72,9 +75,9 @@ export class AdminChapterLessonQuestionsPage {
   contentUpdate: any;
   contentUpdateDifficulty: number;
   contentUpdateType: number;
-  contentUpdateRange: number;
-  contentUpdateChoices: string = '';
-  contentUpdateAnswer: string = '';
+  contentUpdateRange: number = 0;
+  questionUpdateId: number;
+  questionUpdateStatus: number = 1;
   public editorContent: string = '';
   public options: Object = {
     imageUploadURL: `${ api.host }/upload/image_upload`,
@@ -86,11 +89,20 @@ export class AdminChapterLessonQuestionsPage {
     toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', 'spellChecker', 'help', 'html', 'undo', 'redo'],
     toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', 'spellChecker', 'help', 'html', 'undo', 'redo']
   };
+  contentAnswerType: string = 'drag-and-drop';
+  dragAndDrop: string = '';
+  identification: string = '';
+  multipleChoice: string = '';
+  trueOrFalse: string = '';
+  idA = '';
+  idB = '';
+  idC = '';
 
   constructor (
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public sanitize: DomSanitizer,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public navParams: NavParams) { }
@@ -104,23 +116,40 @@ export class AdminChapterLessonQuestionsPage {
   }
 
   showChoicesAndAnswer (id: number): void {
-    
+    if (this.questionTypeList) {
+      const type = this.questionTypeList.filter(type => type['question_type_id'] === id)[0];
+      this.contentAnswerType = type['question_type_slog'];
+    }
   }
 
   addQuestion (): void {
-    const editorContent = this.editorContent
-    const contentUpdateChoices = this.contentUpdateChoices
-    const contentUpdateAnswer = this.contentUpdateAnswer
+    const editorContent = this.editorContent;
+    let contentUpdateChoices = '';
+    let contentUpdateAnswer = '';
+    if (this.contentAnswerType === 'drag-and-drop') {
+      this.toastMessage('Question type not supported yet.');
+      return;
+    }
+    if (this.contentAnswerType === 'identification') {
+      contentUpdateAnswer = this.identification;
+    }
+    if (this.contentAnswerType === 'multiple-choice') {
+      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
+      contentUpdateAnswer = this.multipleChoice;
+    }
+    if (this.contentAnswerType === 'true-or-false') {
+      contentUpdateAnswer = this.trueOrFalse;
+    }
     if ((/^\s*$/).test(editorContent)) {
       this.toastMessage('Question should not be empty.');
       return;
     }
-    if ((/^\s*$/).test(contentUpdateChoices)) {
-      this.toastMessage('Make an atleast 2 choices and try again.');
+    if (this.contentAnswerType === 'multiple-choice' && (/^\s*$/).test(contentUpdateChoices)) {
+      this.toastMessage('Choices should not be empty.');
       return;
     }
     if ((/^\s*$/).test(contentUpdateAnswer)) {
-      this.toastMessage('Choose 1 answer and try again.');
+      this.toastMessage('Answer should not be empty.');
       return;
     }
     const question = {
@@ -132,11 +161,125 @@ export class AdminChapterLessonQuestionsPage {
       answer_choices: contentUpdateChoices,
       answer_key: contentUpdateAnswer
     }
-    console.log(question)
+    this.http.post(`${ api.host }/question/create`, question, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(response => {
+      this.toastMessage(response['message'], response['success']);
+      if (response['success']) {
+        this.fetchLessonQuestions();
+        this.cancelUpdate();
+      }
+    }, error => this.toastMessage(error['message'], error['success']));
   }
 
   updateQuestion (event: any, question: Object): void {
-    console.log(question)
+    this.contentUpdateDifficulty = question['difficulty_id'];
+    this.contentUpdateType = question['question_type_id'];
+    this.contentUpdateRange = question['question_range_id'];
+    this.editorContent = question['question_content'];
+    this.questionUpdateId = question['question_id'];
+    this.questionUpdateStatus = question['question_status'];
+    const index = this.questionTypeList.findIndex(type => type['question_type_id'] === question['question_type_id']);
+    const type = this.questionTypeList[index]['question_type_slog'];
+    this.contentAnswerType = type
+    this.isUpdate = true;
+    switch (type) {
+      case 'multiple-choice':
+        const choices = eval(question['answer_choices']);
+        this.idA = choices[0];
+        this.idB = choices[1];
+        this.idC = choices[2];
+        this.multipleChoice = question['answer_key'];
+        break;
+      case 'drag-and-drop':
+        this.dragAndDrop = question['answer_key'];
+        break;
+      case 'identification':
+        this.identification = question['answer_key'];
+        break;
+      case 'true-or-false':
+        this.trueOrFalse = question['answer_key'];
+        break;
+      default:
+        this.dragAndDrop = '';
+        this.identification = '';
+        this.multipleChoice = '';
+        this.trueOrFalse = '';
+    }
+  }
+
+  updateProceed (): void {
+    const editorContent = this.editorContent;
+    let contentUpdateChoices = '';
+    let contentUpdateAnswer = '';
+    if (this.contentAnswerType === 'drag-and-drop') {
+      this.toastMessage('Question type not supported yet.');
+      return;
+    }
+    if (this.contentAnswerType === 'identification') {
+      contentUpdateAnswer = this.identification;
+    }
+    if (this.contentAnswerType === 'multiple-choice') {
+      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
+      contentUpdateAnswer = this.multipleChoice;
+    }
+    if (this.contentAnswerType === 'true-or-false') {
+      contentUpdateAnswer = this.trueOrFalse;
+    }
+    if ((/^\s*$/).test(editorContent)) {
+      this.toastMessage('Question should not be empty.');
+      return;
+    }
+    if ((/^\s*$/).test(contentUpdateChoices)) {
+      this.toastMessage('Choices should not be empty.');
+      return;
+    }
+    if ((/^\s*$/).test(contentUpdateAnswer)) {
+      this.toastMessage('Answer should not be empty.');
+      return;
+    }
+    const questionDetails = {
+      question_range_id: this.contentUpdateRange,
+      question_type_id: this.contentUpdateType,
+      difficulty_id: this.contentUpdateDifficulty,
+      question_content: editorContent,
+      question_status: this.questionUpdateStatus,
+      answer_choices: contentUpdateChoices,
+      answer_key: contentUpdateAnswer
+    };
+    this.http.put(`${ api.host }/question/${ this.questionUpdateId }`, questionDetails, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(response => {
+      this.toastMessage(response['message'], response['success']);
+      if (response['success']) {
+        this.cancelUpdate();
+        this.fetchLessonQuestions();
+      }
+    }, error => this.toastMessage(error['message'], error['success']));
+  }
+
+  cancelUpdate () {
+    if (this.questionDiffcultiesCount > 0) {
+      this.contentUpdateDifficulty = 1;
+    }
+    if (this.questionTypeCount > 0) {
+      this.contentUpdateType = 1;
+    }
+    if (this.questionRangeCount > 0) {
+      this.contentUpdateRange = 0;
+    }
+    if (this.contentAnswerType === 'multiple-choice') {
+      this.idA = '';
+      this.idB = '';
+      this.idC = '';
+    }
+    this.isUpdate = false;
+    this.editorContent = '';
+    this.contentAnswerType = 'drag-and-drop';
+    this.dragAndDrop = '';
+    this.identification = '';
+    this.multipleChoice = '';
+    this.trueOrFalse = '';
   }
 
   deleteQuestion (event: any, id: number): void {
@@ -156,7 +299,7 @@ export class AdminChapterLessonQuestionsPage {
               headers: new HttpHeaders().set('Authorization', this.user['token'])
             }).subscribe(response => {
               this.toastMessage(response['message'], response['success']);
-              this.fetchLessonQuestions(this.sort);
+              this.fetchLessonQuestions();
             }, error => this.toastMessage(error['message'], error['success']));
             return false;
           }
@@ -166,12 +309,25 @@ export class AdminChapterLessonQuestionsPage {
     alert.present();
   }
 
-  fetchLessonQuestions (sort: string | number): void {
-    this.http.get(`${ api.host }/question/lists/${ this.lesson['lesson_id'] }`).subscribe(response => {
+  viewAll (): void {
+    this.sortStatus = 1;
+    this.sortRange = 0;
+    this.sortDifficulty = 1;
+    this.fetchLessonQuestions();
+  }
+
+  fetchLessonQuestions (): void {
+    const sort = `?difficulty=${ this.sortDifficulty }&range=${ this.sortRange }&status=${ this.sortStatus }`;
+    this.http.get(`${ api.host }/question/lists/${ this.lesson['lesson_id'] }${ sort }`).subscribe(response => {
       if (response['success'] && response['questions']) {
-        this.questionsList = response['questions'];
+        this.questionsList = response['questions'].map(question => {
+          question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
+          return question;
+        });
         this.questionsCount = response['questions']['length'];
+        return;
       }
+      this.questionsCount = 0;
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
@@ -203,9 +359,10 @@ export class AdminChapterLessonQuestionsPage {
     this.http.get(`${ api.host }/question-range/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      console.log(response['question_ranges']);
       if (response['success'] && response['question_ranges']) {
         this.questionRangeList = response['question_ranges'];
-        this.contentUpdateRange = response['question_ranges'][0]['question_range_id'];
+        this.contentUpdateRange = 0;
         this.questionRangeCount = response['question_ranges']['length'];
       }
     }, error => this.toastMessage(error['message'], error['success']));
@@ -231,7 +388,7 @@ export class AdminChapterLessonQuestionsPage {
         this.fetchQuestionRange();
         this.fetchQuestionType();
         this.fetchQuestionDifficulty();
-        this.fetchLessonQuestions(this.sort);
+        this.fetchLessonQuestions();
         this.showChoicesAndAnswer(this.contentUpdateType);
       });
     });

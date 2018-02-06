@@ -20,4 +20,16 @@ page-profile {
     padding: 0 15px;
   }
 
+  .bar-buttons-md[end] {
+    padding: 0 1rem;
+
+    button {
+      padding: 0 12px;
+      font-size: 2rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+  }
+
 }

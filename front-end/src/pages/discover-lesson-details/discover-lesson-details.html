@@ -6,7 +6,13 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Discover - Lesson Details</ion-title>
+    <ion-title>Lesson Details</ion-title>
+    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-right>
+        {{ user['account_name'] }}
+        <ion-icon name="md-exit"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -20,19 +26,27 @@
       <p class="date">{{ lessonDetails['lesson_date'] | date:"longDate" }}</p>
       <div [innerHTML]="lessonDetails['lesson_content']"></div>
     </ion-card-content>
-    <ion-card-content text-right>
-      <button *ngIf="lessonsCount > 1" (click)="goToPage('prev')" ion-button clear round icon-left>
-        <ion-icon name="md-arrow-back"></ion-icon>
-        Previous
-      </button>
-      <button (click)="requestPreTest(lessonDetails)" ion-button clear round icon-left>
-        <ion-icon name="md-medal"></ion-icon>
-        Test
-      </button>
-      <button *ngIf="lessonsCount > 1" (click)="goToPage('next')" ion-button clear round icon-right>
-        Next
-        <ion-icon name="md-arrow-forward"></ion-icon>
-      </button>
+    <ion-card-content>
+      <div class="test-button">
+        <button ion-button round icon-left>
+          <ion-icon name="md-create"></ion-icon>
+          Activities
+        </button>
+        <button ion-button round icon-left>
+          <ion-icon name="md-create"></ion-icon>
+          Post-test
+        </button>
+      </div>
+      <div text-right class="margin-top">
+        <button *ngIf="lessonsCount > 1" (click)="goToPage('prev')" ion-button clear round icon-left>
+          <ion-icon name="md-arrow-back"></ion-icon>
+          Previous
+        </button>
+        <button *ngIf="lessonsCount > 1" (click)="goToPage('next')" ion-button clear round icon-right>
+          Next
+          <ion-icon name="md-arrow-forward"></ion-icon>
+        </button>
+      </div>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -19,6 +19,7 @@ import { api } from './../../config/index';
 })
 export class DiscoverLessonDetailsPage {
 
+  user: Object = {};
   lesson: Object = {};
   lessonsList: Array<{
     lesson_id: number,
@@ -44,6 +45,10 @@ export class DiscoverLessonDetailsPage {
     public storage: Storage,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
+
+  logOut (): void {
+    this.navCtrl.push('LogOutPage');
+  }
 
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
@@ -81,8 +86,8 @@ export class DiscoverLessonDetailsPage {
     }
   }
 
-  requestPreTest (lesson: Object): void {
-    console.log(lesson);
+  requestAnExam (lesson: Object, type: string = ''): void {
+    console.log(lesson, type);
   }
 
   fetchAlllesson (): void {
@@ -108,6 +113,7 @@ export class DiscoverLessonDetailsPage {
   }
   
   ionViewWillEnter () {
+    this.storage.get('account').then(response => response && (this.user = response));
     this.storage.get('lesson-selected').then(response => {
       if (response) {
         this.lesson = response;

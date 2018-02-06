@@ -1,0 +1,48 @@
+<!--
+  Generated template for the DiscoverLessonExamPrePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Discover - Pre-Test</ion-title>
+    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-right>
+        {{ user['account_name'] }}
+        <ion-icon name="md-exit"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="questionsCount > 0; else showNoRecord">
+    <ion-card *ngFor="let question of questions; let i = index">
+      <ion-card-content>
+        <ion-card-title [innerHTML]="question['question_content']"></ion-card-title>
+        <div class="card-action">
+          <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, question['answer_key'], choice, i)" ion-button round>
+            {{ choice }}
+          </button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <button (click)="submitSummaryScore()" class="submit-button" ion-button round icon-left block>
+          <ion-icon name="ios-send"></ion-icon>
+          Submit Answers
+        </button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #showNoRecord>
+    <ion-card>
+      <ion-card-content>
+        No question is availabe for now.
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>
