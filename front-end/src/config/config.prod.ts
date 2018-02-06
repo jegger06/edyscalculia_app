@@ -1,3 +1,3 @@
 export const prodConfiguration = {
-  host: ''
+  host: 'https://e-dyscalculia.herokuapp.com/api'
 }
