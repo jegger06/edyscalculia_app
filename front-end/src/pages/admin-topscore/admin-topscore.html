@@ -14,5 +14,34 @@
 </ion-header>
 
 <ion-content padding>
-  
+  <ion-list>
+    <ion-item>
+      <ion-label>Difficulty Type</ion-label>
+      <ion-select [(ngModel)]="difficultyId" (ionChange)="fetchTopScore()">
+        <ion-option *ngFor="let difficulty of difficulties" [value]="difficulty['difficulty_id']">
+          {{ difficulty['difficulty_text'] }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-item class="item-border">
+      <p>Top 3 Score</p>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="topScoreCount > 0; else showNoRecord">
+    <ion-item class="remove-padding" *ngFor="let score of topScore">
+      {{ score['account_name'] }} - {{ score['score_count'] }}%
+    </ion-item>
+  </ion-list>
+
+  <ng-template #showNoRecord>
+    <ion-list>
+      <ion-item>
+        No top score for now.
+      </ion-item>
+    </ion-list>
+  </ng-template>
 </ion-content>
