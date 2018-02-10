@@ -71,6 +71,9 @@ export class DiscoverLessonExamPrePage {
       if (response['success'] && response['questions']) {
         this.questions = response['questions'].map(question => {
           question['answer_choices'] = eval(question['answer_choices']);
+          if (typeof eval(question['answer_key'].toLowerCase()) === 'boolean') {
+            question['answer_choices'] = ['True', 'False'];
+          }
           question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
           return question;
         });
@@ -79,9 +82,14 @@ export class DiscoverLessonExamPrePage {
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
-  addScore (event: Object, correct: any, answer: any, i: number): void {
-    const selector = $(event['target']).is($('button')) ? $(event['target']) : $(event['target']).parent('button');
-    selector.addClass('button-clicked').siblings('button').removeClass('button-clicked');
+  addScore (event: Object, type: string, correct: any, i: number, answer: any): void {
+    if (type === 'button') {
+      const selector = $(event['target']).is($('button')) ? $(event['target']) : $(event['target']).parent('button');
+      selector.addClass('button-clicked').siblings('button').removeClass('button-clicked');
+    } else if (type === 'input') {
+      answer = '';
+      answer = event['value'];
+    }
     this.examScore[`pre-question-${ (i + 1) }`] = {
       correct,
       answer,

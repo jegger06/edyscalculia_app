@@ -74,9 +74,10 @@ export class DiscoverLessonExamSummaryPage {
         return;
       }
       this.hasExam = true;
-      this.items = Object.keys(response['examDetails']).length;
+      response = response['examDetails'];
+      this.items = Object.keys(response).length;
       for (let property in response) {
-        if (response.hasOwnProperty(property) && (Number(response[property]['correct']) === Number(response[property]['answer']))) {
+        if (response.hasOwnProperty(property) && (response[property]['correct'] === response[property]['answer'])) {
           this.points = this.points + 1;
         }
         if (response[property]['type'] === 'pre-test') {
