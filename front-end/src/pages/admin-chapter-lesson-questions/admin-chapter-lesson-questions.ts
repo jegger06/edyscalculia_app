@@ -75,6 +75,7 @@ export class AdminChapterLessonQuestionsPage {
   contentUpdate: any;
   contentUpdateDifficulty: number;
   contentUpdateType: number;
+  cloneUpdateType: number;
   contentUpdateRange: number = 0;
   questionUpdateId: number;
   questionUpdateStatus: number = 1;
@@ -176,7 +177,7 @@ export class AdminChapterLessonQuestionsPage {
     this.contentUpdateDifficulty = question['difficulty_id'];
     this.contentUpdateType = question['question_type_id'];
     this.contentUpdateRange = question['question_range_id'];
-    this.editorContent = question['question_content'];
+    this.editorContent = question['question_content']['changingThisBreaksApplicationSecurity'];
     this.questionUpdateId = question['question_id'];
     this.questionUpdateStatus = question['question_status'];
     const index = this.questionTypeList.findIndex(type => type['question_type_id'] === question['question_type_id']);
@@ -209,29 +210,26 @@ export class AdminChapterLessonQuestionsPage {
   }
 
   updateProceed (): void {
-    const editorContent = this.editorContent;
     let contentUpdateChoices = '';
     let contentUpdateAnswer = '';
-    if (this.contentAnswerType === 'drag-and-drop') {
+    if (this.contentAnswerType === 'true-or-false') {
+      contentUpdateAnswer = this.trueOrFalse;
+    } else if (this.contentAnswerType === 'identification') {
+      contentUpdateAnswer = this.identification;
+    } else if (this.contentAnswerType === 'multiple-choice') {
+      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
+      if ((/^\s*$/).test(contentUpdateChoices)) {
+        this.toastMessage('Choices should not be empty.');
+        return;
+      }
+      contentUpdateAnswer = this.multipleChoice;
+    } else {
       this.toastMessage('Question type not supported yet.');
       return;
     }
-    if (this.contentAnswerType === 'identification') {
-      contentUpdateAnswer = this.identification;
-    }
-    if (this.contentAnswerType === 'multiple-choice') {
-      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
-      contentUpdateAnswer = this.multipleChoice;
-    }
-    if (this.contentAnswerType === 'true-or-false') {
-      contentUpdateAnswer = this.trueOrFalse;
-    }
+    const editorContent = this.editorContent;
     if ((/^\s*$/).test(editorContent)) {
       this.toastMessage('Question should not be empty.');
-      return;
-    }
-    if ((/^\s*$/).test(contentUpdateChoices)) {
-      this.toastMessage('Choices should not be empty.');
       return;
     }
     if ((/^\s*$/).test(contentUpdateAnswer)) {
@@ -263,7 +261,7 @@ export class AdminChapterLessonQuestionsPage {
       this.contentUpdateDifficulty = 1;
     }
     if (this.questionTypeCount > 0) {
-      this.contentUpdateType = 1;
+      this.contentUpdateType = this.cloneUpdateType;
     }
     if (this.questionRangeCount > 0) {
       this.contentUpdateRange = 0;
@@ -350,6 +348,7 @@ export class AdminChapterLessonQuestionsPage {
       if (response['success'] && response['question_types']) {
         this.questionTypeList = response['question_types'];
         this.contentUpdateType = response['question_types'][0]['question_type_id'];
+        this.cloneUpdateType = this.contentUpdateType;
         this.questionTypeCount = response['question_types']['length'];
       }
     }, error => this.toastMessage(error['message'], error['success']));
@@ -359,7 +358,6 @@ export class AdminChapterLessonQuestionsPage {
     this.http.get(`${ api.host }/question-range/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      console.log(response['question_ranges']);
       if (response['success'] && response['question_ranges']) {
         this.questionRangeList = response['question_ranges'];
         this.contentUpdateRange = 0;

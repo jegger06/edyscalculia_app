@@ -63,6 +63,10 @@ export class DiscoverLessonDetailsPage {
     }).present();
   }
 
+  goToExam (route: string): void {
+    this.navCtrl.push(route);
+  }
+
   goToPage (route: string): void {
     const currentLesson = this.lessonDetails;
     const allLesson = this.lessonsList;

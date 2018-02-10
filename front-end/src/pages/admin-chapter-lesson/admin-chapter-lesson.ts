@@ -123,9 +123,9 @@ export class AdminChapterLessonPage {
     return this.isUpdate = false;
   }
 
-  updateLesson (event: any, lesson): void {
+  updateLesson (event: any, lesson: Object): void {
     event.stopPropagation();
-    this.editorContent = lesson['lesson_content'];
+    this.editorContent = lesson['lesson_content']['changingThisBreaksApplicationSecurity'];
     this.lessonStatus = lesson['lesson_status'];
     this.lessonId = lesson['lesson_id'];
     this.lessonTitle = lesson['lesson_title'];

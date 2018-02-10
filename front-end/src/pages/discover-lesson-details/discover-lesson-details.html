@@ -34,11 +34,11 @@
     </ion-card-content>
     <ion-card-content>
       <div *ngIf="user['account_id']" class="test-button">
-        <button ion-button round icon-left>
+        <button (click)="goToExam('DiscoverLessonExamActivityPage')" ion-button round icon-left>
           <ion-icon name="md-create"></ion-icon>
           Activities
         </button>
-        <button ion-button round icon-left>
+        <button (click)="goToExam('DiscoverLessonExamPostPage')" ion-button round icon-left>
           <ion-icon name="md-create"></ion-icon>
           Post-test
         </button>
