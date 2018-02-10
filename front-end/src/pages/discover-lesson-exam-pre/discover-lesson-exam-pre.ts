@@ -71,7 +71,7 @@ export class DiscoverLessonExamPrePage {
       if (response['success'] && response['questions']) {
         this.questions = response['questions'].map(question => {
           question['answer_choices'] = eval(question['answer_choices']);
-          if (typeof eval(question['answer_key'].toLowerCase()) === 'boolean') {
+          if (typeof question['answer_key'].toLowerCase() === 'boolean') {
             question['answer_choices'] = ['True', 'False'];
           }
           question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);

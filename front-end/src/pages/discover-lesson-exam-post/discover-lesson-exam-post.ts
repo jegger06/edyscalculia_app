@@ -16,7 +16,9 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 })
 export class DiscoverLessonExamPostPage {
 
-  constructor(
+  user: Object = {};
+
+  constructor (
     public navCtrl: NavController,
     public storage: Storage,
     public toastCtrl: ToastController,

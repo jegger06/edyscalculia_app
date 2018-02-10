@@ -77,7 +77,8 @@ export class DiscoverLessonExamSummaryPage {
       response = response['examDetails'];
       this.items = Object.keys(response).length;
       for (let property in response) {
-        if (response.hasOwnProperty(property) && (response[property]['correct'] === response[property]['answer'])) {
+        const toLower = (str) => str.toString().toLowerCase();
+        if (response.hasOwnProperty(property) && (toLower(response[property]['correct']) === toLower(response[property]['answer']))) {
           this.points = this.points + 1;
         }
         if (response[property]['type'] === 'pre-test') {
@@ -87,8 +88,9 @@ export class DiscoverLessonExamSummaryPage {
       }
       this.percentScore = (this.points / this.items) * 100;
       this.examResult['score-count'] = this.points;
-      if (this.points !== 3) {
-        if (this.points > 3) {
+      const halfOfTotalItems = Math.round(Number(this.items) / 2);
+      if (this.points !== halfOfTotalItems) {
+        if (this.points > halfOfTotalItems) {
           this.examResult['img-src-remark'] = 'assets/imgs/test-thumbs-up.svg';
         } else {
           this.examResult['img-src-remark'] = 'assets/imgs/test-sad.svg';
