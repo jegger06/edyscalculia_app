@@ -5,8 +5,14 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar [hideBackButton]="user['account_id']">
     <ion-title>Chapter</ion-title>
+    <ion-buttons (click)="goToLogin()" *ngIf="!hasUser" end>
+      <button ion-button item-right icon-left>
+        <ion-icon name="md-contacts"></ion-icon>
+        Login
+      </button>
+    </ion-buttons>
     <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
       <button ion-button item-right icon-right>
         {{ user['account_name'] }}

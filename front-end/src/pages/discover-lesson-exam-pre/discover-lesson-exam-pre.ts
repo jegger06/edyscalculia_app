@@ -11,7 +11,7 @@ import * as $ from 'jquery';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
 
 @IonicPage()
 @Component({
@@ -21,6 +21,7 @@ import { api } from './../../config/index';
 export class DiscoverLessonExamPrePage {
 
   user: Object = {};
+  hasUser: boolean;
   lesson: Object = {};
   questions: Array<{
     question_id: number,
@@ -47,6 +48,10 @@ export class DiscoverLessonExamPrePage {
 
   logOut (): void {
     this.navCtrl.push('LogOutPage');
+  }
+
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
   }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -86,29 +91,32 @@ export class DiscoverLessonExamPrePage {
 
   submitSummaryScore (): void {
     if (Object.keys(this.examScore).length === this.questionsCount) {
-      this.storage.set('lesson-exam', this.examScore).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
+      const preExamDetails = Object.assign({
+        examDetails: this.examScore
+      }, this.lesson);
+      this.storage.set('lesson-exam', preExamDetails).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
       return;
     }
     this.toastMessage('Answer all the questions and try again.');
   }
 
   ionViewWillEnter () {
-    this.storage.get('lesson-exam').then(response => {
-      if (!response) {
-        this.storage.get('account').then(response => {
-          if (response) {
-            this.user = response;
-          }
-          this.storage.get('lesson-selected').then(response => {
-            if (response) {
-              this.lesson = response;
-              this.fetchPreTest();
-            }
-          });
-        });
-        return;
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.user = response;
+        this.hasUser = true;
       }
-      this.navCtrl.push('DiscoverLessonExamSummaryPage');
+    });
+    this.storage.get('lesson-selected').then(response => {
+      if (response) {
+        this.lesson = response;
+        this.fetchPreTest();
+      }
+    });
+    this.storage.get('lesson-exam').then(response => {
+      if (response && this.lesson['lesson_id'] === response['lesson_id']) {
+        this.navCtrl.push('DiscoverLessonExamSummaryPage');
+      }
     });
   }
 

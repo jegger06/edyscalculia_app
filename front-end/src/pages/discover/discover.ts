@@ -9,7 +9,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
 
 @IonicPage()
 @Component({
@@ -19,6 +19,7 @@ import { api } from './../../config/index';
 export class DiscoverPage {
 
   user: Object = {};
+  hasUser: boolean;
   chapterLists: Array<{
     chapter_id: number,
     account_id: number,
@@ -41,6 +42,10 @@ export class DiscoverPage {
     this.navCtrl.push('LogOutPage');
   }
 
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
+  }
+
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
       message,
@@ -59,8 +64,10 @@ export class DiscoverPage {
 
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
+      this.hasUser = false;
       if (response) {
         this.user = response;
+        this.hasUser = true;
       }
       this.fetchAllRecords();
     }, error => this.toastMessage(error['message'], error['success']));
