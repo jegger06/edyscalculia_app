@@ -19,6 +19,7 @@ import { api } from '../../config/index';
 export class DiscoverLessonExamSummaryPage {
 
   user: Object = {};
+  hasExam: boolean;
   examResult: Object = {};
   points: number = 0;
   items: number = 0;
@@ -68,10 +69,12 @@ export class DiscoverLessonExamSummaryPage {
     this.storage.get('lesson-selected').then(lesson => this.lesson = lesson['lesson_id']);
     this.storage.get('lesson-exam').then(response => {
       if (!response) {
+        this.hasExam = false;
         this.navCtrl.push('DiscoverLessonPage');
         return;
       }
-      this.items = Object.keys(response).length;
+      this.hasExam = true;
+      this.items = Object.keys(response['examDetails']).length;
       for (let property in response) {
         if (response.hasOwnProperty(property) && (Number(response[property]['correct']) === Number(response[property]['answer']))) {
           this.points = this.points + 1;
@@ -85,12 +88,12 @@ export class DiscoverLessonExamSummaryPage {
       this.examResult['score-count'] = this.points;
       if (this.points !== 3) {
         if (this.points > 3) {
-          this.examResult['img-src-remark'] = '../../assets/imgs/test-thumbs-up.svg';
+          this.examResult['img-src-remark'] = 'assets/imgs/test-thumbs-up.svg';
         } else {
-          this.examResult['img-src-remark'] = '../../assets/imgs/test-sad.svg';
+          this.examResult['img-src-remark'] = 'assets/imgs/test-sad.svg';
         }
       } else {
-        this.examResult['img-src-remark'] = '../../assets/imgs/test-happy.svg';
+        this.examResult['img-src-remark'] = 'assets/imgs/test-happy.svg';
       }
     });
   }

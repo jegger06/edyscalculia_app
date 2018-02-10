@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
 
 @IonicPage()
 @Component({
@@ -21,6 +21,7 @@ export class DiscoverLessonDetailsPage {
 
   user: Object = {};
   lesson: Object = {};
+  hasUser: boolean;
   lessonsList: Array<{
     lesson_id: number,
     account_id: number,
@@ -48,6 +49,10 @@ export class DiscoverLessonDetailsPage {
 
   logOut (): void {
     this.navCtrl.push('LogOutPage');
+  }
+
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
   }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -113,7 +118,7 @@ export class DiscoverLessonDetailsPage {
   }
   
   ionViewWillEnter () {
-    this.storage.get('account').then(response => response && (this.user = response));
+    this.storage.get('account').then(response => response && (this.user = response) && (this.hasUser = true));
     this.storage.get('lesson-selected').then(response => {
       if (response) {
         this.lesson = response;

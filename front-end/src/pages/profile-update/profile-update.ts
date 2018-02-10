@@ -9,7 +9,7 @@ import { IonicPage, NavController, NavParams, ToastController, AlertController }
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
 
 @IonicPage()
 @Component({

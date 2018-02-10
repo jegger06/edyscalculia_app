@@ -10,7 +10,7 @@ import { IonicPage, NavController, NavParams, ToastController, AlertController }
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
 
 @IonicPage()
 @Component({
@@ -20,7 +20,9 @@ import { api } from './../../config/index';
 export class DiscoverLessonPage {
 
   user: Object = {};
+  hasExam: boolean;
   chapter: any;
+  hasUser: boolean;
   chapterLessonLists: Array<{
     lesson_id: number,
     account_id: number,
@@ -47,6 +49,14 @@ export class DiscoverLessonPage {
 
   logOut (): void {
     this.navCtrl.push('LogOutPage');
+  }
+
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
+  }
+
+  backToDiscover (): void {
+    this.navCtrl.push('DiscoverPage');
   }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -102,11 +112,21 @@ export class DiscoverLessonPage {
     this.storage.get('account').then(response => {
       if (response) {
         this.user = response;
+        this.hasUser = true;
       }
       this.storage.get('chapter-selected').then(response => {
         if (response) {
           this.chapter = response;
-          this.fetchLesson();
+          this.storage.get('lesson-exam').then(response => {
+            this.fetchLesson();
+            if (response && Object.keys(response).length > 0) {
+              if (this.chapter['chapter_id'] === response['chapter_id']) {
+                this.hasExam = true;
+                return;
+              }
+            }
+            this.hasExam = false;
+          });
           return;
         }
         this.navCtrl.push('DiscoverPage');

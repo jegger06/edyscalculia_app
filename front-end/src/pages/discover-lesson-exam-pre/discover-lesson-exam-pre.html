@@ -7,6 +7,12 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Discover - Pre-Test</ion-title>
+    <ion-buttons (click)="goToLogin()" *ngIf="!hasUser" end>
+      <button ion-button item-right icon-left>
+        <ion-icon name="md-contacts"></ion-icon>
+        Login
+      </button>
+    </ion-buttons>
     <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
       <button ion-button item-right icon-right>
         {{ user['account_name'] }}
