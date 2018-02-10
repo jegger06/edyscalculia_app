@@ -95,9 +95,9 @@ export class AdminChapterLessonQuestionsPage {
   identification: string = '';
   multipleChoice: string = '';
   trueOrFalse: string = '';
-  idA = '';
-  idB = '';
-  idC = '';
+  idA: string = '';
+  idB: string = '';
+  idC: string = '';
 
   constructor (
     public navCtrl: NavController,
@@ -135,7 +135,10 @@ export class AdminChapterLessonQuestionsPage {
       contentUpdateAnswer = this.identification;
     }
     if (this.contentAnswerType === 'multiple-choice') {
-      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
+      const a = typeof this.idA === 'string' ? `"${ this.idA }"` : this.idA;
+      const b = typeof this.idB === 'string' ? `"${ this.idB }"` : this.idB;
+      const c = typeof this.idC === 'string' ? `"${ this.idC }"` : this.idC
+      contentUpdateChoices = `[${ [a, b, c].join(',') }]`;
       contentUpdateAnswer = this.multipleChoice;
     }
     if (this.contentAnswerType === 'true-or-false') {
@@ -217,7 +220,10 @@ export class AdminChapterLessonQuestionsPage {
     } else if (this.contentAnswerType === 'identification') {
       contentUpdateAnswer = this.identification;
     } else if (this.contentAnswerType === 'multiple-choice') {
-      contentUpdateChoices = `[${ [this.idA, this.idB, this.idC].join(',') }]`;
+      const a = typeof this.idA === 'string' ? `"${ this.idA }"` : this.idA;
+      const b = typeof this.idB === 'string' ? `"${ this.idB }"` : this.idB;
+      const c = typeof this.idC === 'string' ? `"${ this.idC }"` : this.idC
+      contentUpdateChoices = `[${ [a, b, c].join(',') }]`;
       if ((/^\s*$/).test(contentUpdateChoices)) {
         this.toastMessage('Choices should not be empty.');
         return;
