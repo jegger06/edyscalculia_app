@@ -10,10 +10,9 @@
       <ion-icon name="md-menu"></ion-icon>
     </button>
     <ion-title>Profile</ion-title>
-    <ion-buttons (click)="logOut()" *ngIf="user['type_id'] !== 1" end>
-      <button ion-button item-right icon-right>
-        {{ user['account_name'] }}
-        <ion-icon name="md-exit"></ion-icon>
+    <ion-buttons class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-only>
+        <ion-icon name="md-more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

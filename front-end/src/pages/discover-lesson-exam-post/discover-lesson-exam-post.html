@@ -7,6 +7,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Discover - Post-Test</ion-title>
+    <ion-buttons class="not-included" class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-only>
+        <ion-icon name="md-more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
