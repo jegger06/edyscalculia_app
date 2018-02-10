@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
  * Ionic pages and navigation.
  */
 import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
@@ -32,8 +33,16 @@ export class DiscoverLessonExamSummaryPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
+
+  presentPopover(event: any) {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
+  }
 
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({

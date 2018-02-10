@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, PopoverController } from 'ionic-angular';
 
 /**
  * Generated class for the DiscoverLessonPage page.
@@ -11,6 +11,7 @@ import { IonicPage, NavController, NavParams, ToastController, AlertController }
  * Ionic pages and navigation.
  */
 import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
@@ -42,13 +43,17 @@ export class DiscoverLessonPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public sanitizer: DomSanitizer,
     public navParams: NavParams) { }
 
-  logOut (): void {
-    this.navCtrl.push('LogOutPage');
+  presentPopover (event: any): void {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
   }
 
   goToLogin (): void {

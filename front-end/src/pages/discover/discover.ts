@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
 
 /**
  * Generated class for the DiscoverPage page.
@@ -10,11 +10,12 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
  * Ionic pages and navigation.
  */
 import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
   selector: 'page-discover',
-  templateUrl: 'discover.html',
+  templateUrl: 'discover.html'
 })
 export class DiscoverPage {
 
@@ -35,11 +36,15 @@ export class DiscoverPage {
     public navCtrl: NavController,
     public http: HttpClient,
     public storage: Storage,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
 
-  logOut (): void {
-    this.navCtrl.push('LogOutPage');
+  presentPopover (event: any): void {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
   }
 
   goToLogin (): void {
