@@ -7,10 +7,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Lesson Details</ion-title>
-    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
-      <button ion-button item-right icon-right>
-        {{ user['account_name'] }}
-        <ion-icon name="md-exit"></ion-icon>
+    <ion-buttons (click)="goToLogin()" *ngIf="!hasUser" end>
+      <button ion-button item-right icon-left>
+        <ion-icon name="md-contacts"></ion-icon>
+        Login
+      </button>
+    </ion-buttons>
+    <ion-buttons class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-only>
+        <ion-icon name="md-more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -27,12 +32,12 @@
       <div [innerHTML]="lessonDetails['lesson_content']"></div>
     </ion-card-content>
     <ion-card-content>
-      <div class="test-button">
-        <button ion-button round icon-left>
+      <div *ngIf="user['account_id']" class="test-button">
+        <button (click)="goToExam('DiscoverLessonExamActivityPage')" ion-button round icon-left>
           <ion-icon name="md-create"></ion-icon>
           Activities
         </button>
-        <button ion-button round icon-left>
+        <button (click)="goToExam('DiscoverLessonExamPostPage')" ion-button round icon-left>
           <ion-icon name="md-create"></ion-icon>
           Post-test
         </button>

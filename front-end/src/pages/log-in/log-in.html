@@ -4,15 +4,9 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-  <ion-navbar>
-    <ion-title>Account Login</ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
   <div class="main">
-    <img src="../../assets/imgs/test-logo.png" alt="App Logo">
+    <img src="assets/imgs/test-logo.png" alt="App Logo">
     <ion-card>
       <ion-card-content>
         <ion-item>
@@ -24,13 +18,17 @@
           <ion-input type="password" #password></ion-input>
         </ion-item>
         <div class="main-button">
-          <button (click)="requestAuth()" ion-button block round large icon-left>
+          <button (click)="requestAuth()" ion-button block round icon-left>
             <ion-icon name="ios-send"></ion-icon>
             Submit
           </button>
-          <button (click)="toRegister()" ion-button block round large icon-left>
+          <button (click)="toRegister()" ion-button block round icon-left>
             <ion-icon name="md-person-add"></ion-icon>
             Register
+          </button>
+          <button (click)="goToPage(2, 'user')" ion-button block round icon-left>
+            <ion-icon name="md-bulb"></ion-icon>
+            Discover
           </button>
         </div>
       </ion-card-content>

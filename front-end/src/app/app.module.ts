@@ -7,10 +7,12 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
+import { DiscoverPopUpPage } from '../pages/discover-pop-up/discover-pop-up'
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+    DiscoverPopUpPage
   ],
   imports: [
     BrowserModule,
@@ -23,7 +25,8 @@ import { MyApp } from './app.component';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    DiscoverPopUpPage
   ],
   providers: [
     StatusBar,

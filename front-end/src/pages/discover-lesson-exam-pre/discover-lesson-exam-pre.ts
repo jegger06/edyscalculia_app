@@ -2,7 +2,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
 import * as $ from 'jquery';
 
 /**
@@ -11,7 +11,8 @@ import * as $ from 'jquery';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
@@ -21,6 +22,7 @@ import { api } from './../../config/index';
 export class DiscoverLessonExamPrePage {
 
   user: Object = {};
+  hasUser: boolean;
   lesson: Object = {};
   questions: Array<{
     question_id: number,
@@ -41,12 +43,20 @@ export class DiscoverLessonExamPrePage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public sanitize: DomSanitizer,
     public navParams: NavParams) { }
 
-  logOut (): void {
-    this.navCtrl.push('LogOutPage');
+  presentPopover(event: any) {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
+  }
+
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
   }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -66,6 +76,9 @@ export class DiscoverLessonExamPrePage {
       if (response['success'] && response['questions']) {
         this.questions = response['questions'].map(question => {
           question['answer_choices'] = eval(question['answer_choices']);
+          if (typeof question['answer_key'].toLowerCase() === 'boolean') {
+            question['answer_choices'] = ['True', 'False'];
+          }
           question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
           return question;
         });
@@ -74,9 +87,14 @@ export class DiscoverLessonExamPrePage {
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
-  addScore (event: Object, correct: any, answer: any, i: number): void {
-    const selector = $(event['target']).is($('button')) ? $(event['target']) : $(event['target']).parent('button');
-    selector.addClass('button-clicked').siblings('button').removeClass('button-clicked');
+  addScore (event: Object, type: string, correct: any, i: number, answer: any): void {
+    if (type === 'button') {
+      const selector = $(event['target']).is($('button')) ? $(event['target']) : $(event['target']).parent('button');
+      selector.addClass('button-clicked').siblings('button').removeClass('button-clicked');
+    } else if (type === 'input') {
+      answer = '';
+      answer = event['value'];
+    }
     this.examScore[`pre-question-${ (i + 1) }`] = {
       correct,
       answer,
@@ -86,29 +104,32 @@ export class DiscoverLessonExamPrePage {
 
   submitSummaryScore (): void {
     if (Object.keys(this.examScore).length === this.questionsCount) {
-      this.storage.set('lesson-exam', this.examScore).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
+      const preExamDetails = Object.assign({
+        examDetails: this.examScore
+      }, this.lesson);
+      this.storage.set('lesson-exam', preExamDetails).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
       return;
     }
     this.toastMessage('Answer all the questions and try again.');
   }
 
   ionViewWillEnter () {
-    this.storage.get('lesson-exam').then(response => {
-      if (!response) {
-        this.storage.get('account').then(response => {
-          if (response) {
-            this.user = response;
-          }
-          this.storage.get('lesson-selected').then(response => {
-            if (response) {
-              this.lesson = response;
-              this.fetchPreTest();
-            }
-          });
-        });
-        return;
+    this.storage.get('account').then(response => {
+      if (response) {
+        this.user = response;
+        this.hasUser = true;
       }
-      this.navCtrl.push('DiscoverLessonExamSummaryPage');
+    });
+    this.storage.get('lesson-selected').then(response => {
+      if (response) {
+        this.lesson = response;
+        this.fetchPreTest();
+      }
+    });
+    this.storage.get('lesson-exam').then(response => {
+      if (response && this.lesson['lesson_id'] === response['lesson_id']) {
+        this.navCtrl.push('DiscoverLessonExamSummaryPage');
+      }
     });
   }
 

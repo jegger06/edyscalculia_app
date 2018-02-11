@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
  * Ionic pages and navigation.
  */
 import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
@@ -19,6 +20,7 @@ import { api } from '../../config/index';
 export class DiscoverLessonExamSummaryPage {
 
   user: Object = {};
+  hasExam: boolean;
   examResult: Object = {};
   points: number = 0;
   items: number = 0;
@@ -31,8 +33,16 @@ export class DiscoverLessonExamSummaryPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
+
+  presentPopover(event: any) {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
+  }
 
   toastMessage (message: string, type: boolean = false): void {
     this.toastCtrl.create({
@@ -68,12 +78,16 @@ export class DiscoverLessonExamSummaryPage {
     this.storage.get('lesson-selected').then(lesson => this.lesson = lesson['lesson_id']);
     this.storage.get('lesson-exam').then(response => {
       if (!response) {
+        this.hasExam = false;
         this.navCtrl.push('DiscoverLessonPage');
         return;
       }
+      this.hasExam = true;
+      response = response['examDetails'];
       this.items = Object.keys(response).length;
       for (let property in response) {
-        if (response.hasOwnProperty(property) && (Number(response[property]['correct']) === Number(response[property]['answer']))) {
+        const toLower = (str) => str.toString().toLowerCase();
+        if (response.hasOwnProperty(property) && (toLower(response[property]['correct']) === toLower(response[property]['answer']))) {
           this.points = this.points + 1;
         }
         if (response[property]['type'] === 'pre-test') {
@@ -83,14 +97,15 @@ export class DiscoverLessonExamSummaryPage {
       }
       this.percentScore = (this.points / this.items) * 100;
       this.examResult['score-count'] = this.points;
-      if (this.points !== 3) {
-        if (this.points > 3) {
-          this.examResult['img-src-remark'] = '../../assets/imgs/test-thumbs-up.svg';
+      const halfOfTotalItems = Math.round(Number(this.items) / 2);
+      if (this.points !== halfOfTotalItems) {
+        if (this.points > halfOfTotalItems) {
+          this.examResult['img-src-remark'] = 'assets/imgs/test-thumbs-up.svg';
         } else {
-          this.examResult['img-src-remark'] = '../../assets/imgs/test-sad.svg';
+          this.examResult['img-src-remark'] = 'assets/imgs/test-sad.svg';
         }
       } else {
-        this.examResult['img-src-remark'] = '../../assets/imgs/test-happy.svg';
+        this.examResult['img-src-remark'] = 'assets/imgs/test-happy.svg';
       }
     });
   }

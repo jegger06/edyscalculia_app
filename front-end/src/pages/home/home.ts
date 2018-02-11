@@ -36,6 +36,10 @@ export class HomePage {
   ionViewWillEnter (): void {
     this.storage.get('account').then(response => {
       if (response) {
+        if (response['type_id'] === 1) {
+          this.navCtrl.push('AdminDashboardPage');
+          return;
+        }
         this.isLoggedIn = response['authenticated'] || true;
         this.routeDirection = 'ProfilePage';
         this.buttonText = 'Profile';

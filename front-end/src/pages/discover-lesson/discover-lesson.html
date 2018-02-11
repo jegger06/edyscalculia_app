@@ -5,22 +5,31 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar [hideBackButton]="hasExam">
     <ion-title>Chapter Lesson</ion-title>
-    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
-      <button ion-button item-right icon-right>
-        {{ user['account_name'] }}
-        <ion-icon name="md-exit"></ion-icon>
+    <ion-buttons (click)="goToLogin()" *ngIf="!hasUser" end>
+      <button ion-button item-right icon-left>
+        <ion-icon name="md-contacts"></ion-icon>
+        Login
+      </button>
+    </ion-buttons>
+    <ion-buttons class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-only>
+        <ion-icon name="md-more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <button *ngIf="hasExam" (click)="backToDiscover()" ion-button round icon-left>
+    <ion-icon name="md-arrow-back"></ion-icon>
+    back to discover
+  </button>
   <div *ngIf="chapterLessonLists; else showNoRecord">
     <ion-card *ngFor="let chapterLessonList of chapterLessonLists">
       <div class="hightlight"></div>
-      <img src="../../assets/imgs/test-chapter.jpg" alt="Chapter Icon">
+      <img src="assets/imgs/test-chapter.jpg" alt="Chapter Icon">
       <ion-card-title>
         {{ chapterLessonList['lesson_title'] }}
       </ion-card-title>

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, PopoverController } from 'ionic-angular';
 
 /**
  * Generated class for the DiscoverLessonPage page.
@@ -10,7 +10,8 @@ import { IonicPage, NavController, NavParams, ToastController, AlertController }
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-import { api } from './../../config/index';
+import { api } from '../../config/index';
+import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
 
 @IonicPage()
 @Component({
@@ -20,7 +21,9 @@ import { api } from './../../config/index';
 export class DiscoverLessonPage {
 
   user: Object = {};
+  hasExam: boolean;
   chapter: any;
+  hasUser: boolean;
   chapterLessonLists: Array<{
     lesson_id: number,
     account_id: number,
@@ -40,13 +43,25 @@ export class DiscoverLessonPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public sanitizer: DomSanitizer,
     public navParams: NavParams) { }
 
-  logOut (): void {
-    this.navCtrl.push('LogOutPage');
+  presentPopover (event: any): void {
+    const popover = this.popoverCtrl.create(DiscoverPopUpPage);
+    popover.present({
+      ev: event
+    });
+  }
+
+  goToLogin (): void {
+    this.navCtrl.push('LogInPage');
+  }
+
+  backToDiscover (): void {
+    this.navCtrl.push('DiscoverPage');
   }
 
   toastMessage (message: string, type: boolean = false): void {
@@ -102,11 +117,21 @@ export class DiscoverLessonPage {
     this.storage.get('account').then(response => {
       if (response) {
         this.user = response;
+        this.hasUser = true;
       }
       this.storage.get('chapter-selected').then(response => {
         if (response) {
           this.chapter = response;
-          this.fetchLesson();
+          this.storage.get('lesson-exam').then(response => {
+            this.fetchLesson();
+            if (response && Object.keys(response).length > 0) {
+              if (this.chapter['chapter_id'] === response['chapter_id']) {
+                this.hasExam = true;
+                return;
+              }
+            }
+            this.hasExam = false;
+          });
           return;
         }
         this.navCtrl.push('DiscoverPage');

@@ -1,3 +1,20 @@
 page-admin-topscore {
 
+  ion-select {
+    width: 120px;
+  }
+
+  .select-md .select-icon .select-icon-inner {
+    margin-top: 5px;
+  }
+
+  .item-md.remove-padding {
+    padding-left: 0;
+
+    .item-inner {
+      padding-left: 15px;
+    }
+
+  }
+
 }

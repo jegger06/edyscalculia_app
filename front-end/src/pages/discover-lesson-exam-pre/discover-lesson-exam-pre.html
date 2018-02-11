@@ -7,10 +7,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Discover - Pre-Test</ion-title>
-    <ion-buttons (click)="logOut()" *ngIf="user['type_id']" end>
-      <button ion-button item-right icon-right>
-        {{ user['account_name'] }}
-        <ion-icon name="md-exit"></ion-icon>
+    <ion-buttons (click)="goToLogin()" *ngIf="!hasUser" end>
+      <button ion-button item-right icon-left>
+        <ion-icon name="md-contacts"></ion-icon>
+        Login
+      </button>
+    </ion-buttons>
+    <ion-buttons class="not-included" class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+      <button ion-button item-right icon-only>
+        <ion-icon name="md-more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -21,11 +26,17 @@
     <ion-card *ngFor="let question of questions; let i = index">
       <ion-card-content>
         <ion-card-title [innerHTML]="question['question_content']"></ion-card-title>
-        <div class="card-action">
-          <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, question['answer_key'], choice, i)" ion-button round>
+        <div *ngIf="question['answer_choices']; else showInputAnswer" class="card-action">
+          <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, 'button', question['answer_key'], i, choice)" ion-button round>
             {{ choice }}
           </button>
         </div>
+        <ng-template #showInputAnswer>
+          <ion-item>
+            <ion-label floating>Answer</ion-label>
+            <ion-input (ionChange)="addScore($event, 'input', question['answer_key'], i)"></ion-input>
+          </ion-item>
+        </ng-template>
       </ion-card-content>
     </ion-card>
     <ion-card>
