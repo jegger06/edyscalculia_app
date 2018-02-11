@@ -21,6 +21,7 @@ export class AdminManageQuestionTypePage {
   user: Object = {};
   questionTypeId: number;
   isUpdate: boolean = false;
+  isLoading: boolean = true;
   questionTitle: string = 'Adding';
   questionTypeList: Array<{
     account_id: number,
@@ -131,11 +132,15 @@ export class AdminManageQuestionTypePage {
     this.http.get(`${ api.host }/question-type/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success']) {
         this.questionTypeList = response['question_types'];
         this.questionTypeListCount = response['question_types']['length'];
       }
-    }, error => this.toastMessage(error['message'], error['success']));
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   ionViewWillEnter (): void {

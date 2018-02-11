@@ -119,3 +119,24 @@ button[small] {
 .inline-block {
     display: inline-block;
 }
+
+.loader {
+    text-align: center;
+    padding: .5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: top;
+
+    & svg path,
+    & svg rect{
+      fill: #488aff;
+    }
+
+    & span {
+        font-size: 20px;
+        color: #9d9d9d;
+        margin-left: 10px;
+    }
+
+  }

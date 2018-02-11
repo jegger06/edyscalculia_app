@@ -11,51 +11,69 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <h3 class="chapter-title">{{ questionTitle }} of Question Type</h3>
-    </ion-item>
-    <ion-item class="no-border">
-      <ion-label floating>Question Type</ion-label>
-      <ion-input #questionTypeDesc></ion-input>
-    </ion-item>
-    <ion-item text-right>
-      <button *ngIf="!isUpdate; else showUpdateButton" (click)="addQuestionType()" ion-button round block icon-left>
-        <ion-icon name="ios-send"></ion-icon>
-        Submit
-      </button>
-      <ng-template #showUpdateButton>
-        <button (click)="updateProceed()" ion-button round icon-left>
-          <ion-icon name="ios-send"></ion-icon>
-          Update
-        </button>
-        <button (click)="cancelUpdate()" color="danger" ion-button round icon-left>
-          <ion-icon name="md-close"></ion-icon>
-          Cancel
-        </button>
-      </ng-template>
-    </ion-item>
-  </ion-list>
-
-  <ion-list>
-    <ion-item class="item-border">
-      <p>List of Question Type</p>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="questionTypeListCount > 0; else showNoRecord">
-    <ion-item *ngFor="let questionType of questionTypeList">
-      <p>{{ questionType['question_type_text'] }}</p>
-      <button (click)="updateQuestionType(questionType)" class="not-included" clear ion-button item-end>Edit</button>
-      <button (click)="deleteQuestionType(questionType['question_type_id'])" class="not-included delete-button" clear ion-button item-end>Delete</button>
-    </ion-item>
-  </ion-list>
-  
-  <ng-template #showNoRecord>
+  <div *ngIf="!isLoading; else showLoader">
     <ion-list>
       <ion-item>
-        <p>No record of question type for now.</p>
+        <h3 class="chapter-title">{{ questionTitle }} of Question Type</h3>
+      </ion-item>
+      <ion-item class="no-border">
+        <ion-label floating>Question Type</ion-label>
+        <ion-input #questionTypeDesc></ion-input>
+      </ion-item>
+      <ion-item text-right>
+        <button *ngIf="!isUpdate; else showUpdateButton" (click)="addQuestionType()" ion-button round block icon-left>
+          <ion-icon name="ios-send"></ion-icon>
+          Submit
+        </button>
+        <ng-template #showUpdateButton>
+          <button (click)="updateProceed()" ion-button round icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            Update
+          </button>
+          <button (click)="cancelUpdate()" color="danger" ion-button round icon-left>
+            <ion-icon name="md-close"></ion-icon>
+            Cancel
+          </button>
+        </ng-template>
       </ion-item>
     </ion-list>
+
+    <ion-list>
+      <ion-item class="item-border">
+        <p>List of Question Type</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="questionTypeListCount > 0; else showNoRecord">
+      <ion-item *ngFor="let questionType of questionTypeList">
+        <p>{{ questionType['question_type_text'] }}</p>
+        <button (click)="updateQuestionType(questionType)" class="not-included" clear ion-button item-end>Edit</button>
+        <button (click)="deleteQuestionType(questionType['question_type_id'])" class="not-included delete-button" clear ion-button item-end>Delete</button>
+      </ion-item>
+    </ion-list>
+    
+    <ng-template #showNoRecord>
+      <ion-list>
+        <ion-item>
+          <p>No record of question type for now.</p>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </div>
+
+  <ng-template #showLoader>
+    <ion-card>
+      <ion-card-content>
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading question type...</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 </ion-content>

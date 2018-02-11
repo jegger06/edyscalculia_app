@@ -24,6 +24,9 @@ export class DiscoverLessonPage {
   hasExam: boolean;
   chapter: any;
   hasUser: boolean;
+  isLoading: boolean = true;
+  disabled: boolean = false;
+  preTestText: string = 'Pre-Test';
   chapterLessonLists: Array<{
     lesson_id: number,
     account_id: number,
@@ -79,9 +82,13 @@ export class DiscoverLessonPage {
   requestPreTest (lesson: Object): void {
     this.storage.set('lesson-selected', lesson).then(response => {
       if (Object.keys(this.user).length > 0) {
+        this.disabled = true;
+        this.preTestText = 'Checking...';
         this.http.get(`${ api.host }/score/pre-test/${ lesson['lesson_id'] }`, {
           headers: new HttpHeaders().set('Authorization', this.user['token'])
         }).subscribe(response => {
+          this.disabled = false;
+          this.preTestText = 'Pre-Test';
           if (response['success'] && response['detail']) {
             this.alertCtrl.create({
               title: 'Pre-Test Information',
@@ -94,7 +101,11 @@ export class DiscoverLessonPage {
             return;
           }
           this.navCtrl.push('DiscoverLessonExamPrePage');
-        }, error => this.toastMessage(error['message'], error['success']));
+        }, error => {
+          this.disabled = false;
+          this.preTestText = 'Pre-Test';
+          this.toastMessage(error['message'], error['success']);
+        });
         return;
       }
       this.navCtrl.push('DiscoverLessonExamPrePage');
@@ -104,12 +115,16 @@ export class DiscoverLessonPage {
   fetchLesson (): void {
     const chapterId = this.chapter['chapter_id'];
     this.http.get(`${ api.host }/lesson/lists/${ chapterId }?sort=all`).subscribe(response => {
+      this.isLoading = false;
       if (response['success']) {
         this.chapterLessonLists = response['lessons'].map(lesson => {
           lesson['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(lesson['lesson_content']);
           return lesson;
         });
       }
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
     });
   }
 

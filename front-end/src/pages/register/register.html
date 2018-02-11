@@ -32,9 +32,9 @@
           <ion-input type="password" #password></ion-input>
         </ion-item>
         <div class="main-button">
-          <button (click)="requestNewAccount()" ion-button block round icon-left>
+          <button (click)="requestNewAccount()" [disabled]="disabled" ion-button block round icon-left>
             <ion-icon name="ios-send"></ion-icon>
-            Submit
+            {{ buttonText }}
           </button>
           <button (click)="toLogin()" ion-button block round icon-left>
             <ion-icon name="ios-contacts"></ion-icon>

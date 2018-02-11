@@ -22,6 +22,7 @@ export class AdminAccountsDetailsPage {
   type: number;
   token: string;
   birthDay: string;
+  isLoading: boolean = true;
 
   @ViewChild('name') name: Object;
   @ViewChild('password') password: Object;
@@ -104,6 +105,7 @@ export class AdminAccountsDetailsPage {
       this.type = response['type_id'];
       this.name['value'] = response['account_name'];
       this.birthDay = new Date(response['account_bday']).toISOString();
+      this.isLoading = false;
     });
   }
 

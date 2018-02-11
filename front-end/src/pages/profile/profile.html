@@ -10,7 +10,7 @@
       <ion-icon name="md-menu"></ion-icon>
     </button>
     <ion-title>Profile</ion-title>
-    <ion-buttons class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id']" end>
+    <ion-buttons class="not-included" (click)="presentPopover($event)" *ngIf="user['type_id'] && user['type_id'] !== 1" end>
       <button ion-button item-right icon-only>
         <ion-icon name="md-more"></ion-icon>
       </button>
@@ -19,58 +19,76 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <img src="assets/imgs/test-bg-1.jpg" alt="Background Photo">
-    </ion-item>
-    <ion-item>
-      <strong>Name: </strong>
-      <span>{{ user['account_name'] }}</span>
-    </ion-item>
-    <ion-item>
-      <strong>Birthday: </strong>
-      <span>{{ user['account_bday'] | date:"longDate" }}</span>
-    </ion-item>
-    <ion-item>
-      <strong>Username: </strong>
-      <span>{{ user['account_username'] }}</span>
-    </ion-item>
-    <ion-item>
-      <strong>Access: </strong>
-      <ion-badge>{{ user['type_description'] }}</ion-badge>
-    </ion-item>
-    <ion-item>
-      <strong>Joined: </strong>
-      <span>{{ user['account_date'] | date:"longDate" }}</span>
-    </ion-item>
-    <ion-item>
-      <button (click)="routeTo('ProfileUpdatePage')" ion-button icon-left round block>
-        <ion-icon name="ios-send"></ion-icon>
-        Update Information
-      </button>
-    </ion-item>
-  </ion-list>
+    <div *ngIf="!isLoading; else showLoader">
+    <ion-list>
+      <ion-item>
+        <img src="assets/imgs/test-bg-1.jpg" alt="Background Photo">
+      </ion-item>
+      <ion-item>
+        <strong>Name: </strong>
+        <span>{{ user['account_name'] }}</span>
+      </ion-item>
+      <ion-item>
+        <strong>Birthday: </strong>
+        <span>{{ user['account_bday'] | date:"longDate" }}</span>
+      </ion-item>
+      <ion-item>
+        <strong>Username: </strong>
+        <span>{{ user['account_username'] }}</span>
+      </ion-item>
+      <ion-item>
+        <strong>Access: </strong>
+        <ion-badge>{{ user['type_description'] }}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <strong>Joined: </strong>
+        <span>{{ user['account_date'] | date:"longDate" }}</span>
+      </ion-item>
+      <ion-item>
+        <button (click)="routeTo('ProfileUpdatePage')" ion-button icon-left round block>
+          <ion-icon name="ios-send"></ion-icon>
+          Update Information
+        </button>
+      </ion-item>
+    </ion-list>
 
-  <ion-list *ngIf="difficultyCount > 0">
-    <ion-item>
-      <ion-label>Scores</ion-label>
-      <ion-select [(ngModel)]="difficulty" (ionChange)="fetchTopScoreHistory()">
-        <ion-option *ngFor="let dif of difficulties" [value]="dif['difficulty_id']">
-          {{ dif['difficulty_text'] }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
+    <ion-list *ngIf="difficultyCount > 0">
+      <ion-item>
+        <ion-label>Scores</ion-label>
+        <ion-select [(ngModel)]="difficulty" (ionChange)="fetchTopScoreHistory()">
+          <ion-option *ngFor="let dif of difficulties" [value]="dif['difficulty_id']">
+            {{ dif['difficulty_text'] }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
 
-  <ion-list *ngIf="scoreSheetCount > 0; else showNoRecord">
-    <ion-item *ngFor="let score of scoreSheet">
-      {{ score['lesson_title'] }} - {{ score['score_count'] }}%
-    </ion-item>
-  </ion-list>
+    <ion-list *ngIf="scoreSheetCount > 0; else showNoRecord">
+      <ion-item *ngFor="let score of scoreSheet">
+        {{ score['lesson_title'] }} - {{ score['score_count'] }}%
+      </ion-item>
+    </ion-list>
 
-  <ng-template #showNoRecord>
-    <ion-item>
-      No records of score for now.
-    </ion-item>
+    <ng-template #showNoRecord>
+      <ion-item>
+        No records of score for now.
+      </ion-item>
+    </ng-template>
+  </div>
+
+  <ng-template #showLoader>
+    <ion-card>
+      <ion-card-content>
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading information...</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 </ion-content>

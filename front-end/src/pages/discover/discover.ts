@@ -21,6 +21,7 @@ export class DiscoverPage {
 
   user: Object = {};
   hasUser: boolean;
+  isLoading: boolean = true;
   chapterLists: Array<{
     chapter_id: number,
     account_id: number,
@@ -64,7 +65,13 @@ export class DiscoverPage {
   }
 
   fetchAllRecords (): void {
-    this.http.get(`${ api.host }/chapter/lists?sort=all`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
+    this.http.get(`${ api.host }/chapter/lists?sort=all`).subscribe(response => {
+      this.chapterLists = response['chapters'];
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message']);
+    });
   }
 
   ionViewWillEnter (): void {

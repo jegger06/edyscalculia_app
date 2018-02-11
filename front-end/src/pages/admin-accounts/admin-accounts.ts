@@ -27,6 +27,7 @@ export class AdminAccountsPage {
     type_id: number,
     type_description: string
   }>;
+  isLoading: boolean = true;
   user: Object = {};
   dateClassname: string = 'md-arrow-dropup';
   sortByType: number = 1;
@@ -58,7 +59,10 @@ export class AdminAccountsPage {
   fetchAccounts (type: number, date: number): void {
     this.http.get(`${ api.host }/user/lists?type=${ type }&date=${ date }`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
-    }).subscribe(response => this.accounts = response['accounts']);
+    }).subscribe(response => {
+      this.isLoading = false;
+      this.accounts = response['accounts'];
+    });
   }
   
   ionViewWillEnter (): void {

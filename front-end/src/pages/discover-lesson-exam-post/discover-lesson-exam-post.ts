@@ -12,6 +12,7 @@ import * as $ from 'jquery';
  */
 import { api } from '../../config/index'
 import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -24,6 +25,9 @@ export class DiscoverLessonExamPostPage {
   lesson: Object = {};
   hasUser: boolean;
   examScore: Object = {};
+  isLoading: boolean = true;
+  disabled: boolean = false;
+  buttonText: string = 'Submit Answers';
   questions: Array<{
     question_id: number,
     lesson_id: number,
@@ -42,6 +46,7 @@ export class DiscoverLessonExamPostPage {
     public navCtrl: NavController,
     public storage: Storage,
     public http: HttpClient,
+    public sanitize: DomSanitizer,
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public navParams: NavParams) { }
@@ -71,17 +76,23 @@ export class DiscoverLessonExamPostPage {
     }
     this.examScore[`pre-question-${ (i + 1) }`] = {
       correct,
-      answer,
-      type: 'pre-test'
+      answer
     };
   }
 
   submitSummaryScore (): void {
     if (Object.keys(this.examScore).length === this.questionsCount) {
+      this.disabled = true;
+      this.buttonText = 'Processing score...';
       const preExamDetails = Object.assign({
-        examDetails: this.examScore
+        examDetails: this.examScore,
+        difficulty_level: 2
       }, this.lesson);
-      this.storage.set('lesson-exam', preExamDetails).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
+      this.storage.set('lesson-exam', preExamDetails).then(response => {
+        this.disabled = false;
+        this.buttonText = 'Submit Answers';
+        this.navCtrl.push('DiscoverLessonExamSummaryPage');
+      });
       return;
     }
     this.toastMessage('Answer all the questions and try again.');
@@ -92,13 +103,18 @@ export class DiscoverLessonExamPostPage {
     this.http.get(`${ api.host }/question/exam?lesson_id=${ lesson }&difficulty=2`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
-      console.log(response);
       if (response['success'] && response['questions']) {
-        this.questions = response['questions'];
+        this.questions = response['questions'].map(question => {
+          question['answer_choices'] = eval(question['answer_choices']);
+          if (typeof question['answer_key'].toLowerCase() === 'boolean') {
+            question['answer_choices'] = ['True', 'False'];
+          }
+          question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
+          return question;
+        });
         this.questionsCount = response['questions']['length'];
-        return;
+        this.isLoading = false;
       }
-      this.questionsCount = 0;
     }, error => this.toastMessage(error['message'], error['success']));
   }
 
@@ -116,7 +132,7 @@ export class DiscoverLessonExamPostPage {
       }
     });
     this.storage.get('lesson-exam').then(response => {
-      if (response && this.lesson['lesson_id'] === response['lesson_id']) {
+      if (response && this.lesson['lesson_id'] === response['lesson_id'] && (response['difficulty_level'] === 2)) {
         this.navCtrl.push('DiscoverLessonExamSummaryPage');
       }
     });

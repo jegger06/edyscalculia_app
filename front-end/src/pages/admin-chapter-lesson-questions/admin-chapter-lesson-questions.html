@@ -11,146 +11,164 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <h3 class="chapter-title">{{ questionTitle }} of Lesson Question</h3>
-    </ion-item>
-    <ion-item *ngIf="questionDiffcultiesCount > 0">
-      <ion-label>Question Difficulty</ion-label>
-      <ion-select [(ngModel)]="contentUpdateDifficulty">
-        <ion-option *ngFor="let difficultyItem of questionDiffcultiesList" [value]="difficultyItem['difficulty_id']">
-          {{ difficultyItem['difficulty_text'] }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="questionTypeCount > 0">
-      <ion-label>Question Type</ion-label>
-      <ion-select (ionChange)="showChoicesAndAnswer(contentUpdateType)" [(ngModel)]="contentUpdateType">
-        <ion-option *ngFor="let questionTypeItem of questionTypeList" [value]="questionTypeItem['question_type_id']">
-          {{ questionTypeItem['question_type_text'] }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="questionRangeCount > 0">
-      <ion-label>Question Range</ion-label>
-      <ion-select [(ngModel)]="contentUpdateRange">
-        <ion-option value="0">0% - 0%</ion-option>
-        <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
-          {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
-        </ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="isUpdate">
-      <ion-label>Question Status</ion-label>
-      <ion-select [(ngModel)]="questionUpdateStatus">
-        <ion-option value="1">Active</ion-option>
-        <ion-option value="0">Inactive</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item class="no-border-bottom">
-      <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
-    </ion-item>
-
-    <!-- <ion-item class="item-margin" *ngIf="contentAnswerType === 'drag-and-drop'">
-      <ion-label floating>Position of Answer <br>(Seperated by comma [,])</ion-label>
-      <ion-input [(ngModel)]="dragAndDrop"></ion-input>
-    </ion-item> -->
-
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'identification'">
-      <ion-label floating>Answer for Identification</ion-label>
-      <ion-input [(ngModel)]="identification"></ion-input>
-    </ion-item>
-
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
-      <ion-label floating>A.</ion-label>
-      <ion-input [(ngModel)]="idA"></ion-input>
-    </ion-item>
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
-      <ion-label floating>B.</ion-label>
-      <ion-input [(ngModel)]="idB"></ion-input>
-    </ion-item>
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
-      <ion-label floating>C.</ion-label>
-      <ion-input [(ngModel)]="idC"></ion-input>
-    </ion-item>
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
-      <ion-label floating>Answer for Multiple Choice</ion-label>
-      <ion-input [(ngModel)]="multipleChoice"></ion-input>
-    </ion-item>
-
-    <ion-item class="item-margin" *ngIf="contentAnswerType === 'true-or-false'">
-      <ion-label floating>Answer (True or False)</ion-label>
-      <ion-input [(ngModel)]="trueOrFalse"></ion-input>
-    </ion-item>
-
-    <ion-item class="no-border-bottom">
-      <div text-right *ngIf="isUpdate; else showCreate">
-        <button (click)="updateProceed()" ion-button round icon-left>
-          <ion-icon name="ios-send"></ion-icon>
-          Update
-        </button>
-        <button (click)="cancelUpdate()" color="danger" ion-button round icon-left>
-          <ion-icon name="md-close"></ion-icon>
-          cancel
-        </button>
-      </div>
-      <ng-template #showCreate>
-        <button (click)="addQuestion()" ion-button block round icon-left>
-          <ion-icon name="ios-send"></ion-icon>
-          submit
-        </button>
-      </ng-template>
-    </ion-item>
-  </ion-list>
-
-  <ion-list>
-    <ion-item *ngIf="questionDiffcultiesCount > 0">
-      <ion-label>Filter by Difficulty</ion-label>
-      <ion-select [(ngModel)]="sortDifficulty" (ionChange)="fetchLessonQuestions()">
-        <ion-option *ngFor="let difficultyItem of questionDiffcultiesList" [value]="difficultyItem['difficulty_id']">
-          {{ difficultyItem['difficulty_text'] }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="questionTypeCount > 0">
-      <ion-label>Filter by Status</ion-label>
-      <ion-select [(ngModel)]="sortStatus" (ionChange)="fetchLessonQuestions()">
-        <ion-option value="1">Active</ion-option>
-        <ion-option value="0">Inactive</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="questionRangeCount > 0">
-      <ion-label>Filter by Range</ion-label>
-      <ion-select [(ngModel)]="sortRange" (ionChange)="fetchLessonQuestions()">
-        <ion-option value="0">0% - 0%</ion-option>
-        <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
-          {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
-        </ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="questionsCount > 0; else showNoRecord">
-    <ion-item>
-      <ion-label>List of Lesson Qestions</ion-label>
-    </ion-item>
-    <ion-item *ngFor="let question of questionsList" class="item-border">
-      <div class="title-link">
-        <ion-icon name="md-arrow-dropright"></ion-icon>
-        <div class="inline-block" [innerHTML]="question['question_content']"></div>
-      </div>
-      <button (click)="updateQuestion($event, question)" class="not-included" clear ion-button item-end>Edit</button>
-      <button (click)="deleteQuestion($event, question['question_id'])" class="not-included delete-button" clear ion-button
-        item-end>Delete</button>
-    </ion-item>
-  </ion-list>
-
-  <ng-template #showNoRecord>
+  <div *ngIf="!isLoading; else showLoader">
     <ion-list>
       <ion-item>
-        <p>No record of question for now.</p>
-        <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
+        <h3 class="chapter-title">{{ questionTitle }} of Lesson Question</h3>
+      </ion-item>
+      <ion-item *ngIf="questionDiffcultiesCount > 0">
+        <ion-label>Question Difficulty</ion-label>
+        <ion-select [(ngModel)]="contentUpdateDifficulty">
+          <ion-option *ngFor="let difficultyItem of questionDiffcultiesList" [value]="difficultyItem['difficulty_id']">
+            {{ difficultyItem['difficulty_text'] }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="questionTypeCount > 0">
+        <ion-label>Question Type</ion-label>
+        <ion-select (ionChange)="showChoicesAndAnswer(contentUpdateType)" [(ngModel)]="contentUpdateType">
+          <ion-option *ngFor="let questionTypeItem of questionTypeList" [value]="questionTypeItem['question_type_id']">
+            {{ questionTypeItem['question_type_text'] }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="questionRangeCount > 0">
+        <ion-label>Question Range</ion-label>
+        <ion-select [(ngModel)]="contentUpdateRange">
+          <ion-option value="0">0% - 0%</ion-option>
+          <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
+            {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="isUpdate">
+        <ion-label>Question Status</ion-label>
+        <ion-select [(ngModel)]="questionUpdateStatus">
+          <ion-option value="1">Active</ion-option>
+          <ion-option value="0">Inactive</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="no-border-bottom">
+        <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
+      </ion-item>
+
+      <!-- <ion-item class="item-margin" *ngIf="contentAnswerType === 'drag-and-drop'">
+        <ion-label floating>Position of Answer <br>(Seperated by comma [,])</ion-label>
+        <ion-input [(ngModel)]="dragAndDrop"></ion-input>
+      </ion-item> -->
+
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'identification'">
+        <ion-label floating>Answer for Identification</ion-label>
+        <ion-input [(ngModel)]="identification"></ion-input>
+      </ion-item>
+
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
+        <ion-label floating>A.</ion-label>
+        <ion-input [(ngModel)]="idA"></ion-input>
+      </ion-item>
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
+        <ion-label floating>B.</ion-label>
+        <ion-input [(ngModel)]="idB"></ion-input>
+      </ion-item>
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
+        <ion-label floating>C.</ion-label>
+        <ion-input [(ngModel)]="idC"></ion-input>
+      </ion-item>
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'multiple-choice'">
+        <ion-label floating>Answer for Multiple Choice</ion-label>
+        <ion-input [(ngModel)]="multipleChoice"></ion-input>
+      </ion-item>
+
+      <ion-item class="item-margin" *ngIf="contentAnswerType === 'true-or-false'">
+        <ion-label floating>Answer (True or False)</ion-label>
+        <ion-input [(ngModel)]="trueOrFalse"></ion-input>
+      </ion-item>
+
+      <ion-item class="no-border-bottom">
+        <div text-right *ngIf="isUpdate; else showCreate">
+          <button (click)="updateProceed()" ion-button round icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            Update
+          </button>
+          <button (click)="cancelUpdate()" color="danger" ion-button round icon-left>
+            <ion-icon name="md-close"></ion-icon>
+            cancel
+          </button>
+        </div>
+        <ng-template #showCreate>
+          <button (click)="addQuestion()" ion-button block round icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            submit
+          </button>
+        </ng-template>
       </ion-item>
     </ion-list>
+
+    <ion-list>
+      <ion-item *ngIf="questionDiffcultiesCount > 0">
+        <ion-label>Filter by Difficulty</ion-label>
+        <ion-select [(ngModel)]="sortDifficulty" (ionChange)="fetchLessonQuestions()">
+          <ion-option *ngFor="let difficultyItem of questionDiffcultiesList" [value]="difficultyItem['difficulty_id']">
+            {{ difficultyItem['difficulty_text'] }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="questionTypeCount > 0">
+        <ion-label>Filter by Status</ion-label>
+        <ion-select [(ngModel)]="sortStatus" (ionChange)="fetchLessonQuestions()">
+          <ion-option value="1">Active</ion-option>
+          <ion-option value="0">Inactive</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="questionRangeCount > 0">
+        <ion-label>Filter by Range</ion-label>
+        <ion-select [(ngModel)]="sortRange" (ionChange)="fetchLessonQuestions()">
+          <ion-option value="0">0% - 0%</ion-option>
+          <ion-option *ngFor="let questionRangeItem of questionRangeList" [value]="questionRangeItem['question_range_id']">
+            {{ questionRangeItem['question_range_from'] }}% - {{ questionRangeItem['question_range_to'] }}%
+          </ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="questionsCount > 0; else showNoRecord">
+      <ion-item>
+        <ion-label>List of Lesson Qestions</ion-label>
+      </ion-item>
+      <ion-item *ngFor="let question of questionsList" class="item-border">
+        <div class="title-link">
+          <ion-icon name="md-arrow-dropright"></ion-icon>
+          <div class="inline-block" [innerHTML]="question['question_content']"></div>
+        </div>
+        <button (click)="updateQuestion($event, question)" class="not-included" clear ion-button item-end>Edit</button>
+        <button (click)="deleteQuestion($event, question['question_id'])" class="not-included delete-button" clear ion-button
+          item-end>Delete</button>
+      </ion-item>
+    </ion-list>
+
+    <ng-template #showNoRecord>
+      <ion-list>
+        <ion-item>
+          <p>No record of question for now.</p>
+          <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </div>
+    
+  <ng-template #showLoader>
+    <ion-card>
+      <ion-card-content>
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading question...</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 </ion-content>

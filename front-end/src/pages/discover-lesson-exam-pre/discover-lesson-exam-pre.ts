@@ -24,6 +24,9 @@ export class DiscoverLessonExamPrePage {
   user: Object = {};
   hasUser: boolean;
   lesson: Object = {};
+  isLoading: boolean = true;
+  disabled: boolean = false;
+  buttonText: string = 'Submit Answers';
   questions: Array<{
     question_id: number,
     lesson_id: number,
@@ -67,26 +70,6 @@ export class DiscoverLessonExamPrePage {
     }).present();
   }
 
-  fetchPreTest (): void {
-    const url = `${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=1`;
-    const request = this.user ? this.http.get(url) : this.http.get(url, {
-      headers: new HttpHeaders().set('Authorization', this.user['token'])
-    });
-    request.subscribe(response => {
-      if (response['success'] && response['questions']) {
-        this.questions = response['questions'].map(question => {
-          question['answer_choices'] = eval(question['answer_choices']);
-          if (typeof question['answer_key'].toLowerCase() === 'boolean') {
-            question['answer_choices'] = ['True', 'False'];
-          }
-          question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
-          return question;
-        });
-        this.questionsCount = response['questions']['length'];
-      }
-    }, error => this.toastMessage(error['message'], error['success']));
-  }
-
   addScore (event: Object, type: string, correct: any, i: number, answer: any): void {
     if (type === 'button') {
       const selector = $(event['target']).is($('button')) ? $(event['target']) : $(event['target']).parent('button');
@@ -97,20 +80,49 @@ export class DiscoverLessonExamPrePage {
     }
     this.examScore[`pre-question-${ (i + 1) }`] = {
       correct,
-      answer,
-      type: 'pre-test'
+      answer
     };
   }
 
   submitSummaryScore (): void {
     if (Object.keys(this.examScore).length === this.questionsCount) {
-      const preExamDetails = Object.assign({
-        examDetails: this.examScore
+      this.disabled = true;
+      this.buttonText = 'Processing score...';
+      const preExamDetails = Object.assign({ 
+        examDetails: this.examScore,
+        difficulty_level: 1
       }, this.lesson);
-      this.storage.set('lesson-exam', preExamDetails).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
+      this.storage.set('lesson-exam', preExamDetails).then(response => {
+        this.disabled = false;
+        this.buttonText = 'Submit Answers';
+        this.navCtrl.push('DiscoverLessonExamSummaryPage');
+      });
       return;
     }
     this.toastMessage('Answer all the questions and try again.');
+  }
+
+  fetchPreTest (): void {
+    const url = `${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=1`;
+    this.user ? this.http.get(url) : this.http.get(url, {
+      headers: new HttpHeaders().set('Authorization', this.user['token'])
+    }).subscribe(response => {
+      if (response['success'] && response['questions']) {
+        this.questions = response['questions'].map(question => {
+          question['answer_choices'] = eval(question['answer_choices']);
+          if (typeof question['answer_key'].toLowerCase() === 'boolean') {
+            question['answer_choices'] = ['True', 'False'];
+          }
+          question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
+          return question;
+        });
+        this.questionsCount = response['questions']['length'];
+        this.isLoading = false;
+      }
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   ionViewWillEnter () {
@@ -127,7 +139,7 @@ export class DiscoverLessonExamPrePage {
       }
     });
     this.storage.get('lesson-exam').then(response => {
-      if (response && this.lesson['lesson_id'] === response['lesson_id']) {
+      if (response && this.lesson['lesson_id'] === response['lesson_id'] && (response['difficulty_level'] === 1)) {
         this.navCtrl.push('DiscoverLessonExamSummaryPage');
       }
     });

@@ -18,6 +18,9 @@ import { api } from '../../config/index'
 })
 export class LogInPage {
 
+  disabled: boolean = false;
+  buttonText: string = 'Submit';
+
   @ViewChild('username') username: Object = {};
   @ViewChild('password') password: Object = {};
 
@@ -52,10 +55,14 @@ export class LogInPage {
       this.toastMessage('Both fields are required! Check and try again.');
       return;
     }
+    this.buttonText = 'Checking...';
+    this.disabled = true;
     this.http.post(`${api.host}/user/login`, {
       "account_username": user,
       "account_password": pass
     }).subscribe(account => {
+      this.disabled = false;
+      this.buttonText = 'Submit';
       if (account.hasOwnProperty('user')) {
         account['user']['token'] = account['token'];
         this.storage.set('account', account['user']).then(response => {
@@ -64,7 +71,11 @@ export class LogInPage {
       }
       this.toastMessage(account['message']);
       return;
-    }, error => this.toastMessage(`${ error['name'] }: ${ error['message'] }`));
+    }, error => {
+      this.disabled = false;
+      this.buttonText = 'Submit';
+      this.toastMessage(`${error['name']}: ${error['message']}`);
+    });
   }
 
   toRegister (): void {

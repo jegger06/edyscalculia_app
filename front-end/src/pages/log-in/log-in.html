@@ -18,9 +18,9 @@
           <ion-input type="password" #password></ion-input>
         </ion-item>
         <div class="main-button">
-          <button (click)="requestAuth()" ion-button block round icon-left>
+          <button (click)="requestAuth()" [disabled]="disabled" ion-button block round icon-left>
             <ion-icon name="ios-send"></ion-icon>
-            Submit
+            {{ buttonText }}
           </button>
           <button (click)="toRegister()" ion-button block round icon-left>
             <ion-icon name="md-person-add"></ion-icon>

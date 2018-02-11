@@ -20,6 +20,7 @@ export class AdminDashboardPage {
 
   dashboardList: Object = {};
   user: Object = {};
+  isLoading: boolean = true;
 
   constructor (
     public navCtrl: NavController,
@@ -89,6 +90,7 @@ export class AdminDashboardPage {
         this.http.get(`${api.host}/lesson/lists`, {
           headers: new HttpHeaders().set('Authorization', this.user['token'])
         }).subscribe(response => {
+          this.isLoading = false;
           this.dashboardList['lessons'] = response['lessons'];
           this.dashboardList['lessonsCount'] = response['lessons']['length'];
         })

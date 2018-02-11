@@ -19,6 +19,7 @@ import { api } from '../../config/index';
 export class AdminTopscorePage {
 
   user: Object = {};
+  isLoading: boolean = true;
   topScore: Array<{
     score_id: number,
     lesson_id: number,
@@ -62,6 +63,7 @@ export class AdminTopscorePage {
     this.http.get(`${ api.host }/score/top?difficulty=${ this.difficultyId }`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success'] && response['topscore']) {
         this.topScore = response['topscore'];
         this.topScoreCount = response['topscore']['length'];

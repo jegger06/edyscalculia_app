@@ -21,6 +21,9 @@ export class DiscoverLessonExamSummaryPage {
 
   user: Object = {};
   hasExam: boolean;
+  disabled: boolean = false;
+  buttonText: string = 'Save Score';
+  isLoading: boolean = true;
   examResult: Object = {};
   points: number = 0;
   items: number = 0;
@@ -54,6 +57,8 @@ export class DiscoverLessonExamSummaryPage {
 
   saveScore (): void {
     if (Object.keys(this.user).length > 0) {
+      this.disabled = true;
+      this.buttonText = 'Saving Score...';
       this.http.post(`${ api.host }/score/create`, {
         lesson_id: this.lesson,
         difficulty_id: this.difficulty,
@@ -61,8 +66,12 @@ export class DiscoverLessonExamSummaryPage {
       }, {
         headers: new HttpHeaders().set('Authorization', this.user['token'])
       }).subscribe(response => {
+        this.disabled = false;
+        this.buttonText = 'Save Score';
         this.toastMessage(response['message'], response['success']);
-        this.navCtrl.push('DiscoverLessonPage');
+        this.storage.remove('lesson-exam').then(() => {
+          this.navCtrl.push('DiscoverLessonPage');
+        });
       }, error => this.toastMessage(error['message'], error['success']));
       return;
     }
@@ -83,16 +92,23 @@ export class DiscoverLessonExamSummaryPage {
         return;
       }
       this.hasExam = true;
-      response = response['examDetails'];
-      this.items = Object.keys(response).length;
-      for (let property in response) {
+      const details = response['examDetails'];
+      this.items = Object.keys(details).length;
+      for (let property in details) {
         const toLower = (str) => str.toString().toLowerCase();
-        if (response.hasOwnProperty(property) && (toLower(response[property]['correct']) === toLower(response[property]['answer']))) {
+        if (details.hasOwnProperty(property) && (toLower(details[property]['correct']) === toLower(details[property]['answer']))) {
           this.points = this.points + 1;
         }
-        if (response[property]['type'] === 'pre-test') {
-          this.title = 'Pre-Test';
-          this.difficulty = 1;
+        this.difficulty = response['difficulty_level'];
+        switch (response['difficulty_level']) {
+          case 2:
+            this.title = 'Post-Test';
+            break;
+          case 3:
+            this.title = 'Activity';
+            break;
+          default:
+            this.title = 'Pre-Test';
         }
       }
       this.percentScore = (this.points / this.items) * 100;
@@ -107,6 +123,7 @@ export class DiscoverLessonExamSummaryPage {
       } else {
         this.examResult['img-src-remark'] = 'assets/imgs/test-happy.svg';
       }
+      this.isLoading = false;
     });
   }
 

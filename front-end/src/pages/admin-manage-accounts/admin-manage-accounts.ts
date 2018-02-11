@@ -19,6 +19,7 @@ import { api } from '../../config/index';
 export class AdminManageAccountsPage {
 
   user: Object = {};
+  isLoading: boolean = true;
   accountTypeList: any;
   accountId: number;
   accountStatus: string | number;
@@ -140,13 +141,17 @@ export class AdminManageAccountsPage {
     this.http.get(`${ api.host }/account/lists${sortMessage}`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success'] && response['account_types']) {
         this.accountTypeList = response['account_types'];
         this.accountTypeListCount = response['account_types']['length'];
         return;
       }
       this.accountTypeListCount = 0;
-    })
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   ionViewWillEnter (): void {

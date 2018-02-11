@@ -33,6 +33,7 @@ export class AdminChapterPage {
   chapterStatus: number;
   isUpdate: boolean = false;
   header: string = 'Adding';
+  isLoading: boolean = true;
   updateChapterContent: Object = {};
   @ViewChild('chapter') chapter: Object = {};
   @ViewChild('chapterTitle') title: Object = {};
@@ -178,7 +179,13 @@ export class AdminChapterPage {
   }
 
   fetchAllRecords (sort: string | number = 'all'): void {
-    this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => this.chapterLists = response['chapters'], error => this.toastMessage(error['message']));
+    this.http.get(`${ api.host }/chapter/lists?sort=${ sort }`).subscribe(response => {
+      this.isLoading = false;
+      this.chapterLists = response['chapters'];
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message']);
+    });
   }
 
   ionViewWillEnter (): void {

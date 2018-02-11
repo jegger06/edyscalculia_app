@@ -18,7 +18,10 @@ import { api } from '../../config/index'
 })
 export class RegisterPage {
 
+  disabled: boolean = false;
+  buttonText: string = 'Submit';
   birthDay: string = new Date().toISOString();
+
   @ViewChild('name') name: string;
   @ViewChild('username') username: string;
   @ViewChild('password') password: string;
@@ -59,12 +62,16 @@ export class RegisterPage {
         return;
       }
     }
+    this.disabled = true;
+    this.buttonText = 'Processing...';
     this.http.post(`${ api.host }/user/register`, {
       account_name,
       account_bday,
       account_username,
       account_password
     }).subscribe(account => {
+      this.disabled = false;
+      this.buttonText = 'Submit';
       this.toastMessage(account['message'], account['success']);
       if (account['success']) {
         this.name['value'] = '';
@@ -72,6 +79,10 @@ export class RegisterPage {
         this.username['value'] = '';
         this.password['value'] = '';
       }
+    }, error => {
+      this.disabled = false;
+      this.buttonText = 'Submit';
+      this.toastMessage(error['message'], error['success']);
     });
   }
 

@@ -14,36 +14,54 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item class="margin-bottom">
-      <h2>Total of Chapter</h2>
-      <p class="numbers-rep" text-center>{{ dashboardList['chaptersCount'] }}</p>
-      <div *ngIf="dashboardList['chaptersCount'] > 0" class="padding-top" text-right>
-        <button (click)="showDetails(dashboardList['chapters'], 'chapter')" large ion-button end round icon-left>
-          <ion-icon name="md-open"></ion-icon>
-          View details
-        </button>
-      </div>
-    </ion-item>
-    <ion-item class="margin-bottom">
-      <h2>Total of Lesson</h2>
-      <p class="numbers-rep" text-center>{{ dashboardList['lessonsCount'] }}</p>
-      <div *ngIf="dashboardList['lessonsCount'] > 0" class="padding-top" text-right>
-        <button (click)="showDetails(dashboardList['lessons'], 'lesson')" large ion-button end round icon-left>
-          <ion-icon name="md-open"></ion-icon>
-          View details
-        </button>
-      </div>
-    </ion-item>
-    <ion-item>
-      <h2>Total of Account</h2>
-      <p class="numbers-rep" text-center>{{ dashboardList['accountsCount'] }}</p>
-      <div *ngIf="dashboardList['accountsCount'] > 0" class="padding-top" text-right>
-        <button (click)="showDetails(dashboardList['accounts'], 'account')" large ion-button end round icon-left>
-          <ion-icon name="md-open"></ion-icon>
-          View details
-        </button>
-      </div>
-    </ion-item>
-  </ion-list>
+  <div *ngIf="!isLoading; else showLoader">
+    <ion-list>
+      <ion-item class="margin-bottom">
+        <h2>Total of Chapter</h2>
+        <p class="numbers-rep" text-center>{{ dashboardList['chaptersCount'] }}</p>
+        <div *ngIf="dashboardList['chaptersCount'] > 0" class="padding-top" text-right>
+          <button (click)="showDetails(dashboardList['chapters'], 'chapter')" large ion-button end round icon-left>
+            <ion-icon name="md-open"></ion-icon>
+            View details
+          </button>
+        </div>
+      </ion-item>
+      <ion-item class="margin-bottom">
+        <h2>Total of Lesson</h2>
+        <p class="numbers-rep" text-center>{{ dashboardList['lessonsCount'] }}</p>
+        <div *ngIf="dashboardList['lessonsCount'] > 0" class="padding-top" text-right>
+          <button (click)="showDetails(dashboardList['lessons'], 'lesson')" large ion-button end round icon-left>
+            <ion-icon name="md-open"></ion-icon>
+            View details
+          </button>
+        </div>
+      </ion-item>
+      <ion-item>
+        <h2>Total of Account</h2>
+        <p class="numbers-rep" text-center>{{ dashboardList['accountsCount'] }}</p>
+        <div *ngIf="dashboardList['accountsCount'] > 0" class="padding-top" text-right>
+          <button (click)="showDetails(dashboardList['accounts'], 'account')" large ion-button end round icon-left>
+            <ion-icon name="md-open"></ion-icon>
+            View details
+          </button>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ng-template #showLoader>
+    <ion-card>
+      <ion-card-content>
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading dashboard...</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

@@ -20,6 +20,7 @@ export class AdminManageDifficultyPage {
 
   user: Object = {};
   difficultyId: number;
+  isLoading: boolean = true;
   isUpdate: boolean = false;
   sort: string | number = 'all';
   difficultyTitle: string = 'Adding';
@@ -132,13 +133,17 @@ export class AdminManageDifficultyPage {
     this.http.get(`${ api.host }/difficulty/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success']) {
         this.difficultyTypeList = response['difficulties'];
         this.difficultyTypeListCount = response['difficulties']['length'];
         return;
       }
       this.toastMessage(response['message'], response['success']);
-    }, error => this.toastMessage(error['message'], error['success']));
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   ionViewWillEnter (): void {
