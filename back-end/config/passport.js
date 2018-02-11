@@ -11,17 +11,30 @@ module.exports = function(passport) {
   opts.secretOrKey = keys.secret;
   passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
     // console.log(jwt_payload);
-    let sql = 'SELECT account_id, a.type_id, account_name, account_bday, account_username, account_date, type_slog FROM tbl_account a INNER JOIN tbl_type t ON a.type_id = t.type_id WHERE account_username = ? LIMIT 1';
-    db.query(sql, [jwt_payload.username], (err, result) => {
+    db.getConnection((err, connection) => {
         if (err) {
-            return done(err, false)
+            connection.release();
+            return res.json({
+            success: false,
+            message: 'Can\' connect to DB right now. Please try again later.'
+            });
         }
 
-        if (result.length) {
-            return done(null, result[0]);
-        } else {
-            return done(null, false);
-        }
+        let sql = 'SELECT account_id, a.type_id, account_name, account_bday, account_username, account_date, type_slog FROM tbl_account a INNER JOIN tbl_type t ON a.type_id = t.type_id WHERE account_username = ? LIMIT 1';
+        connection.query(sql, [jwt_payload.username], (err, result) => {
+            connection.release();
+            if (err) {
+                return done(err, false)
+            }
+
+            if (result.length) {
+                return done(null, result[0]);
+            } else {
+                return done(null, false);
+            }
+        });
+      
     });
+    
   }));
 }
