@@ -51,4 +51,26 @@
     </ion-item>
   </ion-list>
 
+  <ion-list *ngIf="difficultyCount > 0">
+    <ion-item>
+      <ion-label>Scores</ion-label>
+      <ion-select [(ngModel)]="difficulty" (ionChange)="fetchTopScoreHistory()">
+        <ion-option *ngFor="let dif of difficulties" [value]="dif['difficulty_id']">
+          {{ dif['difficulty_text'] }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="scoreSheetCount > 0; else showNoRecord">
+    <ion-item *ngFor="let score of scoreSheet">
+      {{ score['lesson_title'] }} - {{ score['score_count'] }}%
+    </ion-item>
+  </ion-list>
+
+  <ng-template #showNoRecord>
+    <ion-item>
+      No records of score for now.
+    </ion-item>
+  </ng-template>
 </ion-content>

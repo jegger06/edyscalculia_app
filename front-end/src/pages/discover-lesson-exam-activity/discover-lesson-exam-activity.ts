@@ -89,7 +89,7 @@ export class DiscoverLessonExamActivityPage {
     this.toastMessage('Answer all the questions and try again.');
   }
 
-  fetchPostTestQuestions (): void {
+  fetchActivitiesQuestions (): void {
     this.http.get(`${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=3`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
@@ -117,7 +117,7 @@ export class DiscoverLessonExamActivityPage {
     this.storage.get('lesson-selected').then(response => {
       if (response) {
         this.lesson = response;
-        this.fetchPostTestQuestions();
+        this.fetchActivitiesQuestions();
       }
     });
     this.storage.get('lesson-exam').then(response => {

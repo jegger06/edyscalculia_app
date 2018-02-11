@@ -16,5 +16,39 @@
 </ion-header>
 
 <ion-content padding>
-
+  <div *ngIf="questionsCount > 0; else showNoRecord">
+    <ion-card *ngFor="let question of questions; let i = index">
+      <ion-card-content>
+        <ion-card-title [innerHTML]="question['question_content']"></ion-card-title>
+        <div *ngIf="question['answer_choices']; else showInputAnswer" class="card-action">
+          <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, 'button', question['answer_key'], i, choice)"
+            ion-button round>
+            {{ choice }}
+          </button>
+        </div>
+        <ng-template #showInputAnswer>
+          <ion-item>
+            <ion-label floating>Answer</ion-label>
+            <ion-input (ionChange)="addScore($event, 'input', question['answer_key'], i)"></ion-input>
+          </ion-item>
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <button (click)="submitSummaryScore()" class="submit-button" ion-button round icon-left block>
+          <ion-icon name="ios-send"></ion-icon>
+          Submit Answers
+        </button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+  <ng-template #showNoRecord>
+    <ion-card>
+      <ion-card-content>
+        No question is availabe for now.
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>
