@@ -1,5 +1,5 @@
 import { Storage } from '@ionic/storage';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -23,6 +23,10 @@ export class DiscoverLessonDetailsPage {
   user: Object = {};
   lesson: Object = {};
   hasUser: boolean;
+  isLoading: boolean = true;
+  disabled: boolean = false;
+  activitiesText: string = 'Activity';
+  preTestText: string = 'Post-Test';
   lessonsList: Array<{
     lesson_id: number,
     account_id: number,
@@ -73,6 +77,7 @@ export class DiscoverLessonDetailsPage {
   }
 
   goToPage (route: string): void {
+    this.isLoading = true;
     const currentLesson = this.lessonDetails;
     const allLesson = this.lessonsList;
     const index = allLesson.findIndex(lesson => (lesson['lesson_id'] === currentLesson['lesson_id']));
@@ -84,10 +89,11 @@ export class DiscoverLessonDetailsPage {
       this.storage.remove('lesson-selected').then(() => {
         this.storage.set('lesson-selected', allLesson[index - 1]).then(response => {
           this.lessonDetails = response;
+          this.isLoading = false;
+          window.scrollTo(0, 0);
         });
       });
-    }
-    if (route === 'next') {
+    } else {
       if ((allLesson['length'] - 1) === index) {
         this.toastMessage('No more next lesson...');
         return;
@@ -95,17 +101,16 @@ export class DiscoverLessonDetailsPage {
       this.storage.remove('lesson-selected').then(() => {
         this.storage.set('lesson-selected', allLesson[index + 1]).then(response => {
           this.lessonDetails = response;
+          this.isLoading = false;
+          window.scrollTo(0, 0);
         });
       });
     }
   }
 
-  requestAnExam (lesson: Object, type: string = ''): void {
-    console.log(lesson, type);
-  }
-
   fetchAlllesson (): void {
     this.http.get(`${ api.host }/lesson/lists/${ this.lesson['chapter_id'] }`).subscribe(response => {
+      this.isLoading = false;
       if (response['success']) {
         this.lessonsList = response['lessons'].map(lesson => {
           lesson['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(lesson['lesson_content']);
@@ -113,7 +118,10 @@ export class DiscoverLessonDetailsPage {
         });
         this.lessonsCount = response['lessons']['length'];
       }
-    })
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   fetchLessonDetails (): void {
@@ -122,6 +130,7 @@ export class DiscoverLessonDetailsPage {
         const details = response['details'];
         details['lesson_content'] = this.sanitizer.bypassSecurityTrustHtml(details['lesson_content']);
         this.lessonDetails = details;
+        this.isLoading = false;
       }
     });
   }

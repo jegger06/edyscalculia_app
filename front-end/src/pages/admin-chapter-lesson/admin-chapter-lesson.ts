@@ -21,6 +21,7 @@ export class AdminChapterLessonPage {
 
   sort: number = 2;
   user: Object = {};
+  isLoading: boolean = true;
   lessons: Array<{
     lesson_id: number,
     account_id: number,
@@ -186,6 +187,7 @@ export class AdminChapterLessonPage {
       this.chapter = chapter;
       const route = chapter ? chapter['chapter_id'] : '';
       this.http.get(`${ api.host }/lesson/lists/${ route }?sort=${ sort }`).subscribe(response => {
+        this.isLoading = false;
         if (response['success'] && response['lessons']) {
           this.lessons = response['lessons'].map(lesson => {
             lesson['lesson_content'] = this.sanitize.bypassSecurityTrustHtml(lesson['lesson_content']);

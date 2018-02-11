@@ -25,6 +25,9 @@ export class DiscoverLessonExamActivityPage {
   lesson: Object = {};
   examScore: Object = {};
   hasUser: boolean;
+  isLoading: boolean = true;
+  disabled: boolean = false;
+  buttonText: string = 'Submit Answers';
   questions: Array<{
     question_id: number,
     lesson_id: number,
@@ -73,17 +76,23 @@ export class DiscoverLessonExamActivityPage {
     }
     this.examScore[`pre-question-${ (i + 1) }`] = {
       correct,
-      answer,
-      type: 'pre-test'
+      answer
     };
   }
 
   submitSummaryScore (): void {
     if (Object.keys(this.examScore).length === this.questionsCount) {
+      this.disabled = true;
+      this.buttonText = 'Processing score...';
       const preExamDetails = Object.assign({
-        examDetails: this.examScore
+        examDetails: this.examScore,
+        difficulty_level: 3
       }, this.lesson);
-      this.storage.set('lesson-exam', preExamDetails).then(response => this.navCtrl.push('DiscoverLessonExamSummaryPage'));
+      this.storage.set('lesson-exam', preExamDetails).then(response => {
+        this.disabled = false;
+        this.buttonText = 'Submit Answers';
+        this.navCtrl.push('DiscoverLessonExamSummaryPage');
+      });
       return;
     }
     this.toastMessage('Answer all the questions and try again.');
@@ -103,8 +112,12 @@ export class DiscoverLessonExamActivityPage {
           return question;
         });
         this.questionsCount = response['questions']['length'];
+        this.isLoading = false;
       }
-    }, error => this.toastMessage(error['message'], error['success']));
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   ionViewWillEnter (): void {
@@ -121,7 +134,7 @@ export class DiscoverLessonExamActivityPage {
       }
     });
     this.storage.get('lesson-exam').then(response => {
-      if (response && this.lesson['lesson_id'] === response['lesson_id']) {
+      if (response && this.lesson['lesson_id'] === response['lesson_id'] && (response['difficulty_level'] === 3)) {
         this.navCtrl.push('DiscoverLessonExamSummaryPage');
       }
     });

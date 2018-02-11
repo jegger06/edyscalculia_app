@@ -22,6 +22,7 @@ export class AdminManageQuestionRangePage {
   rangeFrom: number = 0;
   rangeTo: number = 100;
   isUpdate: boolean = false;
+  isLoading: boolean = true;
   questionRangeTitle = 'Adding';
   questionRangeId: number;
   questionRangeList: Array<{
@@ -132,11 +133,15 @@ export class AdminManageQuestionRangePage {
     this.http.get(`${ api.host }/question-range/lists`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success']) {
         this.questionRangeList = response['question_ranges'];
         this.questionRangeListCount = response['question_ranges']['length'];
       }
-    }, error => this.toastMessage(error['message'], error['success']));
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
   
   ionViewWillEnter (): void {

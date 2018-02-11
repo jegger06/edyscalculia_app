@@ -11,72 +11,90 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <h3 class="chapter-title">{{ lessonTypeTitle }} of Lesson</h3>
-    </ion-item>
-    <ion-item class="no-border-bottom" *ngIf="isUpdate">
-      <ion-label>Lesson Status</ion-label>
-      <ion-select [(ngModel)]="lessonStatus">
-        <ion-option value="1">Active</ion-option>
-        <ion-option value="0">Inactive</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item class="no-border-bottom">
-      <ion-label floating>Lesson Title</ion-label>
-      <ion-input type="text" [(ngModel)]="lessonTitle"></ion-input>
-    </ion-item>
-    <ion-item class="no-border-bottom">
-      <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
-    </ion-item>
-    <ion-item class="no-border-bottom">
-      <div text-right *ngIf="isUpdate; else showCreate">
-        <button (click)="updateLessonProceed()" ion-button round icon-left>
-          <ion-icon name="ios-send"></ion-icon>
-          Update
-        </button>
-        <button (click)="cancelUpdateLesson()" color="danger" ion-button round icon-left>
-          <ion-icon name="md-close"></ion-icon>
-          cancel
-        </button>
-      </div>
-      <ng-template #showCreate>
-        <button (click)="addLesson()" ion-button block round icon-left>
-          <ion-icon name="ios-send"></ion-icon>
-          submit
-        </button>
-      </ng-template>
-    </ion-item>
-  </ion-list>
-
-  <ion-list>
-    <ion-item>
-      <ion-label>List of Lessons</ion-label>
-      <ion-select (ionChange)="sortNow(sort)" [(ngModel)]="sort">
-        <ion-option value="2">All</ion-option>
-        <ion-option value="1">Active</ion-option>
-        <ion-option value="0">Inactive</ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="lessonsCount > 0; else showNoRecord">
-    <ion-item (click)="addQuestion(lesson)" *ngFor="let lesson of lessons" class="item-border">
-      <div class="title-link">
-        <ion-icon name="md-arrow-dropright"></ion-icon>
-        <div class="inline-block" [innerHTML]="lesson['lesson_title']"></div>
-      </div>
-      <button (click)="updateLesson($event, lesson)" class="not-included no-bold" ion-button clear item-end>EDIT</button>
-      <button (click)="deleteLesson($event, lesson['lesson_id'])" class="delete-button not-included no-bold" ion-button clear item-end>DELETE</button>
-    </ion-item>
-  </ion-list>
-  
-  <ng-template #showNoRecord>
+  <div *ngIf="!isLoading; else showLoader">
     <ion-list>
       <ion-item>
-        <p>No record of lesson for now.</p>
-        <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
+        <h3 class="chapter-title">{{ lessonTypeTitle }} of Lesson</h3>
+      </ion-item>
+      <ion-item class="no-border-bottom" *ngIf="isUpdate">
+        <ion-label>Lesson Status</ion-label>
+        <ion-select [(ngModel)]="lessonStatus">
+          <ion-option value="1">Active</ion-option>
+          <ion-option value="0">Inactive</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="no-border-bottom">
+        <ion-label floating>Lesson Title</ion-label>
+        <ion-input type="text" [(ngModel)]="lessonTitle"></ion-input>
+      </ion-item>
+      <ion-item class="no-border-bottom">
+        <div class="has-border" [froalaEditor]="options" [(ngModel)]="editorContent"></div>
+      </ion-item>
+      <ion-item class="no-border-bottom">
+        <div text-right *ngIf="isUpdate; else showCreate">
+          <button (click)="updateLessonProceed()" ion-button round icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            Update
+          </button>
+          <button (click)="cancelUpdateLesson()" color="danger" ion-button round icon-left>
+            <ion-icon name="md-close"></ion-icon>
+            cancel
+          </button>
+        </div>
+        <ng-template #showCreate>
+          <button (click)="addLesson()" ion-button block round icon-left>
+            <ion-icon name="ios-send"></ion-icon>
+            submit
+          </button>
+        </ng-template>
       </ion-item>
     </ion-list>
+
+    <ion-list>
+      <ion-item>
+        <ion-label>List of Lessons</ion-label>
+        <ion-select (ionChange)="sortNow(sort)" [(ngModel)]="sort">
+          <ion-option value="2">All</ion-option>
+          <ion-option value="1">Active</ion-option>
+          <ion-option value="0">Inactive</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="lessonsCount > 0; else showNoRecord">
+      <ion-item (click)="addQuestion(lesson)" *ngFor="let lesson of lessons" class="item-border">
+        <div class="title-link">
+          <ion-icon name="md-arrow-dropright"></ion-icon>
+          <div class="inline-block" [innerHTML]="lesson['lesson_title']"></div>
+        </div>
+        <button (click)="updateLesson($event, lesson)" class="not-included no-bold" ion-button clear item-end>EDIT</button>
+        <button (click)="deleteLesson($event, lesson['lesson_id'])" class="delete-button not-included no-bold" ion-button clear item-end>DELETE</button>
+      </ion-item>
+    </ion-list>
+    
+    <ng-template #showNoRecord>
+      <ion-list>
+        <ion-item>
+          <p>No record of lesson for now.</p>
+          <button (click)="viewAll()" class="not-included" ion-button round item-right small>View All</button>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </div>
+
+  <ng-template #showLoader>
+    <ion-card>
+      <ion-card-content>
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading lesson...</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 </ion-content>

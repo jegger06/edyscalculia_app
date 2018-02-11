@@ -22,38 +22,56 @@
 </ion-header>
 
 <ion-content padding>
-  <button *ngIf="hasExam" (click)="backToDiscover()" ion-button round icon-left>
-    <ion-icon name="md-arrow-back"></ion-icon>
-    back to discover
-  </button>
-  <div *ngIf="chapterLessonLists; else showNoRecord">
-    <ion-card *ngFor="let chapterLessonList of chapterLessonLists">
-      <div class="hightlight"></div>
-      <img src="assets/imgs/test-chapter.jpg" alt="Chapter Icon">
-      <ion-card-title>
-        {{ chapterLessonList['lesson_title'] }}
-      </ion-card-title>
-      <ion-card-content>
-        <p>{{ chapterLessonList['account_name'] }}</p>
-        <p class="date">{{ chapterLessonList['lesson_date'] | date:"longDate" }}</p>
-        <div class="ellipse" [innerHTML]="chapterLessonList['lesson_content']"></div>
-      </ion-card-content>
-      <ion-card-content text-right>
-        <button (click)="lessonDetails(chapterLessonList)" ion-button round icon-left>
-          <ion-icon name="md-paper"></ion-icon>
-          read more
-        </button>
-        <button (click)="requestPreTest(chapterLessonList)" ion-button round icon-left>
-          <ion-icon name="md-medal"></ion-icon>
-          Pre-test
-        </button>
-      </ion-card-content>
-    </ion-card>
+  <div *ngIf="!isLoading; else showLoader">
+    <button *ngIf="hasExam" (click)="backToDiscover()" ion-button round icon-left>
+      <ion-icon name="md-arrow-back"></ion-icon>
+      back to discover
+    </button>
+    <div *ngIf="chapterLessonLists; else showNoRecord">
+      <ion-card *ngFor="let chapterLessonList of chapterLessonLists">
+        <div class="hightlight"></div>
+        <img src="assets/imgs/test-chapter.jpg" alt="Chapter Icon">
+        <ion-card-title>
+          {{ chapterLessonList['lesson_title'] }}
+        </ion-card-title>
+        <ion-card-content>
+          <p>{{ chapterLessonList['account_name'] }}</p>
+          <p class="date">{{ chapterLessonList['lesson_date'] | date:"longDate" }}</p>
+          <div class="ellipse" [innerHTML]="chapterLessonList['lesson_content']"></div>
+        </ion-card-content>
+        <ion-card-content text-right>
+          <button (click)="lessonDetails(chapterLessonList)" ion-button round icon-left>
+            <ion-icon name="md-paper"></ion-icon>
+            read more
+          </button>
+          <button (click)="requestPreTest(chapterLessonList)" [disabled]="disabled" ion-button round icon-left>
+            <ion-icon name="md-medal"></ion-icon>
+            {{ preTestText }}
+          </button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ng-template #showNoRecord>
+      <ion-card>
+        <ion-card-content>
+          No record of lesson for this chapter for now.
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
   </div>
-  <ng-template #showNoRecord>
+
+  <ng-template #showLoader>
     <ion-card>
       <ion-card-content>
-        No record of lesson for this chapter for now.
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading lessons...</span>
+        </div>
       </ion-card-content>
     </ion-card>
   </ng-template>

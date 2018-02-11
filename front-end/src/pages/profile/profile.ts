@@ -20,6 +20,7 @@ import { DiscoverPopUpPage } from '../discover-pop-up/discover-pop-up'
 export class ProfilePage {
 
   user: Object = {};
+  isLoading: boolean = true;
   scoreSheet: Array<{
     score_id: number,
     lesson_id: number,
@@ -89,6 +90,7 @@ export class ProfilePage {
     this.http.get(`${ api.host }/score/lists/${ this.difficulty }`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
+      this.isLoading = false;
       if (response['success'] && response['scoreSheet']) {
         this.scoreSheet = response['scoreSheet'];
         this.scoreSheetCount = response['scoreSheet']['length'];

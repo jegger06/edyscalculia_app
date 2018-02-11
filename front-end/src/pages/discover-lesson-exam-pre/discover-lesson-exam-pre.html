@@ -22,37 +22,55 @@
 </ion-header>
 
 <ion-content padding>
-  <div *ngIf="questionsCount > 0; else showNoRecord">
-    <ion-card *ngFor="let question of questions; let i = index">
-      <ion-card-content>
-        <ion-card-title [innerHTML]="question['question_content']"></ion-card-title>
-        <div *ngIf="question['answer_choices']; else showInputAnswer" class="card-action">
-          <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, 'button', question['answer_key'], i, choice)" ion-button round>
-            {{ choice }}
+  <div *ngIf="!isLoading; else showLoader">
+    <div *ngIf="questionsCount > 0; else showNoRecord">
+      <ion-card *ngFor="let question of questions; let i = index">
+        <ion-card-content>
+          <ion-card-title [innerHTML]="question['question_content']"></ion-card-title>
+          <div *ngIf="question['answer_choices']; else showInputAnswer" class="card-action">
+            <button class="margin" *ngFor="let choice of question['answer_choices']" (click)="addScore($event, 'button', question['answer_key'], i, choice)" ion-button round>
+              {{ choice }}
+            </button>
+          </div>
+          <ng-template #showInputAnswer>
+            <ion-item>
+              <ion-label floating>Answer</ion-label>
+              <ion-input (ionChange)="addScore($event, 'input', question['answer_key'], i)"></ion-input>
+            </ion-item>
+          </ng-template>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <button (click)="submitSummaryScore()" [disabled]="disabled" class="submit-button" ion-button round icon-left block>
+            <ion-icon name="ios-send"></ion-icon>
+            {{ buttonText }}
           </button>
-        </div>
-        <ng-template #showInputAnswer>
-          <ion-item>
-            <ion-label floating>Answer</ion-label>
-            <ion-input (ionChange)="addScore($event, 'input', question['answer_key'], i)"></ion-input>
-          </ion-item>
-        </ng-template>
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-content>
-        <button (click)="submitSummaryScore()" class="submit-button" ion-button round icon-left block>
-          <ion-icon name="ios-send"></ion-icon>
-          Submit Answers
-        </button>
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ng-template #showNoRecord>
+      <ion-card>
+        <ion-card-content>
+          No question is availabe for now.
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
   </div>
 
-  <ng-template #showNoRecord>
+  <ng-template #showLoader>
     <ion-card>
       <ion-card-content>
-        No question is availabe for now.
+        <div class="loader" title="2">
+          <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+          <span>Loading pre-test exam...</span>
+        </div>
       </ion-card-content>
     </ion-card>
   </ng-template>

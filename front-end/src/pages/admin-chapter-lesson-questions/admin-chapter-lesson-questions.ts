@@ -21,6 +21,7 @@ export class AdminChapterLessonQuestionsPage {
 
   user: Object = {};
   lesson: Object = {};
+  isLoading: boolean = true;
   questionTitle: string = 'Adding';
   sortDifficulty: number = 1;
   sortRange: number = 0;
@@ -323,6 +324,7 @@ export class AdminChapterLessonQuestionsPage {
   fetchLessonQuestions (): void {
     const sort = `?difficulty=${ this.sortDifficulty }&range=${ this.sortRange }&status=${ this.sortStatus }`;
     this.http.get(`${ api.host }/question/lists/${ this.lesson['lesson_id'] }${ sort }`).subscribe(response => {
+      this.isLoading = false;
       if (response['success'] && response['questions']) {
         this.questionsList = response['questions'].map(question => {
           question['question_content'] = this.sanitize.bypassSecurityTrustHtml(question['question_content']);
@@ -332,7 +334,10 @@ export class AdminChapterLessonQuestionsPage {
         return;
       }
       this.questionsCount = 0;
-    }, error => this.toastMessage(error['message'], error['success']));
+    }, error => {
+      this.isLoading = false;
+      this.toastMessage(error['message'], error['success']);
+    });
   }
 
   fetchQuestionDifficulty (): void {
