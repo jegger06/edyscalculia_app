@@ -114,7 +114,7 @@ export class DiscoverLessonPage {
 
   fetchLesson (): void {
     const chapterId = this.chapter['chapter_id'];
-    this.http.get(`${ api.host }/lesson/lists/${ chapterId }?sort=all`).subscribe(response => {
+    this.http.get(`${ api.host }/lesson/lists/${ chapterId }?sort=1`).subscribe(response => {
       this.isLoading = false;
       if (response['success']) {
         this.chapterLessonLists = response['lessons'].map(lesson => {

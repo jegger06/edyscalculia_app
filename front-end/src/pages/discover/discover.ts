@@ -65,7 +65,7 @@ export class DiscoverPage {
   }
 
   fetchAllRecords (): void {
-    this.http.get(`${ api.host }/chapter/lists?sort=all`).subscribe(response => {
+    this.http.get(`${ api.host }/chapter/lists?sort=1`).subscribe(response => {
       this.chapterLists = response['chapters'];
       this.isLoading = false;
     }, error => {

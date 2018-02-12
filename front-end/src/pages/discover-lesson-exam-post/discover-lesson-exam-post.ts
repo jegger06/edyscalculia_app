@@ -100,7 +100,7 @@ export class DiscoverLessonExamPostPage {
 
   fetchPostTestQuestions (): void {
     const lesson = this.lesson['lesson_id'];
-    this.http.get(`${ api.host }/question/exam?lesson_id=${ lesson }&difficulty=2`, {
+    this.http.get(`${ api.host }/question/exam?lesson_id=${ lesson }&difficulty=2&status=1`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
       if (response['success'] && response['questions']) {

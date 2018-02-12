@@ -103,7 +103,7 @@ export class DiscoverLessonExamPrePage {
   }
 
   fetchPreTest (): void {
-    const url = `${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=1`;
+    const url = `${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=1&status=1`;
     this.user ? this.http.get(url) : this.http.get(url, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {

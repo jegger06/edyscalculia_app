@@ -99,7 +99,7 @@ export class DiscoverLessonExamActivityPage {
   }
 
   fetchActivitiesQuestions (): void {
-    this.http.get(`${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=3`, {
+    this.http.get(`${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=3&status=1`, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
     }).subscribe(response => {
       if (response['success'] && response['questions']) {
