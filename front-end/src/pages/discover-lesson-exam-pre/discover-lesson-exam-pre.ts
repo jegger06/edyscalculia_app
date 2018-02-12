@@ -103,10 +103,13 @@ export class DiscoverLessonExamPrePage {
   }
 
   fetchPreTest (): void {
+    console.log(this.isLoading)
     const url = `${ api.host }/question/exam?lesson_id=${ this.lesson['lesson_id'] }&difficulty=1&status=1`;
-    this.user ? this.http.get(url) : this.http.get(url, {
+    const req = this.user ? this.http.get(url) : this.http.get(url, {
       headers: new HttpHeaders().set('Authorization', this.user['token'])
-    }).subscribe(response => {
+    });
+    req.subscribe(response => {
+      this.isLoading = false;
       if (response['success'] && response['questions']) {
         this.questions = response['questions'].map(question => {
           question['answer_choices'] = eval(question['answer_choices']);
@@ -117,7 +120,6 @@ export class DiscoverLessonExamPrePage {
           return question;
         });
         this.questionsCount = response['questions']['length'];
-        this.isLoading = false;
       }
     }, error => {
       this.isLoading = false;

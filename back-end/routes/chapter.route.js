@@ -69,8 +69,8 @@ router.get('/lists', (req, res) => {
         if (err) {
             connection.release();
             return res.json({
-            success: false,
-            message: 'Can\' connect to DB right now. Please try again later.'
+                success: false,
+                message: 'Can\' connect to DB right now. Please try again later.'
             });
         }
 
