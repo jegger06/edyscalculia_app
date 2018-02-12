@@ -1,5 +1,5 @@
 import { Storage } from '@ionic/storage';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
